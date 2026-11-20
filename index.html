@@ -347,6 +347,184 @@
       .day-list .today-badge { border-radius: 999px; background: var(--accent); padding: 4px 10px; font-size: 13px; font-weight: 600; color: #fff; }
       .day-list .past { font-size: 13px; color: var(--dim); }
 
+      /* ---------- desktop pet: 阿绒 the fox ---------- */
+      .pet {
+        position: fixed; z-index: 25; width: 104px; height: 118px;
+        touch-action: none; cursor: grab; outline: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .pet:active { cursor: grabbing; }
+      .pet:focus-visible { filter: drop-shadow(0 0 6px rgba(255, 190, 90, 0.8)); }
+      .pet-walk { position: absolute; left: 0; bottom: 0; width: 104px; height: 104px; will-change: transform; }
+      .pet-scale { width: 100%; height: 100%; transform: scale(var(--ps, 1)); transform-origin: 50% 100%; }
+      .pet svg.fox { width: 100%; height: 100%; display: block; overflow: visible; }
+      .pet .fox-tail {
+        transform-box: fill-box; transform-origin: 10% 88%;
+        animation: tail-wag 2.8s ease-in-out infinite;
+      }
+      @keyframes tail-wag { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(7deg); } }
+      .pet .fox-eyes { transform-box: fill-box; transform-origin: center; animation: fox-blink 4.6s infinite; }
+      @keyframes fox-blink { 0%, 91%, 100% { transform: scaleY(1); } 94.5% { transform: scaleY(0.08); } }
+      .pet .fox-aura { animation: aura-pulse 3.2s ease-in-out infinite; }
+      @keyframes aura-pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.85; } }
+      .pet .fox-body-g { transform-box: fill-box; transform-origin: 50% 100%; transition: transform 0.35s ease; }
+      .pet.sitting .fox-body-g { transform: translateY(5px) scaleY(0.93); }
+      .pet.sitting .fox-tail { animation-duration: 5s; }
+      .pet .fox-head { transform-box: fill-box; transform-origin: 50% 92%; }
+      .pet.act-munch .fox-head { animation: fox-munch 0.28s ease-in-out 4; }
+      @keyframes fox-munch { 0%, 100% { transform: rotate(0deg) translateY(0); } 50% { transform: rotate(3deg) translateY(2.5px); } }
+      .pet.act-hop .pet-scale { animation: pet-hop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); }
+      @keyframes pet-hop {
+        0% { transform: scale(var(--ps, 1)) translateY(0); }
+        35% { transform: scale(var(--ps, 1)) translateY(-17px); }
+        68% { transform: scale(var(--ps, 1)) translateY(0); }
+        84% { transform: scale(var(--ps, 1)) translateY(-6px); }
+        100% { transform: scale(var(--ps, 1)) translateY(0); }
+      }
+      .pet.act-spin .pet-scale { animation: pet-spin 0.85s cubic-bezier(0.34, 1.3, 0.64, 1); }
+      @keyframes pet-spin {
+        0% { transform: scale(var(--ps, 1)) rotate(0deg) translateY(0); }
+        45% { transform: scale(var(--ps, 1)) rotate(200deg) translateY(-15px); }
+        100% { transform: scale(var(--ps, 1)) rotate(360deg) translateY(0); }
+      }
+      .pet.act-roll .pet-scale { animation: pet-roll 0.9s ease; }
+      @keyframes pet-roll {
+        0% { transform: scale(var(--ps, 1)) rotate(0deg); }
+        100% { transform: scale(var(--ps, 1)) rotate(-360deg); }
+      }
+      .pet.act-flip .pet-scale { animation: pet-flip 0.8s cubic-bezier(0.34, 1.4, 0.64, 1); }
+      @keyframes pet-flip {
+        0% { transform: scale(var(--ps, 1)) scaleY(1) translateY(0); }
+        40% { transform: scale(var(--ps, 1)) scaleY(0.82) translateY(-4px); }
+        70% { transform: scale(var(--ps, 1)) scaleY(1.06) translateY(-14px); }
+        100% { transform: scale(var(--ps, 1)) scaleY(1) translateY(0); }
+      }
+      .pet.act-dance .pet-scale { animation: pet-dance 0.9s ease-in-out; }
+      @keyframes pet-dance {
+        0%, 100% { transform: scale(var(--ps, 1)) rotate(0deg); }
+        25% { transform: scale(var(--ps, 1)) rotate(-7deg) translateY(-4px); }
+        55% { transform: scale(var(--ps, 1)) rotate(7deg) translateY(-4px); }
+        80% { transform: scale(var(--ps, 1)) rotate(-4deg); }
+      }
+      .pet.act-magic .pet-scale { animation: pet-magic 0.7s ease; }
+      @keyframes pet-magic {
+        0% { transform: scale(var(--ps, 1)); filter: brightness(1); }
+        40% { transform: scale(calc(var(--ps, 1) * 1.12)); filter: brightness(1.5); }
+        100% { transform: scale(var(--ps, 1)); filter: brightness(1); }
+      }
+      .pet.evolving svg.fox { animation: evo-transform 1.9s ease both; }
+      @keyframes evo-transform {
+        0% { filter: brightness(1); transform: scale(0.92); }
+        30% { filter: brightness(2.4) saturate(0.35); transform: scale(0.86) rotate(-2deg); }
+        55% { filter: brightness(2.8) saturate(0.3); transform: scale(1.04) rotate(2deg); }
+        78% { filter: brightness(1.7) saturate(0.8); transform: scale(1.1); }
+        100% { filter: brightness(1); transform: scale(1); }
+      }
+      .evo-ring {
+        position: absolute; left: 50%; bottom: 34px; width: 30px; height: 30px;
+        border-radius: 999px; border: 3px solid rgba(255, 205, 92, 0.95);
+        transform: translateX(-50%); pointer-events: none;
+        animation: evo-ring 1.5s ease-out both;
+      }
+      @keyframes evo-ring {
+        from { width: 26px; height: 26px; opacity: 1; }
+        to { width: 190px; height: 190px; opacity: 0; bottom: -10px; }
+      }
+      .pet-fx { position: absolute; inset: 0; pointer-events: none; }
+      .pet-fx span {
+        position: absolute; left: 50%; bottom: 74px; width: 18px; height: 18px;
+        margin-left: -9px; opacity: 0; pointer-events: none;
+        animation: fx-float 1.05s ease-out both;
+      }
+      .pet-fx span svg { width: 100%; height: 100%; display: block; }
+      @keyframes fx-float {
+        0% { opacity: 0; transform: translate(0, 0) rotate(0deg) scale(0.5); }
+        18% { opacity: 1; }
+        100% { opacity: 0; transform: translate(var(--dx, 0px), var(--dy, -56px)) rotate(var(--rot, 40deg)) scale(1.05); }
+      }
+      .pet-food {
+        position: absolute; left: 50%; bottom: 2px; width: 30px; height: 22px;
+        margin-left: -15px; pointer-events: none;
+        animation: food-eat 1.15s ease both;
+      }
+      @keyframes food-eat {
+        0% { opacity: 0; transform: translateY(6px) scale(0.6); }
+        20% { opacity: 1; transform: translateY(0) scale(1); }
+        75% { opacity: 1; transform: scale(0.55); }
+        100% { opacity: 0; transform: scale(0.2); }
+      }
+      .pet-say {
+        position: absolute; bottom: 106px; left: 50%; transform: translateX(-50%) translateY(4px);
+        max-width: 190px; padding: 6px 12px; border-radius: 999px;
+        background: rgba(255, 251, 243, 0.96); color: #5b4326;
+        border: 1px solid rgba(176, 137, 84, 0.45);
+        box-shadow: 0 6px 18px rgba(9, 20, 32, 0.22);
+        font-size: 12.5px; font-weight: 500; white-space: nowrap;
+        opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease;
+      }
+      .pet-say.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+      .pet-sign {
+        position: absolute; bottom: 96px; left: -14px; z-index: 2;
+        transform: rotate(-5deg); transform-origin: 50% 100%;
+        max-width: 132px; padding: 5px 9px; border-radius: 7px;
+        background: #fff6e3; color: #7a4d16; border: 1.5px solid #c99a52;
+        box-shadow: 0 5px 14px rgba(9, 20, 32, 0.25);
+        font-size: 11.5px; font-weight: 600; line-height: 1.35; text-align: center;
+        pointer-events: none;
+      }
+      .pet-sign small { display: block; font-weight: 500; color: #a3702c; font-size: 10.5px; }
+      .pet-menu {
+        position: absolute; bottom: 110px; left: 50%; transform: translateX(-50%) translateY(6px);
+        width: 176px; padding: 8px; border-radius: 14px; z-index: 3;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        background: rgba(16, 26, 38, 0.78); color: #fff;
+        box-shadow: 0 12px 30px rgba(8, 16, 26, 0.35);
+        backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+        opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+      .pet-menu.open { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+      .pet-menu-head { padding: 4px 8px 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.16); margin-bottom: 6px; }
+      .pet-menu-head .pm-name { font-size: 14px; font-weight: 600; }
+      .pet-menu-head .pm-name span { margin-left: 6px; font-size: 11.5px; font-weight: 600; color: #ffcf7d; }
+      .pet-menu-head .pm-hint { margin-top: 2px; font-size: 11px; color: rgba(255, 255, 255, 0.75); }
+      .pet-menu button {
+        display: flex; width: 100%; align-items: center; gap: 8px;
+        min-height: 34px; padding: 6px 8px; border: 0; border-radius: 8px;
+        background: transparent; color: #fff; font-size: 13.5px; font-weight: 500; text-align: left;
+      }
+      .pet-menu button:hover:not(:disabled) { background: rgba(255, 255, 255, 0.14); }
+      .pet-menu button:disabled { opacity: 0.45; cursor: not-allowed; }
+      .pet-menu button .lock { margin-left: auto; font-size: 10.5px; color: rgba(255, 255, 255, 0.75); white-space: nowrap; }
+      .pet-paw {
+        position: fixed; left: 18px; bottom: 18px; z-index: 25;
+        width: 46px; height: 46px; padding: 0; border-radius: 999px;
+        display: flex; align-items: center; justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        background: rgba(16, 26, 38, 0.45); color: #ffb877;
+        box-shadow: 0 6px 20px rgba(8, 16, 26, 0.3);
+        backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+      .pet-paw:hover { background: rgba(16, 26, 38, 0.62); transform: scale(1.06); }
+      .pet-toast {
+        position: fixed; left: 50%; bottom: 30px; z-index: 60;
+        transform: translateX(-50%) translateY(10px);
+        max-width: min(92vw, 430px); padding: 10px 18px; border-radius: 999px;
+        border: 1px solid rgba(255, 214, 130, 0.55);
+        background: rgba(24, 30, 20, 0.82); color: #ffe1a6;
+        box-shadow: 0 10px 30px rgba(8, 16, 26, 0.4);
+        backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        font-size: 14px; font-weight: 600; text-align: center;
+        opacity: 0; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+      .pet-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+      @media (prefers-reduced-motion: reduce) {
+        .pet .fox-tail, .pet .fox-eyes, .pet .fox-aura,
+        .pet.act-hop .pet-scale, .pet.act-spin .pet-scale, .pet.act-roll .pet-scale,
+        .pet.act-flip .pet-scale, .pet.act-dance .pet-scale, .pet.act-magic .pet-scale,
+        .pet.evolving svg.fox, .evo-ring, .pet-fx span, .pet-food { animation: none; }
+      }
+
       /* ---------- animations (from v8) ---------- */
       .todo-check-path { stroke-dasharray: 1; stroke-dashoffset: 0; animation: check-draw 0.28s ease both; }
       @keyframes check-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
@@ -380,6 +558,7 @@
         </header>
       </main>
       <div id="ui-root"></div>
+      <div id="pet-root"></div>
     </div>
     <script>
       "use strict";
@@ -1141,6 +1320,7 @@
             var todo = data.todos.filter(function (t) { return t.id === id; })[0];
             if (!todo) return;
             todo.done = !todo.done;
+            if (todo.done) petCelebrateJump();
             saveData();
             renderHeaderExtras();
             renderTodosPanel(true);
@@ -1286,7 +1466,538 @@
         }
       });
 
+      /* ================= desktop pet: 阿绒 the fox =================
+         Original little fox drawn in SVG. Lives near the bottom-left,
+         walks slowly, blinks and wags its tail. Every Monday, once at
+         least 7 days have passed since the last evolution, it grows one
+         stage: 幼狐 → 少年狐 (red scarf) → 成年狐 (cape) → 灵狐 (glow,
+         flower wreath, lantern). At the top stage each new week instead
+         unlocks one extra interaction. State persists in localStorage. */
+      var PET_KEY = "daymark-pet-v1";
+      var PET_STAGES = [
+        { name: "幼狐", scale: 0.78 },
+        { name: "少年狐", scale: 0.9 },
+        { name: "成年狐", scale: 1 },
+        { name: "灵狐", scale: 1.06 },
+      ];
+      var PET_BONUS = [
+        { id: "roll", label: "打滚", cls: "act-roll", say: "滚呀滚呀～" },
+        { id: "dance", label: "跳支舞", cls: "act-dance", say: "看我跳舞！" },
+        { id: "petals", label: "撒花", cls: "act-hop", say: "花瓣雨来啦！", fx: "petal" },
+        { id: "flip", label: "翻跟头", cls: "act-flip", say: "嘿，翻过去啦！" },
+      ];
+      var pet = null;
+      var petMenuOpen = false;
+      var petSitting = false;
+      var petActing = false;
+      var petSayTimer = null;
+      var petToastTimer = null;
+
+      function petDefaultPos() {
+        return {
+          x: 22,
+          y: Math.max(60, window.innerHeight - 140),
+        };
+      }
+      function clampPetPos(x, y) {
+        var maxX = Math.max(4, window.innerWidth - 108);
+        var maxY = Math.max(40, window.innerHeight - 122);
+        return {
+          x: Math.min(Math.max(4, x), maxX),
+          y: Math.min(Math.max(40, y), maxY),
+        };
+      }
+      function loadPet() {
+        var fallback = petDefaultPos();
+        var fresh = {
+          stage: 0, bonus: 0, hidden: false,
+          adopted: todayStr(), lastEvolve: todayStr(),
+          x: fallback.x, y: fallback.y, greeted: false,
+        };
+        try {
+          var raw = localStorage.getItem(PET_KEY);
+          if (!raw) return fresh;
+          var s = JSON.parse(raw);
+          if (!s || typeof s.stage !== "number") return fresh;
+          var pos = (typeof s.x === "number" && typeof s.y === "number")
+            ? clampPetPos(s.x, s.y) : fallback;
+          return {
+            stage: Math.min(3, Math.max(0, s.stage)),
+            bonus: Math.min(PET_BONUS.length, Math.max(0, s.bonus || 0)),
+            hidden: !!s.hidden,
+            adopted: s.adopted || todayStr(),
+            lastEvolve: s.lastEvolve || s.adopted || todayStr(),
+            x: pos.x, y: pos.y,
+            greeted: !!s.greeted,
+          };
+        } catch (e) { return fresh; }
+      }
+      function savePet() {
+        try { localStorage.setItem(PET_KEY, JSON.stringify(pet)); } catch (e) { /* storage unavailable */ }
+      }
+
+      /* ---------- fox artwork (original SVG, one per stage) ---------- */
+      function foxSVG(stage) {
+        var s = "";
+        s += '<svg class="fox" viewBox="0 0 120 112" fill="none" aria-hidden="true">';
+        if (stage >= 3) {
+          s += '<defs><radialGradient id="pet-glow" cx="50%" cy="50%" r="50%">' +
+            '<stop offset="0%" stop-color="#ffd76e" stop-opacity="0.85"/>' +
+            '<stop offset="60%" stop-color="#ffb84d" stop-opacity="0.35"/>' +
+            '<stop offset="100%" stop-color="#ffb84d" stop-opacity="0"/></radialGradient></defs>' +
+            '<ellipse class="fox-aura" cx="60" cy="58" rx="54" ry="52" fill="url(#pet-glow)"/>';
+        }
+        /* tail (behind body, wags) */
+        s += '<g class="fox-tail">' +
+          '<path d="M78 84 C98 88 112 76 111 57 C110 44 100 36 91 43 C82 50 85 63 78 69 Z" fill="#e8762c"/>' +
+          '<path d="M91 43 C100 36 110 44 111 57 C104 51 96 49 91 43 Z" fill="#fff3e0"/></g>';
+        /* cape (stage 2+) behind body */
+        if (stage >= 2) {
+          s += '<path d="M37 56 Q27 82 38 101 L82 101 Q93 82 83 56 Q60 68 37 56 Z" fill="#27655f"/>' +
+            '<path d="M37 56 Q27 82 38 101 L48 101 Q40 80 44 60 Z" fill="#1d4f4a"/>';
+        }
+        s += '<g class="fox-body-g">';
+        /* body + belly + feet */
+        s += '<ellipse cx="60" cy="80" rx="25" ry="21" fill="#e8762c"/>' +
+          '<ellipse cx="60" cy="86" rx="14" ry="13" fill="#fff3e0"/>' +
+          '<ellipse cx="45" cy="99" rx="7.5" ry="4" fill="#c25e1f"/>' +
+          '<ellipse cx="75" cy="99" rx="7.5" ry="4" fill="#c25e1f"/>';
+        /* lantern (stage 3) hanging at the left paw */
+        if (stage >= 3) {
+          s += '<g>' +
+            '<circle class="fox-aura" cx="15" cy="70" r="13" fill="#ffd76e" opacity="0.4"/>' +
+            '<path d="M26 52 L16 60" stroke="#8a5a24" stroke-width="2" stroke-linecap="round"/>' +
+            '<rect x="9" y="60" width="4.5" height="3" rx="1" fill="#8a5a24"/>' +
+            '<rect x="7" y="63" width="17" height="15" rx="6.5" fill="#ffd76e" stroke="#d99a26" stroke-width="1.6"/>' +
+            '<path d="M11.5 65 v11 M15.5 64.5 v12 M19.5 65 v11" stroke="#e0aa3e" stroke-width="1.1"/>' +
+            '<rect x="10.5" y="78" width="10" height="3" rx="1" fill="#8a5a24"/></g>';
+        }
+        /* head */
+        s += '<g class="fox-head">' +
+          '<path d="M38 27 L42 3 L57 18 Z" fill="#e8762c"/>' +
+          '<path d="M42 20 L44 9.5 L52 17 Z" fill="#ffd9b0"/>' +
+          '<path d="M82 27 L78 3 L63 18 Z" fill="#e8762c"/>' +
+          '<path d="M78 20 L76 9.5 L68 17 Z" fill="#ffd9b0"/>' +
+          '<circle cx="60" cy="38" r="23" fill="#e8762c"/>' +
+          '<ellipse cx="60" cy="47" rx="12" ry="8.5" fill="#fff3e0"/>' +
+          '<ellipse cx="42" cy="45" rx="3.4" ry="2" fill="#f49c6b" opacity="0.55"/>' +
+          '<ellipse cx="78" cy="45" rx="3.4" ry="2" fill="#f49c6b" opacity="0.55"/>' +
+          '<g class="fox-eyes">' +
+            '<ellipse cx="49" cy="36" rx="3" ry="3.9" fill="#3a2415"/>' +
+            '<ellipse cx="71" cy="36" rx="3" ry="3.9" fill="#3a2415"/>' +
+            '<circle cx="50" cy="34.6" r="1.05" fill="#fff"/>' +
+            '<circle cx="72" cy="34.6" r="1.05" fill="#fff"/></g>' +
+          '<ellipse cx="60" cy="43" rx="3.4" ry="2.4" fill="#4a2c1a"/>' +
+          '<path d="M56.5 50 Q60 52.6 63.5 50" stroke="#4a2c1a" stroke-width="1.5" stroke-linecap="round"/>';
+        /* flower wreath (stage 3) */
+        if (stage >= 3) {
+          var flowers = [[43, 18, "#f7a8b8"], [52, 12.5, "#ffffff"], [61, 11, "#f9d976"], [70, 12.5, "#f7a8b8"], [78, 18, "#ffffff"]];
+          flowers.forEach(function (f) {
+            for (var k = 0; k < 5; k++) {
+              var a = (k / 5) * Math.PI * 2;
+              s += '<circle cx="' + (f[0] + 2.6 * Math.cos(a)).toFixed(1) + '" cy="' +
+                (f[1] + 2.6 * Math.sin(a)).toFixed(1) + '" r="2.1" fill="' + f[2] + '"/>';
+            }
+            s += '<circle cx="' + f[0] + '" cy="' + f[1] + '" r="1.5" fill="#f2a541"/>';
+          });
+        }
+        s += "</g>"; /* head */
+        /* scarf (stage 1+) over the neck */
+        if (stage >= 1) {
+          s += '<path d="M37 55 Q60 66 83 55 L83 63 Q60 74 37 63 Z" fill="#d13438"/>' +
+            '<path d="M71 63 L80 63 L77.5 80 L69 77.5 Z" fill="#b92b30"/>' +
+            '<circle cx="73" cy="63" r="4" fill="#d13438"/>';
+        }
+        /* cape clasp (stage 2+) */
+        if (stage >= 2) {
+          s += '<circle cx="60" cy="61" r="3.6" fill="#f2c14e" stroke="#b8860b" stroke-width="1.2"/>';
+        }
+        s += "</g></svg>";
+        return s;
+      }
+      var PAW_SVG = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
+        '<ellipse cx="12" cy="15.5" rx="4.6" ry="3.9"/>' +
+        '<ellipse cx="5.4" cy="10.6" rx="1.9" ry="2.4" transform="rotate(-18 5.4 10.6)"/>' +
+        '<ellipse cx="9.2" cy="7.6" rx="1.9" ry="2.5"/>' +
+        '<ellipse cx="14.8" cy="7.6" rx="1.9" ry="2.5"/>' +
+        '<ellipse cx="18.6" cy="10.6" rx="1.9" ry="2.4" transform="rotate(18 18.6 10.6)"/></svg>';
+      var FX_SVGS = {
+        heart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21C7 16.5 3 13 3 8.8 3 5.9 5.2 4 7.7 4c1.7 0 3.3 0.9 4.3 2.4C13 4.9 14.6 4 16.3 4 18.8 4 21 5.9 21 8.8c0 4.2-4 7.7-9 12.2z" fill="#f2607a"/></svg>',
+        star: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 5.9 6.5 0.8-4.8 4.4 1.3 6.4L12 17l-5.8 3.1 1.3-6.4L2.7 9.3l6.5-0.8z" fill="#f6c945"/></svg>',
+        petal: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3.5 3.2 5 6.6 5 10a5 5 0 1 1-10 0c0-3.4 1.5-6.8 5-10z" fill="#f7a8b8"/></svg>',
+        fish: '<svg viewBox="0 0 32 22" aria-hidden="true"><path d="M2 11 C7 4.5 13 2 19 2 C25 2 28 6 30 11 C28 16 25 20 19 20 C13 20 7 17.5 2 11 Z" fill="#5b8dd9"/><path d="M2 11 L7.5 5.5 L7.5 16.5 Z" fill="#3f6fb5"/><circle cx="23.5" cy="9" r="1.6" fill="#fff"/></svg>',
+      };
+
+      /* ---------- pet rendering ---------- */
+      var petRoot = document.getElementById("pet-root");
+      function petMenuHTML() {
+        var stage = PET_STAGES[pet.stage];
+        var hint = pet.stage < 3
+          ? "每周一长大一阶"
+          : pet.bonus < PET_BONUS.length ? "每周解锁一个新动作" : "新动作已全部解锁";
+        var html = '<div class="pet-menu-head"><div class="pm-name">阿绒<span>' + stage.name +
+          '</span></div><div class="pm-hint">' + hint + "</div></div>";
+        html += '<button type="button" data-act="pet">摸摸</button>';
+        html += pet.stage >= 1
+          ? '<button type="button" data-act="feed">喂食小鱼</button>'
+          : '<button type="button" disabled>喂食小鱼<span class="lock">少年狐解锁</span></button>';
+        html += pet.stage >= 2
+          ? '<button type="button" data-act="play">一起玩耍</button>'
+          : '<button type="button" disabled>一起玩耍<span class="lock">成年狐解锁</span></button>';
+        if (pet.stage >= 3) {
+          html += '<button type="button" data-act="magic">变魔术</button>';
+        }
+        for (var i = 0; i < pet.bonus; i++) {
+          html += '<button type="button" data-act="bonus-' + PET_BONUS[i].id + '">' + PET_BONUS[i].label + "</button>";
+        }
+        html += '<button type="button" data-act="hide">先藏起来</button>';
+        return html;
+      }
+      function renderPet() {
+        if (pet.hidden) {
+          petRoot.innerHTML =
+            '<button type="button" class="pet-paw" id="pet-paw" aria-label="把阿绒叫回来">' +
+            PAW_SVG + "</button>" +
+            '<div class="pet-toast" id="pet-toast" role="status"></div>';
+          document.getElementById("pet-paw").addEventListener("click", function () {
+            pet.hidden = false;
+            savePet();
+            renderPet();
+            petSay("我回来啦！");
+          });
+          return;
+        }
+        var pos = clampPetPos(pet.x, pet.y);
+        pet.x = pos.x; pet.y = pos.y;
+        petRoot.innerHTML =
+          '<div class="pet" id="pet" role="button" tabindex="0" aria-haspopup="true" aria-expanded="' +
+            (petMenuOpen ? "true" : "false") + '" aria-label="桌宠阿绒，' + PET_STAGES[pet.stage].name +
+            '，点击打开互动菜单，也可以拖动它" style="left:' + pet.x + "px;top:" + pet.y + 'px;--ps:' +
+            PET_STAGES[pet.stage].scale + '">' +
+            '<div class="pet-sign" id="pet-sign" hidden></div>' +
+            '<div class="pet-say" id="pet-say" aria-live="polite"></div>' +
+            '<div class="pet-menu' + (petMenuOpen ? " open" : "") + '" id="pet-menu" role="menu" aria-label="和阿绒互动">' +
+              (petMenuOpen ? petMenuHTML() : "") + "</div>" +
+            '<div class="pet-walk" id="pet-walk"><div class="pet-scale" id="pet-scale">' +
+              foxSVG(pet.stage) + "</div></div>" +
+            '<div class="pet-fx" id="pet-fx"></div>' +
+          "</div>" +
+          '<div class="pet-toast" id="pet-toast" role="status"></div>';
+        wirePet();
+        if (petMenuOpen) wirePetMenu();
+        updatePetSign();
+      }
+      function petEl() { return document.getElementById("pet"); }
+
+      /* Menu items only exist in the DOM while the menu is open, so a
+         closed menu leaves no unreachable controls behind. */
+      function wirePetMenu() {
+        var menu = document.getElementById("pet-menu");
+        if (!menu) return;
+        Array.prototype.forEach.call(menu.querySelectorAll("button[data-act]"), function (btn) {
+          btn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            petDo(btn.getAttribute("data-act"));
+          });
+        });
+      }
+      function setPetMenu(open) {
+        petMenuOpen = open;
+        var menu = document.getElementById("pet-menu");
+        var el = petEl();
+        if (el) el.setAttribute("aria-expanded", open ? "true" : "false");
+        if (!menu) return;
+        if (open) {
+          menu.innerHTML = petMenuHTML();
+          wirePetMenu();
+          menu.classList.add("open");
+        } else {
+          menu.classList.remove("open");
+          window.setTimeout(function () {
+            if (!petMenuOpen && menu.parentNode) menu.innerHTML = "";
+          }, 210);
+        }
+      }
+
+      /* ---------- speech bubble & toast ---------- */
+      function petSay(text, ms) {
+        var el = document.getElementById("pet-say");
+        if (!el) return;
+        el.textContent = text;
+        el.classList.add("show");
+        if (petSayTimer) window.clearTimeout(petSayTimer);
+        petSayTimer = window.setTimeout(function () { el.classList.remove("show"); }, ms || 2400);
+      }
+      function petToast(text, ms) {
+        var el = document.getElementById("pet-toast");
+        if (!el) return;
+        el.textContent = text;
+        el.classList.add("show");
+        if (petToastTimer) window.clearTimeout(petToastTimer);
+        petToastTimer = window.setTimeout(function () { el.classList.remove("show"); }, ms || 4200);
+      }
+
+      /* ---------- particle bursts ---------- */
+      function petBurst(kind, count) {
+        var fx = document.getElementById("pet-fx");
+        if (!fx) return;
+        for (var i = 0; i < count; i++) {
+          var span = document.createElement("span");
+          span.innerHTML = FX_SVGS[kind];
+          var dx = Math.round((Math.random() - 0.5) * 110);
+          var dy = -Math.round(38 + Math.random() * 55);
+          var rot = Math.round((Math.random() - 0.5) * 160);
+          span.style.setProperty("--dx", dx + "px");
+          span.style.setProperty("--dy", dy + "px");
+          span.style.setProperty("--rot", rot + "deg");
+          span.style.animationDelay = (Math.random() * 0.18).toFixed(2) + "s";
+          span.style.bottom = (66 + Math.random() * 22) + "px";
+          fx.appendChild(span);
+          (function (node) {
+            window.setTimeout(function () { if (node.parentNode) node.parentNode.removeChild(node); }, 1500);
+          })(span);
+        }
+      }
+      function petAct(cls, ms) {
+        var el = petEl();
+        if (!el) return;
+        petActing = true;
+        el.classList.add(cls);
+        window.setTimeout(function () {
+          el.classList.remove(cls);
+          petActing = false;
+        }, ms);
+      }
+
+      /* ---------- interactions ---------- */
+      function petDo(act) {
+        setPetMenu(false);
+        if (act === "hide") {
+          pet.hidden = true;
+          savePet();
+          renderPet();
+          return;
+        }
+        if (act === "pet") {
+          petAct("act-hop", 580);
+          petBurst("heart", 6);
+          petSay(["呼噜呼噜～", "最喜欢被摸摸了", "嘿嘿，好痒"][Math.floor(Math.random() * 3)]);
+        } else if (act === "feed") {
+          var fx = document.getElementById("pet-fx");
+          if (fx) {
+            var food = document.createElement("div");
+            food.className = "pet-food";
+            food.innerHTML = FX_SVGS.fish;
+            fx.appendChild(food);
+            window.setTimeout(function () { if (food.parentNode) food.parentNode.removeChild(food); }, 1250);
+          }
+          petAct("act-munch", 1180);
+          window.setTimeout(function () { petSay("小鱼干好好吃！"); }, 620);
+        } else if (act === "play") {
+          petAct("act-spin", 880);
+          petBurst("star", 5);
+          petSay("再来一次，再来一次！");
+        } else if (act === "magic") {
+          petAct("act-magic", 720);
+          petBurst("star", 12);
+          window.setTimeout(function () { petBurst("heart", 4); }, 260);
+          petSay("变变变，星星来啦！");
+        } else if (act.indexOf("bonus-") === 0) {
+          var id = act.slice(6);
+          for (var i = 0; i < PET_BONUS.length; i++) {
+            if (PET_BONUS[i].id === id) {
+              petAct(PET_BONUS[i].cls, 950);
+              if (PET_BONUS[i].fx) petBurst(PET_BONUS[i].fx, 8);
+              petSay(PET_BONUS[i].say);
+            }
+          }
+        }
+      }
+      /* Todo completed → the fox hops once to celebrate. */
+      function petCelebrateJump() {
+        if (!pet || pet.hidden) return;
+        petAct("act-hop", 580);
+        petBurst("heart", 3);
+      }
+
+      /* ---------- drag & menu wiring ---------- */
+      function wirePet() {
+        var el = petEl();
+        if (!el) return;
+        var drag = null;
+        var justDragged = false;
+        el.addEventListener("pointerdown", function (e) {
+          if (e.target.closest && e.target.closest(".pet-menu")) return;
+          drag = {
+            pointerId: e.pointerId, startX: e.clientX, startY: e.clientY,
+            originX: pet.x, originY: pet.y, moved: false,
+          };
+          try { el.setPointerCapture(e.pointerId); } catch (err) {}
+        });
+        el.addEventListener("pointermove", function (e) {
+          if (!drag || e.pointerId !== drag.pointerId) return;
+          var dx = e.clientX - drag.startX;
+          var dy = e.clientY - drag.startY;
+          if (!drag.moved && Math.hypot(dx, dy) < 6) return;
+          drag.moved = true;
+          el.style.cursor = "grabbing";
+          var next = clampPetPos(drag.originX + dx, drag.originY + dy);
+          pet.x = next.x; pet.y = next.y;
+          el.style.left = next.x + "px";
+          el.style.top = next.y + "px";
+        });
+        function endDrag(e) {
+          if (!drag || e.pointerId !== drag.pointerId) return;
+          var wasMoved = drag.moved;
+          drag = null;
+          el.style.cursor = "grab";
+          if (wasMoved) {
+            justDragged = true;
+            savePet();
+          }
+        }
+        el.addEventListener("pointerup", endDrag);
+        el.addEventListener("pointercancel", endDrag);
+        el.addEventListener("click", function (e) {
+          if (e.target.closest && e.target.closest(".pet-menu")) return;
+          if (justDragged) { justDragged = false; return; }
+          setPetMenu(!petMenuOpen);
+        });
+        el.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") {
+            if (e.target !== el) return;
+            e.preventDefault();
+            setPetMenu(!petMenuOpen);
+          }
+        });
+      }
+      document.addEventListener("pointerdown", function (e) {
+        if (!petMenuOpen) return;
+        var el = petEl();
+        if (el && !el.contains(e.target)) setPetMenu(false);
+      });
+      window.addEventListener("resize", function () {
+        if (!pet || pet.hidden) return;
+        var pos = clampPetPos(pet.x, pet.y);
+        pet.x = pos.x; pet.y = pos.y;
+        var el = petEl();
+        if (el) { el.style.left = pos.x + "px"; el.style.top = pos.y + "px"; }
+      });
+
+      /* ---------- countdown sign (nearest day within 3 days) ---------- */
+      function updatePetSign() {
+        var sign = document.getElementById("pet-sign");
+        if (!sign) return;
+        var up = upcomingEvents();
+        if (up.length && up[0].d <= 3) {
+          var name = up[0].name.length > 7 ? up[0].name.slice(0, 7) + "…" : up[0].name;
+          sign.innerHTML = esc(name) + "<small>" +
+            (up[0].d === 0 ? "就是今天！" : "还有 " + up[0].d + " 天") + "</small>";
+          sign.hidden = false;
+        } else {
+          sign.hidden = true;
+        }
+      }
+
+      /* ---------- ambient walking ---------- */
+      var petWalk = { x: 0, target: 34, facing: 1, pauseUntil: 0 };
+      var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.setInterval(function () {
+        if (!pet || pet.hidden || petMenuOpen || petSitting || petActing || reduceMotion) return;
+        var walkEl = document.getElementById("pet-walk");
+        if (!walkEl) return;
+        var now = Date.now();
+        if (now < petWalk.pauseUntil) return;
+        var step = 0.55;
+        var diff = petWalk.target - petWalk.x;
+        if (Math.abs(diff) <= step) {
+          petWalk.x = petWalk.target;
+          if (Math.random() < 0.45) {
+            petWalk.pauseUntil = now + 2200 + Math.random() * 3800;
+          } else {
+            petWalk.target = Math.round((Math.random() - 0.5) * 96);
+          }
+        } else {
+          petWalk.facing = diff > 0 ? 1 : -1;
+          petWalk.x += step * petWalk.facing;
+        }
+        walkEl.style.transform = "translateX(" + petWalk.x.toFixed(1) + "px) scaleX(" + petWalk.facing + ")";
+      }, 50);
+
+      /* ---------- pomodoro link: sit alongside while focusing ---------- */
+      window.setInterval(function () {
+        if (!pet || pet.hidden) return;
+        var sitting = !!(typeof timer !== "undefined" && timer && timer.running && timer.mode === "focus");
+        if (sitting === petSitting) return;
+        petSitting = sitting;
+        var el = petEl();
+        if (el) el.classList.toggle("sitting", sitting);
+        if (sitting) petSay("陪你专注中", 3000);
+      }, 800);
+
+      /* ---------- weekly evolution ---------- */
+      function checkEvolution() {
+        var now = new Date();
+        if (now.getDay() !== 1) return; /* Mondays only */
+        var diff = Math.round((parseDay(todayStr()) - parseDay(pet.lastEvolve)) / 86400000);
+        if (diff < 7) return;
+        pet.lastEvolve = todayStr();
+        if (pet.stage < 3) {
+          pet.stage += 1;
+          savePet();
+          petEvolveCelebration("阿绒进化了！现在是「" + PET_STAGES[pet.stage].name + "」");
+        } else if (pet.bonus < PET_BONUS.length) {
+          pet.bonus += 1;
+          savePet();
+          renderPet();
+          petBurst("star", 10);
+          petToast("新的一周：阿绒学会了新动作「" + PET_BONUS[pet.bonus - 1].label + "」");
+          petSay("我学会新本领啦！");
+        } else {
+          savePet();
+        }
+      }
+      function petEvolveCelebration(text) {
+        pet.hidden = false;
+        petMenuOpen = false;
+        renderPet();
+        var el = petEl();
+        if (el) {
+          el.classList.add("evolving");
+          var ring = document.createElement("div");
+          ring.className = "evo-ring";
+          el.appendChild(ring);
+          window.setTimeout(function () {
+            el.classList.remove("evolving");
+            if (ring.parentNode) ring.parentNode.removeChild(ring);
+          }, 2000);
+        }
+        window.setTimeout(function () { petBurst("star", 12); }, 650);
+        window.setTimeout(function () { petBurst("heart", 5); }, 1000);
+        petToast("进化了！" + text, 5200);
+        petSay("我长大啦！", 3200);
+      }
+
+      /* ---------- pet init ---------- */
+      function petInit() {
+        pet = loadPet();
+        var isNew = !pet.greeted;
+        renderPet();
+        checkEvolution();
+        window.setInterval(function () { checkEvolution(); updatePetSign(); }, 60000);
+        if (isNew) {
+          pet.greeted = true;
+          savePet();
+          if (!pet.hidden) {
+            window.setTimeout(function () { petSay("你好，我是阿绒！", 3400); }, 600);
+          }
+        }
+      }
+
       renderUI();
+      petInit();
     </script>
+  </body>
+</html>
   </body>
 </html>
