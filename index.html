@@ -367,6 +367,35 @@
       @keyframes fox-blink { 0%, 91%, 100% { transform: scaleY(1); } 94.5% { transform: scaleY(0.08); } }
       .pet .fox-aura { animation: aura-pulse 3.2s ease-in-out infinite; }
       @keyframes aura-pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.85; } }
+      .pet .fox-ear-l, .pet .fox-ear-r { transform-box: fill-box; transform-origin: 50% 92%; }
+      .pet .fox-ear-l { animation: ear-twitch 5.4s ease-in-out infinite; }
+      .pet .fox-ear-r { animation: ear-twitch 6.3s ease-in-out infinite; animation-delay: -2.4s; }
+      @keyframes ear-twitch {
+        0%, 86%, 100% { transform: rotate(0deg); }
+        89.5% { transform: rotate(-6deg); }
+        93% { transform: rotate(3.5deg); }
+        96.5% { transform: rotate(0deg); }
+      }
+      .pet .fox-breath-g { transform-box: fill-box; transform-origin: 50% 100%; animation: breath-soft 3.6s ease-in-out infinite; }
+      @keyframes breath-soft { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.022) translateY(-0.4px); } }
+      .pet .fox-fire { animation: fire-float 2.7s ease-in-out infinite; }
+      @keyframes fire-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4.5px); } }
+      .pet .fox-petal { animation: petal-fall 5.6s linear infinite; }
+      @keyframes petal-fall {
+        0% { transform: translate(0, -4px) rotate(0deg); opacity: 0; }
+        14% { opacity: 0.9; }
+        55% { transform: translate(5px, 24px) rotate(120deg); }
+        88% { opacity: 0.75; }
+        100% { transform: translate(-3px, 52px) rotate(230deg); opacity: 0; }
+      }
+      .pet.evolving .fox-tail { animation: evo-fan 1.9s ease both; }
+      .pet.evolving .wa-tail { animation: evo-fan 1.9s ease both; }
+      @keyframes evo-fan {
+        0% { transform: rotate(0deg) scale(1); }
+        35% { transform: rotate(var(--fan, 8deg)) scale(1.12); }
+        68% { transform: rotate(calc(var(--fan, 8deg) * -0.35)) scale(1.05); }
+        100% { transform: rotate(0deg) scale(1); }
+      }
       .pet .fox-body-g { transform-box: fill-box; transform-origin: 50% 100%; transition: transform 0.35s ease; }
       .pet.sitting .fox-body-g { transform: translateY(5px) scaleY(0.93); }
       .pet.sitting .fox-tail { animation-duration: 5s; }
@@ -454,7 +483,7 @@
         100% { opacity: 0; transform: scale(0.2); }
       }
       .pet-say {
-        position: absolute; bottom: 106px; left: 50%; transform: translateX(-50%) translateY(4px);
+        position: absolute; bottom: 136px; left: 50%; transform: translateX(-50%) translateY(4px);
         max-width: 190px; padding: 6px 12px; border-radius: 999px;
         background: rgba(255, 251, 243, 0.96); color: #5b4326;
         border: 1px solid rgba(176, 137, 84, 0.45);
@@ -474,7 +503,7 @@
       }
       .pet-sign small { display: block; font-weight: 500; color: #a3702c; font-size: 10.5px; }
       .pet-menu {
-        position: absolute; bottom: 110px; left: 50%; transform: translateX(-50%) translateY(6px);
+        position: absolute; bottom: 140px; left: 50%; transform: translateX(-50%) translateY(6px);
         width: 176px; padding: 8px; border-radius: 14px; z-index: 3;
         border: 1px solid rgba(255, 255, 255, 0.28);
         background: rgba(16, 26, 38, 0.78); color: #fff;
@@ -519,10 +548,149 @@
       }
       .pet-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
       @media (prefers-reduced-motion: reduce) {
-        .pet .fox-tail, .pet .fox-eyes, .pet .fox-aura,
+        .pet .fox-tail, .pet .fox-eyes, .pet .fox-aura, .pet .wa-float-g, .pet .wa-tail, .pet .wa-sleeve, .pet-smoke,
+        .pet .fox-ear-l, .pet .fox-ear-r, .pet .fox-breath-g, .pet .fox-fire, .pet .fox-petal,
         .pet.act-hop .pet-scale, .pet.act-spin .pet-scale, .pet.act-roll .pet-scale,
         .pet.act-flip .pet-scale, .pet.act-dance .pet-scale, .pet.act-magic .pet-scale,
-        .pet.evolving svg.fox, .evo-ring, .pet-fx span, .pet-food { animation: none; }
+        .pet.act-breath .fox-body-g, .pet.act-nod .fox-head, .pet.act-look .fox-head,
+        .pet.act-stretch .pet-scale, .pet.act-wave .pet-scale, .pet.act-shake .pet-scale,
+        .pet.act-squash .pet-scale,
+        .pet.evolving svg.fox, .evo-ring, .pet-fx span, .pet-food, .pet-dot { animation: none; }
+      }
+
+      /* ---------- pet upgrade: status pill, panel, extra actions ---------- */
+      .pet-status {
+        position: absolute; bottom: 108px; left: 50%; transform: translateX(-50%);
+        z-index: 2; max-width: 210px; padding: 3px 11px 3px 9px; border-radius: 999px;
+        display: flex; align-items: center; gap: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        background: rgba(16, 26, 38, 0.55); color: #fff;
+        box-shadow: 0 4px 14px rgba(9, 20, 32, 0.22);
+        backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+        font-size: 11.5px; font-weight: 500; white-space: nowrap;
+        overflow: hidden; text-overflow: ellipsis; cursor: pointer;
+        transition: bottom 0.25s ease, background 0.2s ease;
+      }
+      .pet-status:hover { background: rgba(16, 26, 38, 0.72); }
+      .pet-dot {
+        width: 8px; height: 8px; border-radius: 999px; flex-shrink: 0;
+        background: #5aa2ff; box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.16);
+      }
+      .pet-dot.green { background: #43d17c; }
+      .pet-dot.blue { background: #5aa2ff; }
+      .pet-dot.gray { background: #9aa7b4; }
+      .pet-dot.red { background: #ff5a5a; animation: pet-dot-pulse 1.5s ease-in-out infinite; }
+      @keyframes pet-dot-pulse {
+        0%, 100% { box-shadow: 0 0 0 2px rgba(255, 90, 90, 0.3); }
+        50% { box-shadow: 0 0 0 5px rgba(255, 90, 90, 0.1); }
+      }
+      .pet.has-sign .pet-status { bottom: 146px; }
+      .pet.has-sign .pet-say { bottom: 174px; }
+      .pet.held .fox-body-g { transform: rotate(-7deg) translateY(-3px); }
+      .pet.held .fox-tail { animation-duration: 0.55s; }
+      .pet.sleeping .fox-body-g { transform: translateY(6px) scaleY(0.9); }
+      .pet.sleeping .fox-tail { animation-duration: 6.5s; }
+      .pet.fainted .pet-scale { transform: scale(var(--ps, 1)) rotate(-80deg) translateY(3px); }
+      .pet.act-breath .fox-body-g { animation: fox-breath 2.6s ease-in-out; }
+      @keyframes fox-breath { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.035) translateY(-0.6px); } }
+      .pet.act-nod .fox-head { animation: fox-nod 1.5s ease-in-out; }
+      @keyframes fox-nod { 0%, 100% { transform: rotate(0deg) translateY(0); } 35% { transform: rotate(4deg) translateY(3.5px); } 65% { transform: rotate(3deg) translateY(3px); } }
+      .pet.act-look .fox-head { animation: fox-look 1.7s ease-in-out; }
+      @keyframes fox-look { 0%, 100% { transform: rotate(0deg); } 28% { transform: rotate(-11deg); } 62% { transform: rotate(11deg); } }
+      .pet.act-stretch .pet-scale { animation: pet-stretch 1.45s ease-in-out; }
+      @keyframes pet-stretch {
+        0% { transform: scale(var(--ps, 1)) scaleY(1) scaleX(1); }
+        40% { transform: scale(var(--ps, 1)) scaleY(1.13) scaleX(0.93) translateY(-3px); }
+        75% { transform: scale(var(--ps, 1)) scaleY(0.96) scaleX(1.03); }
+        100% { transform: scale(var(--ps, 1)) scaleY(1) scaleX(1); }
+      }
+      .pet.act-wave .pet-scale { animation: pet-wave 0.95s ease-in-out; }
+      @keyframes pet-wave {
+        0%, 100% { transform: scale(var(--ps, 1)) rotate(0deg); }
+        25% { transform: scale(var(--ps, 1)) rotate(-8deg) translateY(-3px); }
+        55% { transform: scale(var(--ps, 1)) rotate(8deg) translateY(-3px); }
+        80% { transform: scale(var(--ps, 1)) rotate(-5deg); }
+      }
+      .pet.act-shake .pet-scale { animation: pet-shake 0.5s ease; }
+      @keyframes pet-shake {
+        0%, 100% { transform: scale(var(--ps, 1)) translateX(0); }
+        25% { transform: scale(var(--ps, 1)) translateX(-3.5px); }
+        55% { transform: scale(var(--ps, 1)) translateX(3.5px); }
+        80% { transform: scale(var(--ps, 1)) translateX(-2px); }
+      }
+      .pet.act-squash .pet-scale { animation: pet-squash 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+      @keyframes pet-squash {
+        0% { transform: scale(var(--ps, 1)) scaleY(1) scaleX(1); }
+        35% { transform: scale(var(--ps, 1)) scaleY(0.7) scaleX(1.2); }
+        70% { transform: scale(var(--ps, 1)) scaleY(1.08) scaleX(0.95); }
+        100% { transform: scale(var(--ps, 1)) scaleY(1) scaleX(1); }
+      }
+      .pet.act-sun .fox-body-g { transform: translateY(6px) scaleY(0.9); }
+      .pet-panel {
+        position: absolute; bottom: 140px; left: 50%; transform: translateX(-50%) translateY(6px);
+        width: 248px; max-height: min(62vh, 430px); overflow-y: auto;
+        padding: 12px 14px; border-radius: 14px; z-index: 3;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        background: rgba(16, 26, 38, 0.82); color: #fff;
+        box-shadow: 0 12px 30px rgba(8, 16, 26, 0.35);
+        backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+        opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease;
+        font-size: 12.5px;
+      }
+      .pet-panel.open { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+      .pet-panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+      .pet-panel-head .pp-title { font-size: 14px; font-weight: 600; }
+      .pet-panel-head .pp-title span { margin-left: 6px; font-size: 11.5px; font-weight: 600; color: #ffcf7d; }
+      .pet-panel-close {
+        display: flex; width: 26px; height: 26px; min-height: 0; padding: 0; flex-shrink: 0;
+        align-items: center; justify-content: center; border: 0; border-radius: 6px;
+        background: transparent; color: rgba(255, 255, 255, 0.8);
+      }
+      .pet-panel-close:hover { background: rgba(255, 255, 255, 0.14); color: #fff; }
+      .pet-panel .pp-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 4.5px 0; }
+      .pet-panel .pp-row .k { color: rgba(255, 255, 255, 0.72); flex-shrink: 0; }
+      .pet-panel .pp-row .v { font-weight: 600; text-align: right; }
+      .pet-panel .pp-bar { height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.18); overflow: hidden; margin: 1px 0 5px; }
+      .pet-panel .pp-bar span { display: block; height: 100%; border-radius: 999px; background: #ffb35c; transition: width 0.4s ease; }
+      .pet-panel .pp-bar span.sat { background: #7fc96b; }
+      .pet-panel .pp-acts { margin: 2px 0 0; line-height: 1.65; color: rgba(255, 255, 255, 0.88); }
+      .pet-panel .pp-sec { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.16); color: rgba(255, 255, 255, 0.72); }
+      .pet-panel .pp-switch {
+        display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 10px;
+        min-height: 36px; margin-top: 6px; padding: 7px 10px; border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.25); background: rgba(255, 255, 255, 0.1);
+        color: #fff; font-size: 13px; font-weight: 600; text-align: left;
+      }
+      .pet-panel .pp-switch:hover { background: rgba(255, 255, 255, 0.2); }
+      .pet-panel .pp-switch span { font-size: 11.5px; font-weight: 500; color: rgba(255, 255, 255, 0.75); white-space: nowrap; }
+      .pet-panel .pp-opt.on { border-color: rgba(255, 207, 125, 0.9); background: rgba(255, 179, 92, 0.24); }
+      .pet-panel .pp-opt.on span { color: #ffcf7d; font-weight: 700; }
+      .pet-panel .pp-note { margin: 6px 0 0; font-size: 11.5px; line-height: 1.6; color: rgba(255, 255, 255, 0.68); }
+
+      /* ---------- second pet: 小娲 the snake goddess (floats, never walks) ---------- */
+      .pet .wa-float-g { animation: wa-float 3.6s ease-in-out infinite; }
+      @keyframes wa-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3.5px); } }
+      .pet .wa-tail {
+        transform-box: fill-box; transform-origin: 50% 4%;
+        animation: wa-tail-sway 3.4s ease-in-out infinite;
+      }
+      @keyframes wa-tail-sway { 0%, 100% { transform: rotate(-2.4deg); } 50% { transform: rotate(2.8deg); } }
+      .pet .wa-sleeve {
+        transform-box: fill-box; transform-origin: 50% 0%;
+        animation: wa-sleeve-wave 3.2s ease-in-out infinite;
+      }
+      @keyframes wa-sleeve-wave { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(2.2deg); } }
+      .pet-smoke {
+        position: absolute; left: 50%; bottom: 30px; z-index: 4;
+        width: 16px; height: 16px; margin-left: -8px; border-radius: 999px;
+        background: radial-gradient(circle, rgba(245, 248, 250, 0.95) 0%, rgba(226, 233, 239, 0.55) 55%, rgba(226, 233, 239, 0) 75%);
+        filter: blur(1.5px); pointer-events: none; opacity: 0;
+        animation: smoke-puff 0.8s ease-out both;
+      }
+      @keyframes smoke-puff {
+        0% { opacity: 0; transform: translate(0, 6px) scale(0.5); }
+        22% { opacity: 0.95; }
+        100% { opacity: 0; transform: translate(var(--dx, 0px), var(--dy, -26px)) scale(3.4); }
       }
 
       /* ---------- animations (from v8) ---------- */
@@ -768,7 +936,12 @@
       }
       function closeAll() { ringOpen = false; activeTool = null; renderUI(); }
       function openRing() { ringOpen = true; activeTool = null; renderUI(); }
-      function openPanel(id) { ringOpen = false; activeTool = id; renderUI(); }
+      function openPanel(id) {
+        ringOpen = false; activeTool = id;
+        /* Opening 重要日子 acknowledges the fox's unread countdown reminder. */
+        if (id === "days") petAckNotify();
+        renderUI();
+      }
 
       /* ================= floating tool dot =================
          iOS AssistiveTouch-style launcher: small translucent dot, no label.
@@ -1472,26 +1645,193 @@
          least 7 days have passed since the last evolution, it grows one
          stage: 幼狐 → 少年狐 (red scarf) → 成年狐 (cape) → 灵狐 (glow,
          flower wreath, lantern). At the top stage each new week instead
-         unlocks one extra interaction. State persists in localStorage. */
-      var PET_KEY = "daymark-pet-v1";
-      var PET_STAGES = [
-        { name: "幼狐", scale: 0.78 },
-        { name: "少年狐", scale: 0.9 },
-        { name: "成年狐", scale: 1 },
-        { name: "灵狐", scale: 1.06 },
-      ];
-      var PET_BONUS = [
-        { id: "roll", label: "打滚", cls: "act-roll", say: "滚呀滚呀～" },
-        { id: "dance", label: "跳支舞", cls: "act-dance", say: "看我跳舞！" },
-        { id: "petals", label: "撒花", cls: "act-hop", say: "花瓣雨来啦！", fx: "petal" },
-        { id: "flip", label: "翻跟头", cls: "act-flip", say: "嘿，翻过去啦！" },
-      ];
+         unlocks one extra interaction.
+         Upgraded behaviour (inspired by classic desktop pets): a weighted
+         random action pool, fling physics with gravity and squash, poke
+         reactions by mood, idle chatter, a persistent status line, sleep
+         mode, intimacy & satiety meters, a status panel, and optional
+         WebAudio sound effects (off by default). State persists in
+         localStorage.
+         Plugin-pet round: the fox strolls along the bottom with random
+         pauses and turns at the edges; two clicks within 300ms freeze /
+         resume the stroll (status pill then reads 休息中）; the status
+         pill carries a state dot (green focusing, blue resting/waiting,
+         red unread reminder, gray sleeping); a countdown within 3 days
+         raises an unread reminder — hop, bubble, red dot — cleared by
+         opening the 重要日子 panel; and the first open of each day is
+         greeted with a wave. With reduced motion the fox stays a
+         static frame: no strolling, random actions or flinging. */
+      /* Two pets, raised one at a time （换着养）: 阿绒 the fox walks along
+         the bottom; 小娲 the little snake goddess floats instead, her
+         lotus lantern glowing brighter after dark. Each keeps its own
+         stage / intimacy / satiety / hidden / position in its own
+         localStorage key; the panel's 换宠物 button swaps them with a
+         puff of smoke, and the active species is remembered.
+         Companionship modes (unlocked once either pet reaches the top
+         stage): 随机换宠 is OFF by default — with nothing chosen, the
+         current pet (阿绒 at first) simply stays, never swapping on
+         its own. Turning it on in the panel makes the first open of
+         each day pick one of the two at random. 一直陪伴 locks one
+         pet as the permanent companion; lock and random are mutually
+         exclusive in effect and the lock wins. Manual 换宠物 always
+         works regardless. The choice persists in its own key. */
+      var PET_ACTIVE_KEY = "daymark-pet-active-v1";
+      var SPECIES = {
+        fox: {
+          id: "fox", key: "daymark-pet-v1", name: "阿绒", kind: "小狐狸",
+          stages: [
+            { name: "幼狐", scale: 0.78 },
+            { name: "少年狐", scale: 0.9 },
+            { name: "成年狐", scale: 1 },
+            { name: "灵狐", scale: 1.06 },
+          ],
+          bonus: [
+            { id: "roll", label: "打滚", cls: "act-roll", say: "滚呀滚呀～" },
+            { id: "dance", label: "跳支舞", cls: "act-dance", say: "看我跳舞！" },
+            { id: "petals", label: "撒花", cls: "act-hop", say: "花瓣雨来啦！", fx: "petal" },
+            { id: "flip", label: "翻跟头", cls: "act-flip", say: "嘿，翻过去啦！" },
+          ],
+          feedLabel: "喂食小鱼", playLabel: "一起玩耍", specialLabel: "变魔术",
+          food: "fish", moveWord: "散步",
+          says: {
+            petLines: ["呼噜呼噜～", "最喜欢被摸摸了", "嘿嘿，好痒"],
+            feedSay: "小鱼干好好吃！",
+            playSay: "再来一次，再来一次！",
+            specialSay: "变变变，星星来啦！",
+            pokeHappy: ["嘿嘿", "在呢在呢", "跳一个给你看"],
+            pokeSurprised: ["哇！吓我一跳", "诶？叫我吗"],
+            pokeTickle: "咯咯咯，好痒好痒",
+            pokeWave: "嗨！元气满满向你挥手",
+            angrySay: "哼！再戳我要生气啦",
+            wakeSay: "唔……醒啦，睡得好香",
+            freezeSay: "好，我就在这儿休息一下",
+            unfreezeSay: "休息够啦，继续散步！",
+            greetFirst: "你好，我是阿绒！长按我可以打开菜单",
+          },
+        },
+        wa: {
+          id: "wa", key: "daymark-pet-wa-v1", name: "小娲", kind: "灵蛇小女娲",
+          stages: [
+            { name: "小蛇女", scale: 0.78 },
+            { name: "少女", scale: 0.9 },
+            { name: "仙子", scale: 1 },
+            { name: "神女", scale: 1.06 },
+          ],
+          bonus: [
+            { id: "dance2", label: "翩翩起舞", cls: "act-dance", say: "衣袖飘飘，跳支舞给你看" },
+            { id: "bless", label: "莲灯祈福", cls: "act-magic", say: "莲灯保佑你，顺顺利利", fx: "star" },
+            { id: "lotusrain", label: "莲花雨", cls: "act-hop", say: "莲花雨来啦！", fx: "petal" },
+            { id: "cloud", label: "腾云翻身", cls: "act-flip", say: "驾着小云朵翻个身！" },
+          ],
+          feedLabel: "喂莲子仙桃", playLabel: "云端玩耍", specialLabel: "莲灯许愿",
+          food: "peach", moveWord: "飘游",
+          says: {
+            petLines: ["唔，好舒服", "最喜欢被摸摸了", "嘿嘿，金冠都要歪啦"],
+            feedSay: "莲子清甜，仙桃多汁，好好吃！",
+            playSay: "再来一次，再来一次！",
+            specialSay: "闭上眼许个愿吧——莲灯都听见了",
+            pokeHappy: ["嘿嘿", "在呢，我在云端看着你", "飘一个给你看"],
+            pokeSurprised: ["哇，吓我一跳", "诶？唤我吗"],
+            pokeTickle: "咯咯咯，袖子都笑皱了",
+            pokeWave: "嗨，愿你今日顺遂如意",
+            angrySay: "哼！再戳，莲灯可要晃了",
+            wakeSay: "唔……醒啦，这一觉睡在云朵上",
+            freezeSay: "好，我就停在这朵云上歇歇",
+            unfreezeSay: "歇够啦，继续飘游！",
+            greetFirst: "你好，我是小娲！长按我可以打开菜单",
+          },
+        },
+      };
+      var petSpecies = "fox";
+      function SP() { return SPECIES[petSpecies]; }
+      /* Live views onto the active species' tables; applySpeciesTables
+         re-points them on every switch. PET_POOL / PET_CHATTER start
+         null and are filled by petInit once FOX_/WA_ tables exist. */
+      var PET_STAGES = SPECIES.fox.stages;
+      var PET_BONUS = SPECIES.fox.bonus;
+      var PET_POOL = null;
+      var PET_CHATTER = null;
+      function applySpeciesTables() {
+        var cfg = SPECIES[petSpecies];
+        PET_STAGES = cfg.stages;
+        PET_BONUS = cfg.bonus;
+        PET_POOL = petSpecies === "wa" ? WA_POOL : FOX_POOL;
+        PET_CHATTER = petSpecies === "wa" ? WA_CHATTER : FOX_CHATTER;
+      }
+      var PET_TIERS = ["陌生", "熟悉", "亲密", "挚友"];
+      var PET_TIER_MIN = [0, 20, 60, 120];
       var pet = null;
       var petMenuOpen = false;
+      var petPanelOpen = false;
       var petSitting = false;
       var petActing = false;
       var petSayTimer = null;
       var petToastTimer = null;
+      var petFace = "normal";
+      var petFaceTimer = null;
+      var petPokeCount = 0;
+      var petPokeLast = 0;
+      var petDizzy = false;
+      var petFlying = false;
+      var petPhysTimer = null;
+      var petVel = { x: 0, y: 0 };
+      var petLastActAt = 0;
+      var petLastChatAt = 0;
+      var petLastTouchAt = 0;
+      var petLastClickAt = 0;
+      var petPokeTimer = null;
+      var petNotifyJumpedKey = "";
+
+      /* ---------- companionship modes: 随机换宠 & 一直陪伴 ---------- */
+      var PET_ROSTER_KEY = "daymark-pet-roster-v1";
+      var petRoster = { random: false, lock: "", lastRandomDay: "" };
+      function loadPetRoster() {
+        try {
+          var raw = localStorage.getItem(PET_ROSTER_KEY);
+          if (!raw) return;
+          var s = JSON.parse(raw);
+          if (!s) return;
+          petRoster.random = !!s.random;
+          petRoster.lock = (s.lock === "fox" || s.lock === "wa") ? s.lock : "";
+          petRoster.lastRandomDay = typeof s.lastRandomDay === "string" ? s.lastRandomDay : "";
+        } catch (e) { /* storage unavailable — defaults: no random, no lock */ }
+      }
+      function savePetRoster() {
+        try { localStorage.setItem(PET_ROSTER_KEY, JSON.stringify(petRoster)); } catch (e) { /* storage unavailable */ }
+      }
+      function petStoredStage(species) {
+        if (pet && pet.species === species) return pet.stage;
+        try {
+          var raw = localStorage.getItem(SPECIES[species].key);
+          if (!raw) return 0;
+          var s = JSON.parse(raw);
+          return (s && typeof s.stage === "number") ? Math.min(3, Math.max(0, s.stage)) : 0;
+        } catch (e) { return 0; }
+      }
+      /* Unlocked once either pet reaches the top stage (index 3). */
+      function petRosterUnlocked() {
+        return petStoredStage("fox") >= 3 || petStoredStage("wa") >= 3;
+      }
+      function petSetLock(species) {
+        petRoster.lock = species; /* "" clears the lock */
+        savePetRoster();
+        if (species && species !== petSpecies) {
+          /* The locked companion comes out right away; the switch
+             closes the panel as it arrives. */
+          petSwitchTo(species);
+        } else if (petPanelOpen) {
+          setPetPanel(true);
+          if (species) petToast("已锁定" + SPECIES[species].name + "一直陪伴");
+        }
+      }
+      function petToggleRandom() {
+        petRoster.random = !petRoster.random;
+        savePetRoster();
+        if (petPanelOpen) setPetPanel(true);
+        petToast(petRoster.random
+          ? "随机换宠已开启：每天第一次打开时，阿绒和小娲随机来一只"
+          : "随机换宠已关闭");
+      }
 
       function petDefaultPos() {
         return {
@@ -1507,61 +1847,263 @@
           y: Math.min(Math.max(40, y), maxY),
         };
       }
-      function loadPet() {
+      function petTier() {
+        var t = 0;
+        for (var i = 0; i < PET_TIER_MIN.length; i++) {
+          if (pet.intimacy >= PET_TIER_MIN[i]) t = i;
+        }
+        return t;
+      }
+      function petDecaySatiety() {
+        var now = Date.now();
+        var mins = (now - (pet.satietyAt || now)) / 60000;
+        if (mins > 0) {
+          pet.satiety = Math.max(0, Math.round((pet.satiety - mins / 6) * 10) / 10);
+          pet.satietyAt = now;
+        }
+      }
+      function loadPet(species) {
         var fallback = petDefaultPos();
         var fresh = {
+          species: species,
           stage: 0, bonus: 0, hidden: false,
           adopted: todayStr(), lastEvolve: todayStr(),
           x: fallback.x, y: fallback.y, greeted: false,
+          intimacy: 0, satiety: 80, satietyAt: Date.now(),
+          sleeping: false, soundOn: false,
+          frozen: false, lastGreetDay: "", notifyAck: "",
         };
         try {
-          var raw = localStorage.getItem(PET_KEY);
+          var raw = localStorage.getItem(SPECIES[species].key);
           if (!raw) return fresh;
           var s = JSON.parse(raw);
           if (!s || typeof s.stage !== "number") return fresh;
           var pos = (typeof s.x === "number" && typeof s.y === "number")
             ? clampPetPos(s.x, s.y) : fallback;
-          return {
+          var merged = {
+            species: species,
             stage: Math.min(3, Math.max(0, s.stage)),
-            bonus: Math.min(PET_BONUS.length, Math.max(0, s.bonus || 0)),
+            bonus: Math.min(SPECIES[species].bonus.length, Math.max(0, s.bonus || 0)),
             hidden: !!s.hidden,
             adopted: s.adopted || todayStr(),
             lastEvolve: s.lastEvolve || s.adopted || todayStr(),
             x: pos.x, y: pos.y,
             greeted: !!s.greeted,
+            intimacy: Math.max(0, s.intimacy || 0),
+            satiety: typeof s.satiety === "number" ? Math.min(100, Math.max(0, s.satiety)) : 80,
+            satietyAt: typeof s.satietyAt === "number" ? s.satietyAt : Date.now(),
+            sleeping: !!s.sleeping,
+            soundOn: !!s.soundOn,
+            frozen: !!s.frozen,
+            lastGreetDay: typeof s.lastGreetDay === "string" ? s.lastGreetDay : "",
+            notifyAck: typeof s.notifyAck === "string" ? s.notifyAck : "",
           };
+          return merged;
         } catch (e) { return fresh; }
       }
       function savePet() {
-        try { localStorage.setItem(PET_KEY, JSON.stringify(pet)); } catch (e) { /* storage unavailable */ }
+        try { localStorage.setItem(SPECIES[pet.species || "fox"].key, JSON.stringify(pet)); } catch (e) { /* storage unavailable */ }
+      }
+      function petGainIntimacy(n) {
+        var before = petTier();
+        pet.intimacy += n;
+        petLastTouchAt = Date.now();
+        savePet();
+        if (petTier() > before) {
+          petToast(SP().name + "和你更亲近了：现在是「" + PET_TIERS[petTier()] + "」");
+          petSay("感觉和你更亲近了！", 3000);
+        }
       }
 
-      /* ---------- fox artwork (original SVG, one per stage) ---------- */
-      function foxSVG(stage) {
+      /* ---------- sound effects (WebAudio synth, off by default) ---------- */
+      var petAudioCtx = null;
+      function petTone(freq0, freq1, dur, type, vol, delay) {
+        try {
+          var Ctor = window.AudioContext || window.webkitAudioContext;
+          if (!Ctor) return;
+          if (!petAudioCtx) petAudioCtx = new Ctor();
+          if (petAudioCtx.state === "suspended") petAudioCtx.resume();
+          var ac = petAudioCtx;
+          var t = ac.currentTime + (delay || 0);
+          var osc = ac.createOscillator();
+          var gain = ac.createGain();
+          osc.type = type || "sine";
+          osc.frequency.setValueAtTime(freq0, t);
+          if (freq1 && freq1 !== freq0) {
+            osc.frequency.exponentialRampToValueAtTime(freq1, t + dur);
+          }
+          gain.gain.setValueAtTime(0, t);
+          gain.gain.linearRampToValueAtTime(vol || 0.12, t + 0.015);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start(t);
+          osc.stop(t + dur + 0.05);
+        } catch (e) { /* audio unavailable — stay silent */ }
+      }
+      function petSfx(name) {
+        if (!pet || !pet.soundOn) return;
+        if (name === "jump") {
+          petTone(480, 920, 0.18, "sine", 0.1);
+        } else if (name === "pop") {
+          petTone(680, 680, 0.07, "triangle", 0.1);
+        } else if (name === "eat") {
+          petTone(320, 240, 0.09, "square", 0.05);
+          petTone(280, 220, 0.09, "square", 0.05, 0.13);
+          petTone(360, 300, 0.1, "square", 0.05, 0.26);
+        } else if (name === "magic") {
+          petTone(880, 880, 0.12, "sine", 0.09);
+          petTone(1318, 1318, 0.16, "sine", 0.09, 0.1);
+        } else if (name === "evolve") {
+          [523.25, 659.25, 783.99, 1046.5].forEach(function (f, i) {
+            petTone(f, f, 0.22, "sine", 0.1, i * 0.13);
+          });
+        }
+      }
+
+      /* ---------- fox faces ---------- */
+      function foxFaceSVG(face) {
+        var eyes = "", mouth = "";
+        var lashL = '<path d="M44.4 33.1 l-2.1 -1.5 M45.3 31.6 l-1.3 -2.2" stroke="#2a170c" stroke-width="1.25" fill="none" stroke-linecap="round"/>';
+        var lashR = '<path d="M75.6 33.1 l2.1 -1.5 M74.7 31.6 l1.3 -2.2" stroke="#2a170c" stroke-width="1.25" fill="none" stroke-linecap="round"/>';
+        var closed = '<path d="M44.6 35.6 Q48.5 38.6 52.4 35.6" stroke="#3a2415" stroke-width="2" fill="none" stroke-linecap="round"/>' +
+          '<path d="M67.6 35.6 Q71.5 38.6 75.4 35.6" stroke="#3a2415" stroke-width="2" fill="none" stroke-linecap="round"/>';
+        if (face === "sleep") {
+          eyes = closed +
+            '<path d="M46.2 38.5 l-0.8 1.6 M50.6 38.9 l-0.2 1.8 M69.4 38.9 l0.2 1.8 M73.8 38.5 l0.8 1.6" stroke="#3a2415" stroke-width="1.1" fill="none" stroke-linecap="round"/>';
+          mouth = '<circle cx="60" cy="49.8" r="1.7" fill="#4a2c1a"/>';
+        } else if (face === "dizzy") {
+          eyes = '<path d="M45.3 32.3 l6.4 6.4 M51.7 32.3 l-6.4 6.4" stroke="#3a2415" stroke-width="2" stroke-linecap="round"/>' +
+            '<path d="M68.3 32.3 l6.4 6.4 M74.7 32.3 l-6.4 6.4" stroke="#3a2415" stroke-width="2" stroke-linecap="round"/>';
+          mouth = '<path d="M55 52 Q57.5 49.8 60 52 Q62.5 54.2 65 52" stroke="#4a2c1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>';
+        } else if (face === "angry") {
+          eyes = '<path d="M43.6 29.8 L53.4 33.2" stroke="#3a2415" stroke-width="2.2" stroke-linecap="round"/>' +
+            '<path d="M76.4 29.8 L66.6 33.2" stroke="#3a2415" stroke-width="2.2" stroke-linecap="round"/>' +
+            '<ellipse cx="48.5" cy="37.8" rx="3.1" ry="2.2" fill="#3a2415"/>' +
+            '<ellipse cx="71.5" cy="37.8" rx="3.1" ry="2.2" fill="#3a2415"/>';
+          mouth = '<path d="M56.5 53 Q60 50.8 63.5 53" stroke="#4a2c1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>';
+        } else if (face === "surprised") {
+          eyes = '<circle cx="48.5" cy="35.5" r="4.7" fill="url(#eyeGrad)"/><circle cx="71.5" cy="35.5" r="4.7" fill="url(#eyeGrad)"/>' +
+            '<circle cx="50" cy="33.8" r="1.5" fill="#fff"/><circle cx="73" cy="33.8" r="1.5" fill="#fff"/>' + lashL + lashR;
+          mouth = '<circle cx="60" cy="50.5" r="2.2" fill="#4a2c1a"/>';
+        } else if (face === "happy") {
+          eyes = '<path d="M44.4 37.2 Q48.5 32.6 52.6 37.2" stroke="#3a2415" stroke-width="2.3" fill="none" stroke-linecap="round"/>' +
+            '<path d="M67.4 37.2 Q71.5 32.6 75.6 37.2" stroke="#3a2415" stroke-width="2.3" fill="none" stroke-linecap="round"/>';
+          mouth = '<path d="M55.3 48.8 Q60 54.4 64.7 48.8 Q60 50.8 55.3 48.8 Z" fill="#8a4a24"/>' +
+            '<path d="M57.6 51.3 Q60 53.3 62.4 51.3 Q60 52.1 57.6 51.3 Z" fill="#f28ba0"/>';
+        } else if (face === "yawn") {
+          eyes = closed;
+          mouth = '<ellipse cx="60" cy="51.5" rx="3.1" ry="4.1" fill="#8a4a24"/>' +
+            '<ellipse cx="60" cy="53.4" rx="1.9" ry="1.5" fill="#f28ba0"/>';
+        } else {
+          eyes = '<g class="fox-eyes">' +
+            '<ellipse cx="48.5" cy="35.5" rx="3.9" ry="5.1" fill="url(#eyeGrad)"/>' +
+            '<ellipse cx="71.5" cy="35.5" rx="3.9" ry="5.1" fill="url(#eyeGrad)"/>' +
+            '<path d="M44.2 32.4 Q48.5 29.2 52.8 32.4" stroke="#2a170c" stroke-width="1.7" fill="none" stroke-linecap="round"/>' +
+            '<path d="M67.2 32.4 Q71.5 29.2 75.8 32.4" stroke="#2a170c" stroke-width="1.7" fill="none" stroke-linecap="round"/>' +
+            '<circle cx="49.9" cy="33.3" r="1.35" fill="#fff"/><circle cx="72.9" cy="33.3" r="1.35" fill="#fff"/>' +
+            '<circle cx="47.2" cy="37.8" r="0.65" fill="#fff" opacity="0.85"/><circle cx="70.2" cy="37.8" r="0.65" fill="#fff" opacity="0.85"/></g>' +
+            lashL + lashR;
+          mouth = '<path d="M56.3 49.9 Q60 52.5 63.7 49.9" stroke="#4a2c1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>';
+        }
+        return eyes +
+          '<ellipse cx="60" cy="43.6" rx="3.6" ry="2.6" fill="url(#noseGrad)"/>' +
+          '<ellipse cx="58.9" cy="42.7" rx="1.1" ry="0.7" fill="#ffffff" opacity="0.55"/>' + mouth;
+      }
+      function setPetFace(face, ms) {
+        petFace = face;
+        var scale = document.getElementById("pet-scale");
+        if (scale) scale.innerHTML = petSVG(pet.stage, currentPetFace());
+        if (petFaceTimer) { window.clearTimeout(petFaceTimer); petFaceTimer = null; }
+        if (ms) {
+          petFaceTimer = window.setTimeout(function () {
+            petFace = "normal";
+            var sc = document.getElementById("pet-scale");
+            if (sc) sc.innerHTML = petSVG(pet.stage, currentPetFace());
+          }, ms);
+        }
+      }
+      function currentPetFace() {
+        if (pet && pet.sleeping) return "sleep";
+        return petFace;
+      }
+
+      /* ---------- fox artwork (original SVG, redrawn per stage) ---------- */
+      function foxSVG(stage, face) {
+        var gold = stage >= 3;
+        var fur1 = gold ? "#ffd873" : "#f69f47";
+        var fur2 = gold ? "#f4bc45" : "#ee7f2b";
+        var fur3 = gold ? "#e59a17" : "#da6218";
+        var tail1 = gold ? "#f9d976" : "#f59a44";
+        var tail2 = gold ? "#f0ae22" : "#e8762c";
+        var tip1 = gold ? "#fff6cf" : "#ffffff";
+        var tip2 = gold ? "#ffd76e" : "#ffe9c9";
         var s = "";
         s += '<svg class="fox" viewBox="0 0 120 112" fill="none" aria-hidden="true">';
-        if (stage >= 3) {
-          s += '<defs><radialGradient id="pet-glow" cx="50%" cy="50%" r="50%">' +
+        s += '<defs>' +
+          '<linearGradient id="furGrad" x1="0" y1="0" x2="0" y2="1">' +
+            '<stop offset="0%" stop-color="' + fur1 + '"/><stop offset="55%" stop-color="' + fur2 + '"/><stop offset="100%" stop-color="' + fur3 + '"/></linearGradient>' +
+          '<linearGradient id="tailGrad" x1="0" y1="1" x2="0.35" y2="0">' +
+            '<stop offset="0%" stop-color="' + tail2 + '"/><stop offset="100%" stop-color="' + tail1 + '"/></linearGradient>' +
+          '<linearGradient id="tipGrad" x1="0" y1="1" x2="0" y2="0">' +
+            '<stop offset="0%" stop-color="' + tip2 + '"/><stop offset="100%" stop-color="' + tip1 + '"/></linearGradient>' +
+          '<linearGradient id="creamGrad" x1="0" y1="0" x2="0" y2="1">' +
+            '<stop offset="0%" stop-color="#fffaf0"/><stop offset="100%" stop-color="#ffe9c4"/></linearGradient>' +
+          '<radialGradient id="eyeGrad" cx="50%" cy="32%" r="78%">' +
+            '<stop offset="0%" stop-color="#7a4525"/><stop offset="55%" stop-color="#4a2a14"/><stop offset="100%" stop-color="#241105"/></radialGradient>' +
+          '<linearGradient id="noseGrad" x1="0" y1="0" x2="0" y2="1">' +
+            '<stop offset="0%" stop-color="#f79db1"/><stop offset="100%" stop-color="#e85d7f"/></linearGradient>' +
+          '<linearGradient id="earGrad" x1="0" y1="0" x2="0" y2="1">' +
+            '<stop offset="0%" stop-color="#ffd0da"/><stop offset="100%" stop-color="#f78fa7"/></linearGradient>' +
+          '<linearGradient id="scarfGrad" x1="0" y1="0" x2="0" y2="1">' +
+            '<stop offset="0%" stop-color="#e2494d"/><stop offset="100%" stop-color="#bc2a30"/></linearGradient>' +
+          '<linearGradient id="capeGrad" x1="0" y1="0" x2="0" y2="1">' +
+            '<stop offset="0%" stop-color="#2e7d72"/><stop offset="100%" stop-color="#1b4a44"/></linearGradient>' +
+          '<radialGradient id="fireGrad" cx="50%" cy="68%" r="68%">' +
+            '<stop offset="0%" stop-color="#cdefff"/><stop offset="55%" stop-color="#6fc2ff"/><stop offset="100%" stop-color="#2f7fe0"/></radialGradient>' +
+          (gold ? '<radialGradient id="pet-glow" cx="50%" cy="50%" r="50%">' +
             '<stop offset="0%" stop-color="#ffd76e" stop-opacity="0.85"/>' +
             '<stop offset="60%" stop-color="#ffb84d" stop-opacity="0.35"/>' +
-            '<stop offset="100%" stop-color="#ffb84d" stop-opacity="0"/></radialGradient></defs>' +
-            '<ellipse class="fox-aura" cx="60" cy="58" rx="54" ry="52" fill="url(#pet-glow)"/>';
+            '<stop offset="100%" stop-color="#ffb84d" stop-opacity="0"/></radialGradient>' : '') +
+          '</defs>';
+        if (gold) {
+          s += '<ellipse class="fox-aura" cx="60" cy="58" rx="55" ry="53" fill="url(#pet-glow)"/>' +
+            '<circle class="fox-aura" cx="60" cy="37" r="30.5" fill="none" stroke="#ffcf5e" stroke-width="2" opacity="0.55"/>';
         }
-        /* tail (behind body, wags) */
-        s += '<g class="fox-tail">' +
-          '<path d="M78 84 C98 88 112 76 111 57 C110 44 100 36 91 43 C82 50 85 63 78 69 Z" fill="#e8762c"/>' +
-          '<path d="M91 43 C100 36 110 44 111 57 C104 51 96 49 91 43 Z" fill="#fff3e0"/></g>';
+        /* soft ground shadow */
+        s += '<ellipse cx="60" cy="105" rx="30" ry="4.6" fill="#1c2a1a" opacity="0.16"/>';
+        /* tails: 1 / 3 / 6 / 9 fanned behind the body, each wagging on its own beat */
+        var tailCounts = [1, 3, 6, 9];
+        var nTails = tailCounts[stage];
+        for (var ti = 0; ti < nTails; ti++) {
+          var tt = nTails === 1 ? 0.62 : ti / (nTails - 1);
+          var tAng = (-44 + tt * 78).toFixed(1);
+          var tSc = (0.9 + 0.16 * Math.sin(tt * Math.PI)).toFixed(2);
+          var tDly = (-(ti * 0.33)).toFixed(2);
+          var tFan = Math.round(-44 + tt * 78) * 0.85;
+          s += '<g transform="rotate(' + tAng + ' 72 93)">' +
+            '<g class="fox-tail" style="animation-delay:' + tDly + 's;--fan:' + tFan.toFixed(0) + 'deg">' +
+            '<g transform="translate(72 93) scale(' + tSc + ') translate(-72 -93)">' +
+            '<path d="M72 95 C87 93 98 80 97 59 C96 45 86 37 77 43 C68 48 72 61 68 72 C65 81 66 89 72 95 Z" fill="url(#tailGrad)"/>' +
+            '<path d="M77 43 C86 37 96 45 97 59 C90 52 82 50 77 43 Z" fill="url(#tipGrad)"/>' +
+            (gold && ti % 2 === 0 ? '<path d="M95 66 C96 53 89 44 81 42" stroke="#f7a8b8" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/>' : '') +
+            '</g></g></g>';
+        }
         /* cape (stage 2+) behind body */
         if (stage >= 2) {
-          s += '<path d="M37 56 Q27 82 38 101 L82 101 Q93 82 83 56 Q60 68 37 56 Z" fill="#27655f"/>' +
-            '<path d="M37 56 Q27 82 38 101 L48 101 Q40 80 44 60 Z" fill="#1d4f4a"/>';
+          s += '<path d="M37 56 Q27 82 38 101 L82 101 Q93 82 83 56 Q60 68 37 56 Z" fill="url(#capeGrad)"/>' +
+            '<path d="M37 56 Q27 82 38 101 L48 101 Q40 80 44 60 Z" fill="#14332f" opacity="0.55"/>' +
+            '<path d="M38.5 99 L81.5 99" stroke="#f2c14e" stroke-width="1.6" opacity="0.8"/>';
         }
         s += '<g class="fox-body-g">';
-        /* body + belly + feet */
-        s += '<ellipse cx="60" cy="80" rx="25" ry="21" fill="#e8762c"/>' +
-          '<ellipse cx="60" cy="86" rx="14" ry="13" fill="#fff3e0"/>' +
-          '<ellipse cx="45" cy="99" rx="7.5" ry="4" fill="#c25e1f"/>' +
-          '<ellipse cx="75" cy="99" rx="7.5" ry="4" fill="#c25e1f"/>';
+        /* body + cream belly + feet with pink paw pads, gently breathing */
+        s += '<g class="fox-breath-g">' +
+          '<ellipse cx="60" cy="81" rx="25" ry="20.5" fill="url(#furGrad)"/>' +
+          '<ellipse cx="60" cy="87" rx="14" ry="12.5" fill="url(#creamGrad)"/>' +
+          '<ellipse cx="44.5" cy="99.5" rx="7.5" ry="4" fill="' + fur3 + '"/>' +
+          '<ellipse cx="75.5" cy="99.5" rx="7.5" ry="4" fill="' + fur3 + '"/>' +
+          '<ellipse cx="44.5" cy="100.4" rx="2.9" ry="1.6" fill="#f2a0a8" opacity="0.9"/>' +
+          '<ellipse cx="75.5" cy="100.4" rx="2.9" ry="1.6" fill="#f2a0a8" opacity="0.9"/></g>';
         /* lantern (stage 3) hanging at the left paw */
         if (stage >= 3) {
           s += '<g>' +
@@ -1572,23 +2114,29 @@
             '<path d="M11.5 65 v11 M15.5 64.5 v12 M19.5 65 v11" stroke="#e0aa3e" stroke-width="1.1"/>' +
             '<rect x="10.5" y="78" width="10" height="3" rx="1" fill="#8a5a24"/></g>';
         }
+        /* fluffy cream neck ruff (Eevee-style collar) */
+        s += '<path d="M35 53 Q38.5 61 44 57.5 Q46.5 65.5 52.5 60 Q55 68.5 60 61.5 Q65 68.5 67.5 60 Q73.5 65.5 76 57.5 Q81.5 61 85 53 Q84 66 75 69.5 L45 69.5 Q36 66 35 53 Z" fill="url(#creamGrad)"/>' +
+          '<path d="M44 60.5 Q60 67.5 76 60.5" stroke="#f3d9ae" stroke-width="1.4" fill="none" opacity="0.7"/>';
         /* head */
         s += '<g class="fox-head">' +
-          '<path d="M38 27 L42 3 L57 18 Z" fill="#e8762c"/>' +
-          '<path d="M42 20 L44 9.5 L52 17 Z" fill="#ffd9b0"/>' +
-          '<path d="M82 27 L78 3 L63 18 Z" fill="#e8762c"/>' +
-          '<path d="M78 20 L76 9.5 L68 17 Z" fill="#ffd9b0"/>' +
-          '<circle cx="60" cy="38" r="23" fill="#e8762c"/>' +
-          '<ellipse cx="60" cy="47" rx="12" ry="8.5" fill="#fff3e0"/>' +
-          '<ellipse cx="42" cy="45" rx="3.4" ry="2" fill="#f49c6b" opacity="0.55"/>' +
-          '<ellipse cx="78" cy="45" rx="3.4" ry="2" fill="#f49c6b" opacity="0.55"/>' +
-          '<g class="fox-eyes">' +
-            '<ellipse cx="49" cy="36" rx="3" ry="3.9" fill="#3a2415"/>' +
-            '<ellipse cx="71" cy="36" rx="3" ry="3.9" fill="#3a2415"/>' +
-            '<circle cx="50" cy="34.6" r="1.05" fill="#fff"/>' +
-            '<circle cx="72" cy="34.6" r="1.05" fill="#fff"/></g>' +
-          '<ellipse cx="60" cy="43" rx="3.4" ry="2.4" fill="#4a2c1a"/>' +
-          '<path d="M56.5 50 Q60 52.6 63.5 50" stroke="#4a2c1a" stroke-width="1.5" stroke-linecap="round"/>';
+          '<g class="fox-ear-l">' +
+            '<path d="M37 28 C36 15 39 4 43.5 0.5 C49.5 6.5 55.5 13 58.5 19.5 C51.5 24.5 44 27.5 37 28 Z" fill="url(#furGrad)"/>' +
+            '<path d="M41.5 22.5 C41.3 14.5 43 8 45.3 5.8 C48.3 9.8 51.3 14 53.3 17.5 C49.6 20.3 45.6 21.8 41.5 22.5 Z" fill="url(#earGrad)"/>' +
+            '<path d="M43.5 0.5 l-1.8 -3.2 M43.5 0.5 l2.6 -2.4" stroke="' + fur2 + '" stroke-width="1.6" fill="none" stroke-linecap="round"/></g>' +
+          '<g class="fox-ear-r">' +
+            '<path d="M83 28 C84 15 81 4 76.5 0.5 C70.5 6.5 64.5 13 61.5 19.5 C68.5 24.5 76 27.5 83 28 Z" fill="url(#furGrad)"/>' +
+            '<path d="M78.5 22.5 C78.7 14.5 77 8 74.7 5.8 C71.7 9.8 68.7 14 66.7 17.5 C70.4 20.3 74.4 21.8 78.5 22.5 Z" fill="url(#earGrad)"/>' +
+            '<path d="M76.5 0.5 l1.8 -3.2 M76.5 0.5 l-2.6 -2.4" stroke="' + fur2 + '" stroke-width="1.6" fill="none" stroke-linecap="round"/></g>' +
+          '<path d="M39 33 L31.5 37.5 L36.5 41.5 L30.5 46.5 L37.5 49.5 C34.5 44 35.5 38 39 33 Z" fill="url(#furGrad)"/>' +
+          '<path d="M81 33 L88.5 37.5 L83.5 41.5 L89.5 46.5 L82.5 49.5 C85.5 44 84.5 38 81 33 Z" fill="url(#furGrad)"/>' +
+          '<circle cx="60" cy="38" r="23.5" fill="url(#furGrad)"/>' +
+          '<ellipse cx="49" cy="24" rx="9" ry="5.5" fill="#ffffff" opacity="0.18"/>' +
+          '<path d="M49 17.5 C52 10.5 58.5 10 59.5 15.5 C62 10 68 11 66.5 17 C62 14.5 54 14.5 49 17.5 Z" fill="url(#furGrad)"/>' +
+          (gold ? '<path d="M56 14.8 C58 11.5 61.5 11 62.5 14.6 C60.5 13.4 58 13.6 56 14.8 Z" fill="#f7a8b8" opacity="0.9"/>' : '') +
+          '<ellipse cx="60" cy="47" rx="12.5" ry="8.8" fill="url(#creamGrad)"/>' +
+          '<ellipse cx="40.5" cy="44.5" rx="4.2" ry="2.4" fill="#f49bb0" opacity="0.6"/>' +
+          '<ellipse cx="79.5" cy="44.5" rx="4.2" ry="2.4" fill="#f49bb0" opacity="0.6"/>' +
+          foxFaceSVG(face || "normal");
         /* flower wreath (stage 3) */
         if (stage >= 3) {
           var flowers = [[43, 18, "#f7a8b8"], [52, 12.5, "#ffffff"], [61, 11, "#f9d976"], [70, 12.5, "#f7a8b8"], [78, 18, "#ffffff"]];
@@ -1600,20 +2148,187 @@
             }
             s += '<circle cx="' + f[0] + '" cy="' + f[1] + '" r="1.5" fill="#f2a541"/>';
           });
+          s += '<path d="M47 15.5 q-3.5 -1 -5.5 1.5 q3 1.8 5.5 -1.5 Z" fill="#7fb069"/>' +
+            '<path d="M73 15.5 q3.5 -1 5.5 1.5 q-3 1.8 -5.5 -1.5 Z" fill="#7fb069"/>';
         }
         s += "</g>"; /* head */
-        /* scarf (stage 1+) over the neck */
+        /* scarf (stage 1+) over the ruff */
         if (stage >= 1) {
-          s += '<path d="M37 55 Q60 66 83 55 L83 63 Q60 74 37 63 Z" fill="#d13438"/>' +
-            '<path d="M71 63 L80 63 L77.5 80 L69 77.5 Z" fill="#b92b30"/>' +
-            '<circle cx="73" cy="63" r="4" fill="#d13438"/>';
+          s += '<path d="M36.5 54.5 Q60 66 83.5 54.5 L83.5 62.5 Q60 73.5 36.5 62.5 Z" fill="url(#scarfGrad)"/>' +
+            '<path d="M36.5 58.2 Q60 69.2 83.5 58.2" stroke="#8f1f24" stroke-width="1.2" fill="none" opacity="0.5"/>' +
+            '<path d="M70.5 62.5 L79.5 62.5 L77 79.5 L68.5 77 Z" fill="url(#scarfGrad)"/>' +
+            '<path d="M70.2 70.5 l6.4 1.7 M71.2 74.8 l6.2 1.6" stroke="#8f1f24" stroke-width="1" opacity="0.55"/>' +
+            '<circle cx="72.5" cy="62.5" r="4.2" fill="url(#scarfGrad)"/>';
         }
         /* cape clasp (stage 2+) */
         if (stage >= 2) {
-          s += '<circle cx="60" cy="61" r="3.6" fill="#f2c14e" stroke="#b8860b" stroke-width="1.2"/>';
+          s += '<circle cx="60" cy="61" r="3.6" fill="#f2c14e" stroke="#b8860b" stroke-width="1.2"/>' +
+            '<circle cx="58.9" cy="59.9" r="1.1" fill="#fff3c4"/>';
+        }
+        /* foxfire + drifting petals and stars (stage 3) */
+        if (stage >= 3) {
+          var flame = '<path d="M0 -7 C3.4 -2.5 4.6 1.2 0 7 C-4.6 1.2 -3.4 -2.5 0 -7 Z" fill="url(#fireGrad)"/><circle cx="0" cy="2.6" r="1.7" fill="#eaf9ff"/>';
+          s += '<g transform="translate(9 40)"><g class="fox-fire">' + flame + '</g></g>' +
+            '<g transform="translate(111 30) scale(0.8)"><g class="fox-fire" style="animation-delay:-0.9s">' + flame + '</g></g>' +
+            '<g transform="translate(103 68) scale(0.62)"><g class="fox-fire" style="animation-delay:-1.7s">' + flame + '</g></g>' +
+            '<path class="fox-petal" style="animation-delay:-1.2s" d="M26 2 c2.2 2.6 2.8 5 0 7.6 c-2.8 -2.6 -2.2 -5 0 -7.6 Z" fill="#f7a8b8" opacity="0.85"/>' +
+            '<path class="fox-petal" style="animation-delay:-3.4s" d="M94 0 c2 2.4 2.5 4.6 0 7 c-2.5 -2.4 -2 -4.6 0 -7 Z" fill="#fbc2cd" opacity="0.8"/>' +
+            '<path class="fox-petal" style="animation-delay:-2.1s" d="M108 14 l1.3 2.9 2.9 1.3 -2.9 1.3 -1.3 2.9 -1.3 -2.9 -2.9 -1.3 2.9 -1.3 Z" fill="#ffd76e"/>' +
+            '<path class="fox-petal" style="animation-delay:-4.3s" d="M10 66 c1.8 2.2 2.3 4.2 0 6.4 c-2.3 -2.2 -1.8 -4.2 0 -6.4 Z" fill="#f7a8b8" opacity="0.75"/>';
         }
         s += "</g></svg>";
         return s;
+      }
+
+      /* ---------- wa artwork (original SVG: 小娲， the little snake goddess) ----------
+         Same painterly style as the fox, same animation hooks (fox-head /
+         fox-body-g / fox-breath-g / fox-eyes classes) so every existing
+         action animation works on her too. She floats: the whole figure
+         bobs on the wa-float group, her jade snake tail sways beneath
+         the ivory robe, and the lotus lantern in her hand glows
+         brighter with each stage — and brighter still after dark. */
+      function waFaceSVG(face) {
+        var eyes = "", mouth = "";
+        var closed = '<path d="M49.8 39.4 Q53 41.8 56.2 39.4" stroke="#3a2415" stroke-width="1.9" fill="none" stroke-linecap="round"/>' +
+          '<path d="M63.8 39.4 Q67 41.8 70.2 39.4" stroke="#3a2415" stroke-width="1.9" fill="none" stroke-linecap="round"/>';
+        if (face === "sleep") {
+          eyes = closed;
+          mouth = '<circle cx="60" cy="48.6" r="1.5" fill="#8a4a3a"/>';
+        } else if (face === "dizzy") {
+          eyes = '<path d="M50.3 36.2 l5.4 5.4 M55.7 36.2 l-5.4 5.4" stroke="#3a2415" stroke-width="1.9" stroke-linecap="round"/>' +
+            '<path d="M64.3 36.2 l5.4 5.4 M69.7 36.2 l-5.4 5.4" stroke="#3a2415" stroke-width="1.9" stroke-linecap="round"/>';
+          mouth = '<path d="M55.5 50.2 Q57.7 48.4 60 50.2 Q62.3 52 64.5 50.2" stroke="#8a4a3a" stroke-width="1.4" fill="none" stroke-linecap="round"/>';
+        } else if (face === "angry") {
+          eyes = '<path d="M49.4 34.4 L56.6 36.8" stroke="#3a2415" stroke-width="2" stroke-linecap="round"/>' +
+            '<path d="M70.6 34.4 L63.4 36.8" stroke="#3a2415" stroke-width="2" stroke-linecap="round"/>' +
+            '<ellipse cx="53" cy="40.4" rx="2.5" ry="1.8" fill="#3a2415"/>' +
+            '<ellipse cx="67" cy="40.4" rx="2.5" ry="1.8" fill="#3a2415"/>';
+          mouth = '<path d="M56.8 51 Q60 49.2 63.2 51" stroke="#8a4a3a" stroke-width="1.4" fill="none" stroke-linecap="round"/>';
+        } else if (face === "surprised") {
+          eyes = '<circle cx="53" cy="38.8" r="3.9" fill="url(#waEye)"/><circle cx="67" cy="38.8" r="3.9" fill="url(#waEye)"/>' +
+            '<circle cx="54.2" cy="37.4" r="1.2" fill="#fff"/><circle cx="68.2" cy="37.4" r="1.2" fill="#fff"/>';
+          mouth = '<circle cx="60" cy="49.2" r="1.9" fill="#8a4a3a"/>';
+        } else if (face === "happy") {
+          eyes = '<path d="M49.6 40.4 Q53 36.4 56.4 40.4" stroke="#3a2415" stroke-width="2.1" fill="none" stroke-linecap="round"/>' +
+            '<path d="M63.6 40.4 Q67 36.4 70.4 40.4" stroke="#3a2415" stroke-width="2.1" fill="none" stroke-linecap="round"/>';
+          mouth = '<path d="M55.8 47.6 Q60 52.4 64.2 47.6 Q60 49.4 55.8 47.6 Z" fill="#a04a3a"/>' +
+            '<path d="M57.8 50 Q60 51.7 62.2 50 Q60 50.7 57.8 50 Z" fill="#f28ba0"/>';
+        } else if (face === "yawn") {
+          eyes = closed;
+          mouth = '<ellipse cx="60" cy="50" rx="2.7" ry="3.5" fill="#a04a3a"/>' +
+            '<ellipse cx="60" cy="51.6" rx="1.6" ry="1.3" fill="#f28ba0"/>';
+        } else {
+          eyes = '<g class="fox-eyes">' +
+            '<ellipse cx="53" cy="38.8" rx="3" ry="4.1" fill="url(#waEye)"/>' +
+            '<ellipse cx="67" cy="38.8" rx="3" ry="4.1" fill="url(#waEye)"/>' +
+            '<path d="M49.7 35.8 Q53 33.2 56.3 35.8" stroke="#2a170c" stroke-width="1.6" fill="none" stroke-linecap="round"/>' +
+            '<path d="M63.7 35.8 Q67 33.2 70.3 35.8" stroke="#2a170c" stroke-width="1.6" fill="none" stroke-linecap="round"/>' +
+            '<circle cx="54.1" cy="36.9" r="1.1" fill="#fff"/><circle cx="68.1" cy="36.9" r="1.1" fill="#fff"/></g>';
+          mouth = '<path d="M56.8 48.4 Q60 50.6 63.2 48.4" stroke="#8a4a3a" stroke-width="1.4" fill="none" stroke-linecap="round"/>';
+        }
+        return eyes + mouth;
+      }
+      function waSVG(stage, face) {
+        var hour = new Date().getHours();
+        var night = hour >= 18 || hour < 6; /* lantern burns brighter after dark */
+        var lampR = 9 + stage * 2.6 + (night ? 5 : 0);
+        var lampO = Math.min(0.95, 0.38 + stage * 0.13 + (night ? 0.3 : 0));
+        var tailW = 10.5 + stage * 1.1;
+        var s = "";
+        s += '<svg class="fox" viewBox="0 0 120 112" fill="none" aria-hidden="true">';
+        s += '<defs>' +
+          '<linearGradient id="waHair" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4a3542"/><stop offset="100%" stop-color="#241a20"/></linearGradient>' +
+          '<linearGradient id="waSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff3e4"/><stop offset="100%" stop-color="#ffd9b8"/></linearGradient>' +
+          '<linearGradient id="waDress" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fffaf0"/><stop offset="100%" stop-color="#f0d9a0"/></linearGradient>' +
+          '<linearGradient id="waSleeve" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fdf3d8"/><stop offset="100%" stop-color="#e8c887"/></linearGradient>' +
+          '<linearGradient id="waTail" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7fd1a8"/><stop offset="55%" stop-color="#3fae7d"/><stop offset="100%" stop-color="#22795a"/></linearGradient>' +
+          '<linearGradient id="waGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffe9a3"/><stop offset="100%" stop-color="#d99a26"/></linearGradient>' +
+          '<radialGradient id="waEye" cx="50%" cy="32%" r="78%"><stop offset="0%" stop-color="#5d7a4a"/><stop offset="55%" stop-color="#2f4a26"/><stop offset="100%" stop-color="#14230e"/></radialGradient>' +
+          '<radialGradient id="waLamp" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffe9a3" stop-opacity="0.95"/><stop offset="55%" stop-color="#ffb84d" stop-opacity="0.45"/><stop offset="100%" stop-color="#ffb84d" stop-opacity="0"/></radialGradient>' +
+          '<radialGradient id="waGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffe9a3" stop-opacity="0.8"/><stop offset="60%" stop-color="#ffd76e" stop-opacity="0.3"/><stop offset="100%" stop-color="#ffd76e" stop-opacity="0"/></radialGradient>' +
+          '</defs>';
+        /* she floats above the ground, so the shadow stays faint */
+        s += '<ellipse cx="60" cy="107" rx="23" ry="3.4" fill="#1c2a1a" opacity="0.1"/>';
+        s += '<g class="wa-float-g">';
+        if (stage >= 3) {
+          s += '<ellipse class="fox-aura" cx="60" cy="56" rx="52" ry="50" fill="url(#waGlow)"/>' +
+            '<circle class="fox-aura" cx="60" cy="36" r="27.5" fill="none" stroke="#ffcf5e" stroke-width="1.8" opacity="0.5"/>';
+        }
+        /* jade snake tail: an S-curve coiling at the base, swaying;
+           longer, thicker and patterned as she grows */
+        s += '<g class="wa-tail" style="--fan:7deg">' +
+          '<path d="M60 70 C46 78 34 86 39 95 C43.5 103.5 57 105.5 65.5 100.5 C72.5 96.4 71.5 88.6 65 87.4" stroke="url(#waTail)" stroke-width="' + tailW.toFixed(1) + '" fill="none" stroke-linecap="round"/>' +
+          '<path d="M60 70 C46 78 34 86 39 95 C43.5 103.5 57 105.5 65.5 100.5" stroke="#ffffff" stroke-width="' + (tailW * 0.32).toFixed(1) + '" fill="none" stroke-linecap="round" opacity="0.18"/>';
+        if (stage >= 2) {
+          s += '<path d="M47 79 q3.5 3 7 1.5 M41 88 q3.5 3 7 1.5 M47 98 q3.5 3 7 1.5 M60 101 q3.5 2.4 7 1" stroke="#eafff3" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.55"/>' +
+            '<circle cx="52" cy="92" r="1.7" fill="#ffd9e8" opacity="0.9"/><circle cx="43" cy="83" r="1.4" fill="#ffd9e8" opacity="0.8"/><circle cx="62" cy="97" r="1.4" fill="#fff3b0" opacity="0.9"/>';
+        }
+        if (stage >= 3) {
+          s += '<path d="M60 70 C46 78 34 86 39 95" stroke="#ffd76e" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.65"/>' +
+            '<circle cx="38" cy="90" r="1.3" fill="#ffe9a3"/><circle cx="56" cy="103" r="1.3" fill="#ffe9a3"/>';
+        }
+        s += '</g>';
+        /* ivory robe with wide flowing sleeves, jade sash */
+        s += '<g class="fox-body-g"><g class="fox-breath-g">' +
+          '<g class="wa-sleeve"><path d="M45 53 Q27 55 21 71 Q24 82 36 81 Q44 80 47 70 Z" fill="url(#waSleeve)"/></g>' +
+          '<g class="wa-sleeve" style="animation-delay:-1.4s"><path d="M75 53 Q93 55 99 71 Q96 82 84 81 Q76 80 73 70 Z" fill="url(#waSleeve)"/></g>' +
+          '<path d="M46 51 Q60 45.5 74 51 L82 79 Q60 87 38 79 Z" fill="url(#waDress)"/>' +
+          (stage >= 2 ? '<path d="M39.5 78.2 Q60 85.2 80.5 78.2" stroke="#d99a26" stroke-width="1.6" fill="none" opacity="0.85"/>' : '') +
+          '<path d="M45 63 Q60 68.5 75 63 L76.5 69.5 Q60 74.5 43.5 69.5 Z" fill="#3fae7d"/>' +
+          '<circle cx="60" cy="67.3" r="3.1" fill="url(#waGold)" stroke="#b8860b" stroke-width="1"/>' +
+          '<path d="M52 51.5 L60 58.5 L68 51.5 L66 47.8 Q60 46.2 54 47.8 Z" fill="#3fae7d" opacity="0.9"/>' +
+          '<circle cx="34.5" cy="79" r="3" fill="url(#waSkin)"/>' +
+          '</g>';
+        /* lotus lantern in her right hand */
+        s += '<g>' +
+          '<path d="M84 66 L93 74" stroke="#8a5a24" stroke-width="1.8" stroke-linecap="round"/>' +
+          '<circle cx="84" cy="66" r="3" fill="url(#waSkin)"/>' +
+          '<g class="fox-fire">' +
+            '<circle cx="95" cy="84" r="' + lampR.toFixed(1) + '" fill="url(#waLamp)" opacity="' + lampO.toFixed(2) + '"/>' +
+            '<circle cx="95" cy="84" r="3.4" fill="#ffdf8a"/>' +
+            '<path d="M95 76.5 C97.8 79.8 98.7 82.6 95 86.5 C91.3 82.6 92.2 79.8 95 76.5 Z" fill="#f7a8b8"/>' +
+            '<path d="M88.6 81 C91.6 82 93.4 84 93.8 87.4 C90.6 86.8 88.9 84.6 88.6 81 Z" fill="#f9c2d0"/>' +
+            '<path d="M101.4 81 C101.1 84.6 99.4 86.8 96.2 87.4 C96.6 84 98.4 82 101.4 81 Z" fill="#f9c2d0"/>' +
+            '<path d="M90.5 89.5 Q95 91.8 99.5 89.5 L98.2 92 Q95 93.4 91.8 92 Z" fill="#d97742"/>' +
+          '</g></g>';
+        s += '</g>'; /* body */
+        /* head: dark hair, fringe, and a crown that grows grander per stage */
+        s += '<g class="fox-head">' +
+          '<path d="M41 30 Q36 52 42 62 L48 62 Q44 46 46 34 Z" fill="url(#waHair)"/>' +
+          '<path d="M79 30 Q84 52 78 62 L72 62 Q76 46 74 34 Z" fill="url(#waHair)"/>' +
+          '<circle cx="60" cy="35" r="20.5" fill="url(#waHair)"/>' +
+          '<ellipse cx="60" cy="39" rx="15.8" ry="14.6" fill="url(#waSkin)"/>' +
+          '<path d="M44.5 37 Q43.5 21.5 60 20.5 Q76.5 21.5 75.5 37 Q70 27.5 60 28.5 Q50 27.5 44.5 37 Z" fill="url(#waHair)"/>' +
+          '<ellipse cx="46.8" cy="44.5" rx="3.6" ry="2.1" fill="#f49bb0" opacity="0.55"/>' +
+          '<ellipse cx="73.2" cy="44.5" rx="3.6" ry="2.1" fill="#f49bb0" opacity="0.55"/>' +
+          waFaceSVG(face || "normal");
+        if (stage === 0) {
+          s += '<circle cx="60" cy="17.5" r="3.4" fill="url(#waGold)" stroke="#b8860b" stroke-width="0.9"/>' +
+            '<path d="M60 14.5 L60 9.5" stroke="#b8860b" stroke-width="1.6" stroke-linecap="round"/><circle cx="60" cy="8.4" r="1.7" fill="#f2607a"/>';
+        } else if (stage === 1) {
+          s += '<path d="M51 19 L53.5 12.5 L57.5 17 L60 11 L62.5 17 L66.5 12.5 L69 19 Q60 21.5 51 19 Z" fill="url(#waGold)" stroke="#b8860b" stroke-width="0.9"/>';
+        } else if (stage === 2) {
+          s += '<path d="M49.5 19.5 L52 10.5 L56.5 16 L60 8.5 L63.5 16 L68 10.5 L70.5 19.5 Q60 22.5 49.5 19.5 Z" fill="url(#waGold)" stroke="#b8860b" stroke-width="1"/>' +
+            '<circle cx="60" cy="16.5" r="2" fill="#e2494d" stroke="#ffffff" stroke-width="0.7"/>';
+        } else {
+          s += '<path d="M47.5 20 L50 9 L55.5 15 L60 6.5 L64.5 15 L70 9 L72.5 20 Q60 23.5 47.5 20 Z" fill="url(#waGold)" stroke="#b8860b" stroke-width="1"/>' +
+            '<circle cx="60" cy="16.8" r="2.3" fill="#e2494d" stroke="#ffffff" stroke-width="0.8"/>' +
+            '<path d="M47.5 17 Q41 14.5 38.5 9.5 Q44 9 47 12.5 Z" fill="url(#waGold)" opacity="0.95"/>' +
+            '<path d="M72.5 17 Q79 14.5 81.5 9.5 Q76 9 73 12.5 Z" fill="url(#waGold)" opacity="0.95"/>' +
+            '<circle cx="60" cy="26.8" r="1.8" fill="#ffd76e" stroke="#d99a26" stroke-width="0.7"/>' +
+            '<circle cx="43" cy="46" r="1.5" fill="url(#waGold)"/><circle cx="77" cy="46" r="1.5" fill="url(#waGold)"/>';
+        }
+        s += '</g>'; /* head */
+        if (stage >= 3) {
+          s += '<path class="fox-petal" style="animation-delay:-0.8s" d="M24 6 c2 2.4 2.5 4.6 0 7 c-2.5 -2.4 -2 -4.6 0 -7 Z" fill="#f9d976" opacity="0.85"/>' +
+            '<path class="fox-petal" style="animation-delay:-2.9s" d="M98 4 c1.9 2.2 2.3 4.3 0 6.5 c-2.3 -2.2 -1.9 -4.3 0 -6.5 Z" fill="#f7a8b8" opacity="0.8"/>' +
+            '<path class="fox-petal" style="animation-delay:-4.1s" d="M110 22 l1.2 2.7 2.7 1.2 -2.7 1.2 -1.2 2.7 -1.2 -2.7 -2.7 -1.2 2.7 -1.2 Z" fill="#ffd76e"/>';
+        }
+        s += '</g></svg>';
+        return s;
+      }
+      function petSVG(stage, face) {
+        return petSpecies === "wa" ? waSVG(stage, face) : foxSVG(stage, face);
       }
       var PAW_SVG = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
         '<ellipse cx="12" cy="15.5" rx="4.6" ry="3.9"/>' +
@@ -1621,11 +2336,20 @@
         '<ellipse cx="9.2" cy="7.6" rx="1.9" ry="2.5"/>' +
         '<ellipse cx="14.8" cy="7.6" rx="1.9" ry="2.5"/>' +
         '<ellipse cx="18.6" cy="10.6" rx="1.9" ry="2.4" transform="rotate(18 18.6 10.6)"/></svg>';
+      var LOTUS_SVG = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
+        '<path d="M12 3.6c1.9 2.1 2.9 4.5 2.9 7.1 0 2.1-1.1 3.9-2.9 5.1-1.8-1.2-2.9-3-2.9-5.1 0-2.6 1-5 2.9-7.1z"/>' +
+        '<path d="M4.3 9.2c2.8.2 5.1 1.3 6.9 3.2-1.6 1.5-3.8 2-6 1.4C3.9 12.5 3.7 10.7 4.3 9.2z"/>' +
+        '<path d="M19.7 9.2c.6 1.5.4 3.3-.9 4.6-2.2.6-4.4.1-6-1.4 1.8-1.9 4.1-3 6.9-3.2z"/>' +
+        '<path d="M3.2 16.6c2.8 1.8 5.7 2.7 8.8 2.7s6-.9 8.8-2.7c-.9 2.5-3.6 4.3-8.8 4.3s-7.9-1.8-8.8-4.3z"/></svg>';
       var FX_SVGS = {
         heart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21C7 16.5 3 13 3 8.8 3 5.9 5.2 4 7.7 4c1.7 0 3.3 0.9 4.3 2.4C13 4.9 14.6 4 16.3 4 18.8 4 21 5.9 21 8.8c0 4.2-4 7.7-9 12.2z" fill="#f2607a"/></svg>',
         star: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 5.9 6.5 0.8-4.8 4.4 1.3 6.4L12 17l-5.8 3.1 1.3-6.4L2.7 9.3l6.5-0.8z" fill="#f6c945"/></svg>',
         petal: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3.5 3.2 5 6.6 5 10a5 5 0 1 1-10 0c0-3.4 1.5-6.8 5-10z" fill="#f7a8b8"/></svg>',
         fish: '<svg viewBox="0 0 32 22" aria-hidden="true"><path d="M2 11 C7 4.5 13 2 19 2 C25 2 28 6 30 11 C28 16 25 20 19 20 C13 20 7 17.5 2 11 Z" fill="#5b8dd9"/><path d="M2 11 L7.5 5.5 L7.5 16.5 Z" fill="#3f6fb5"/><circle cx="23.5" cy="9" r="1.6" fill="#fff"/></svg>',
+        peach: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.8 3.4c1.8-1.4 4.2-1.3 5.9.2-1.4 1.7-3.8 2.2-5.9 1z" fill="#7fb069"/><path d="M12 21.5c-4.9 0-8.5-3.4-8.5-8 0-3.9 2.8-6.7 6.2-6.7.8 0 1.6.2 2.3.5.7-.3 1.5-.5 2.3-.5 3.4 0 6.2 2.8 6.2 6.7 0 4.6-3.6 8-8.5 8z" fill="#f79db1"/><path d="M12 7.3c-.5 2.4-.5 4.9.2 7.2" stroke="#e85d7f" stroke-width="1.3" fill="none" stroke-linecap="round"/></svg>',
+        note: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3v10.55A4 4 0 1 0 12 17V7.8L20 6v8.05A4 4 0 1 0 22 17.5V3L10 3z" fill="#8a6fc9" transform="scale(0.92) translate(1,0)"/></svg>',
+        zzz: '<svg viewBox="0 0 24 24" aria-hidden="true"><text x="12" y="17" font-size="14" font-weight="700" fill="#7d9cc4" text-anchor="middle" font-family="inherit">Z</text></svg>',
+        yarn: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#7fb2d9"/><path d="M4 10 Q12 14.5 20 9.5 M4.5 15.5 Q12 18.5 19.5 13.5 M8.5 4 Q11.5 12 9 20.5" stroke="#5b8ab5" fill="none" stroke-width="1.6"/></svg>',
       };
 
       /* ---------- pet rendering ---------- */
@@ -1635,29 +2359,124 @@
         var hint = pet.stage < 3
           ? "每周一长大一阶"
           : pet.bonus < PET_BONUS.length ? "每周解锁一个新动作" : "新动作已全部解锁";
-        var html = '<div class="pet-menu-head"><div class="pm-name">阿绒<span>' + stage.name +
+        var html = '<div class="pet-menu-head"><div class="pm-name">' + SP().name + '<span>' + stage.name +
           '</span></div><div class="pm-hint">' + hint + "</div></div>";
+        if (pet.sleeping) {
+          html += '<button type="button" data-act="wake">叫醒它</button>';
+          html += '<button type="button" data-act="status">' + SP().name + '的状态</button>';
+          html += '<button type="button" data-act="hide">先藏起来</button>';
+          return html;
+        }
         html += '<button type="button" data-act="pet">摸摸</button>';
         html += pet.stage >= 1
-          ? '<button type="button" data-act="feed">喂食小鱼</button>'
-          : '<button type="button" disabled>喂食小鱼<span class="lock">少年狐解锁</span></button>';
+          ? '<button type="button" data-act="feed">' + SP().feedLabel + '</button>'
+          : '<button type="button" disabled>' + SP().feedLabel + '<span class="lock">' + PET_STAGES[1].name + '解锁</span></button>';
         html += pet.stage >= 2
-          ? '<button type="button" data-act="play">一起玩耍</button>'
-          : '<button type="button" disabled>一起玩耍<span class="lock">成年狐解锁</span></button>';
+          ? '<button type="button" data-act="play">' + SP().playLabel + '</button>'
+          : '<button type="button" disabled>' + SP().playLabel + '<span class="lock">' + PET_STAGES[2].name + '解锁</span></button>';
         if (pet.stage >= 3) {
-          html += '<button type="button" data-act="magic">变魔术</button>';
+          html += '<button type="button" data-act="magic">' + SP().specialLabel + '</button>';
         }
         for (var i = 0; i < pet.bonus; i++) {
           html += '<button type="button" data-act="bonus-' + PET_BONUS[i].id + '">' + PET_BONUS[i].label + "</button>";
         }
+        html += '<button type="button" data-act="status">' + SP().name + '的状态</button>';
+        html += '<button type="button" data-act="sleep">睡觉</button>';
+        html += '<button type="button" data-act="sound">音效：' + (pet.soundOn ? "开" : "关") + "</button>";
         html += '<button type="button" data-act="hide">先藏起来</button>';
+        return html;
+      }
+      function petUnlockedActions() {
+        var list = ["摸摸"];
+        if (pet.stage >= 1) list.push(SP().feedLabel);
+        if (pet.stage >= 2) list.push(SP().playLabel);
+        if (pet.stage >= 3) list.push(SP().specialLabel);
+        for (var i = 0; i < pet.bonus; i++) list.push(PET_BONUS[i].label);
+        PET_POOL.forEach(function (a) {
+          if (petTier() >= a.need) list.push(a.label);
+        });
+        return list;
+      }
+      function petMoodText() {
+        if (pet.sleeping) return "睡着了";
+        if (petDizzy) return "晕乎乎";
+        if (petFace === "angry") return "有点小脾气";
+        if (pet.satiety < 25) return "肚子饿了";
+        if (Date.now() - petLastTouchAt < 120000) return "很开心";
+        if (petTier() >= 2) return "开心";
+        return "平静";
+      }
+      function petNextEvolve() {
+        if (pet.stage >= 3 && pet.bonus >= PET_BONUS.length) return null;
+        var base = parseDay(pet.lastEvolve);
+        base.setDate(base.getDate() + 7);
+        while (base.getDay() !== 1) base.setDate(base.getDate() + 1);
+        var today = parseDay(todayStr());
+        var d = Math.round((base.getTime() - today.getTime()) / 86400000);
+        return { days: Math.max(0, d), date: base };
+      }
+      function petPanelHTML() {
+        var tier = petTier();
+        var html = '<div class="pet-panel-head"><div class="pp-title">' + SP().name + '的状态<span>' +
+          PET_STAGES[pet.stage].name + '</span></div>' +
+          '<button type="button" class="pet-panel-close" id="pet-panel-close" aria-label="关闭状态面板">' + X_ICON_SM + "</button></div>";
+        html += '<div class="pp-row"><span class="k">阶段</span><span class="v">第 ' + (pet.stage + 1) +
+          " 阶 · " + PET_STAGES[pet.stage].name + "</span></div>";
+        var nextMin = tier < 3 ? PET_TIER_MIN[tier + 1] : null;
+        var intimPct = nextMin === null ? 100 :
+          Math.round(((pet.intimacy - PET_TIER_MIN[tier]) / (nextMin - PET_TIER_MIN[tier])) * 100);
+        html += '<div class="pp-row"><span class="k">亲密度</span><span class="v">' + PET_TIERS[tier] +
+          " · " + pet.intimacy + " 点" +
+          (nextMin === null ? "" : "（还差 " + (nextMin - pet.intimacy) + " 点）") + "</span></div>";
+        html += '<div class="pp-bar"><span style="width:' + Math.min(100, intimPct) + '%"></span></div>';
+        var sat = Math.round(pet.satiety);
+        html += '<div class="pp-row"><span class="k">饱食度</span><span class="v">' + sat + "%" +
+          (sat < 25 ? " · 有点饿了" : sat >= 85 ? " · 吃得饱饱的" : "") + "</span></div>";
+        html += '<div class="pp-bar"><span class="sat" style="width:' + sat + '%"></span></div>';
+        html += '<div class="pp-row"><span class="k">心情</span><span class="v">' + petMoodText() + "</span></div>";
+        html += '<div class="pp-row"><span class="k">' + SP().moveWord + '</span><span class="v">' +
+          (pet.frozen ? "休息中 · 双击" + SP().name + "继续" + SP().moveWord
+            : SP().moveWord + "中 · 双击" + SP().name + "原地休息") + "</span></div>";
+        var nx = petNextEvolve();
+        html += '<div class="pp-row"><span class="k">' + (pet.stage < 3 ? "下次进化" : "下次新动作") +
+          '</span><span class="v">' +
+          (nx === null ? "已全部解锁" : nx.days === 0 ? "就是今天" :
+            "还有 " + nx.days + " 天 · " + (nx.date.getMonth() + 1) + "月" + nx.date.getDate() + "日周一") +
+          "</span></div>";
+        html += '<div class="pp-sec">已解锁的动作</div><p class="pp-acts">' +
+          petUnlockedActions().join("、") + "</p>";
+        var otherPet = SPECIES[petSpecies === "wa" ? "fox" : "wa"];
+        html += '<div class="pp-sec">换宠物</div>' +
+          '<button type="button" class="pp-switch" id="pet-switch-btn">换成' + otherPet.name +
+          '<span>' + otherPet.kind + ' · 各养各的</span></button>';
+        html += '<div class="pp-sec">陪伴方式</div>';
+        if (!petRosterUnlocked()) {
+          html += '<p class="pp-note">任意一只宠物进化到顶阶（第 4 阶）后，这里会解锁「随机换宠」和「一直陪伴」。在那之前，就由现在这只一直陪着你。</p>';
+        } else {
+          html += '<button type="button" class="pp-switch pp-opt' + (petRoster.lock === "fox" ? " on" : "") +
+            '" id="pet-lock-fox">阿绒一直陪伴<span>' + (petRoster.lock === "fox" ? "已锁定" : "锁定") + "</span></button>";
+          html += '<button type="button" class="pp-switch pp-opt' + (petRoster.lock === "wa" ? " on" : "") +
+            '" id="pet-lock-wa">小娲一直陪伴<span>' + (petRoster.lock === "wa" ? "已锁定" : "锁定") + "</span></button>";
+          html += '<button type="button" class="pp-switch pp-opt' + (petRoster.lock === "" ? " on" : "") +
+            '" id="pet-lock-none">不锁定<span>' + (petRoster.lock === "" ? "当前" : "取消锁定") + "</span></button>";
+          html += '<button type="button" class="pp-switch pp-opt' + (petRoster.random ? " on" : "") +
+            '" id="pet-random-btn">随机换宠<span>' + (petRoster.random ? "已开启" : "已关闭") + "</span></button>";
+          if (petRoster.lock) {
+            html += '<p class="pp-note">已锁定' + SPECIES[petRoster.lock].name +
+              '一直陪伴，随机换宠暂不生效；想恢复随机，先点「不锁定」。手动换宠物随时可用。</p>';
+          } else if (petRoster.random) {
+            html += '<p class="pp-note">随机换宠已开启：每天第一次打开页面时，阿绒和小娲随机来一只。手动换宠物随时可用，第二天打开仍按随机规则。</p>';
+          } else {
+            html += '<p class="pp-note">随机没开，也没有锁定——就由现在这只一直陪着你，不会自己乱换。</p>';
+          }
+        }
         return html;
       }
       function renderPet() {
         if (pet.hidden) {
           petRoot.innerHTML =
-            '<button type="button" class="pet-paw" id="pet-paw" aria-label="把阿绒叫回来">' +
-            PAW_SVG + "</button>" +
+            '<button type="button" class="pet-paw" id="pet-paw" aria-label="把' + SP().name + '叫回来">' +
+            (pet.species === "wa" ? LOTUS_SVG : PAW_SVG) + "</button>" +
             '<div class="pet-toast" id="pet-toast" role="status"></div>';
           document.getElementById("pet-paw").addEventListener("click", function () {
             pet.hidden = false;
@@ -1670,22 +2489,31 @@
         var pos = clampPetPos(pet.x, pet.y);
         pet.x = pos.x; pet.y = pos.y;
         petRoot.innerHTML =
-          '<div class="pet" id="pet" role="button" tabindex="0" aria-haspopup="true" aria-expanded="' +
-            (petMenuOpen ? "true" : "false") + '" aria-label="桌宠阿绒，' + PET_STAGES[pet.stage].name +
-            '，点击打开互动菜单，也可以拖动它" style="left:' + pet.x + "px;top:" + pet.y + 'px;--ps:' +
+          '<div class="pet' + (pet.species === "wa" ? " is-wa" : "") + (pet.sleeping ? " sleeping" : "") + (petDizzy ? " fainted" : "") +
+            '" id="pet" role="button" tabindex="0" aria-haspopup="true" aria-expanded="' +
+            (petMenuOpen ? "true" : "false") + '" aria-label="桌宠' + SP().name + '，' + PET_STAGES[pet.stage].name +
+            '，点一下和它打招呼，双击让它原地休息或继续' + SP().moveWord + '，长按或右键打开互动菜单，也可以拖动、甩出去" style="left:' + pet.x + "px;top:" + pet.y + 'px;--ps:' +
             PET_STAGES[pet.stage].scale + '">' +
             '<div class="pet-sign" id="pet-sign" hidden></div>' +
+            '<div class="pet-status" id="pet-status" role="button" tabindex="0" title="打开' + SP().name + '的菜单">' +
+              '<span class="pet-dot blue" id="pet-dot" aria-hidden="true"></span>' +
+              '<span id="pet-status-text"></span></div>' +
             '<div class="pet-say" id="pet-say" aria-live="polite"></div>' +
-            '<div class="pet-menu' + (petMenuOpen ? " open" : "") + '" id="pet-menu" role="menu" aria-label="和阿绒互动">' +
+            '<div class="pet-menu' + (petMenuOpen ? " open" : "") + '" id="pet-menu" role="menu" aria-label="和' + SP().name + '互动">' +
               (petMenuOpen ? petMenuHTML() : "") + "</div>" +
+            '<div class="pet-panel" id="pet-panel" role="dialog" aria-label="' + SP().name + '的状态"></div>' +
             '<div class="pet-walk" id="pet-walk"><div class="pet-scale" id="pet-scale">' +
-              foxSVG(pet.stage) + "</div></div>" +
+              petSVG(pet.stage, currentPetFace()) + "</div></div>" +
             '<div class="pet-fx" id="pet-fx"></div>' +
           "</div>" +
           '<div class="pet-toast" id="pet-toast" role="status"></div>';
         wirePet();
         if (petMenuOpen) wirePetMenu();
+        if (petPanelOpen) setPetPanel(true);
         updatePetSign();
+        petStatusCache = "";
+        petDotCache = "";
+        updatePetStatus();
       }
       function petEl() { return document.getElementById("pet"); }
 
@@ -1702,6 +2530,7 @@
         });
       }
       function setPetMenu(open) {
+        if (open) setPetPanel(false);
         petMenuOpen = open;
         var menu = document.getElementById("pet-menu");
         var el = petEl();
@@ -1718,8 +2547,64 @@
           }, 210);
         }
       }
+      function setPetPanel(open) {
+        petPanelOpen = open;
+        var panel = document.getElementById("pet-panel");
+        if (!panel) return;
+        if (open) {
+          panel.innerHTML = petPanelHTML();
+          panel.classList.add("open");
+          var closeBtn = document.getElementById("pet-panel-close");
+          if (closeBtn) {
+            closeBtn.addEventListener("click", function (e) {
+              e.stopPropagation();
+              setPetPanel(false);
+            });
+          }
+          var switchBtn = document.getElementById("pet-switch-btn");
+          if (switchBtn) {
+            switchBtn.addEventListener("click", function (e) {
+              e.stopPropagation();
+              petSwitchTo(petSpecies === "wa" ? "fox" : "wa");
+            });
+          }
+          var lockFoxBtn = document.getElementById("pet-lock-fox");
+          if (lockFoxBtn) {
+            lockFoxBtn.addEventListener("click", function (e) {
+              e.stopPropagation();
+              petSetLock("fox");
+            });
+          }
+          var lockWaBtn = document.getElementById("pet-lock-wa");
+          if (lockWaBtn) {
+            lockWaBtn.addEventListener("click", function (e) {
+              e.stopPropagation();
+              petSetLock("wa");
+            });
+          }
+          var lockNoneBtn = document.getElementById("pet-lock-none");
+          if (lockNoneBtn) {
+            lockNoneBtn.addEventListener("click", function (e) {
+              e.stopPropagation();
+              petSetLock("");
+            });
+          }
+          var randomBtn = document.getElementById("pet-random-btn");
+          if (randomBtn) {
+            randomBtn.addEventListener("click", function (e) {
+              e.stopPropagation();
+              petToggleRandom();
+            });
+          }
+        } else {
+          panel.classList.remove("open");
+          window.setTimeout(function () {
+            if (!petPanelOpen && panel.parentNode) panel.innerHTML = "";
+          }, 210);
+        }
+      }
 
-      /* ---------- speech bubble & toast ---------- */
+      /* ---------- speech bubble, status line & toast ---------- */
       function petSay(text, ms) {
         var el = document.getElementById("pet-say");
         if (!el) return;
@@ -1735,6 +2620,93 @@
         el.classList.add("show");
         if (petToastTimer) window.clearTimeout(petToastTimer);
         petToastTimer = window.setTimeout(function () { el.classList.remove("show"); }, ms || 4200);
+      }
+      function petStatusText() {
+        if (!pet) return "";
+        if (pet.sleeping) return "睡着了 · Zzz";
+        if (petDizzy) return "晕乎乎……";
+        if (petNotifyActive()) return "有重要日子快到了";
+        if (typeof timer !== "undefined" && timer && timer.running) {
+          return timer.mode === "focus" ? "专注中 · 陪你一起" : "休息中 · 歇一会儿";
+        }
+        if (pet.frozen) return "休息中";
+        if (pet.satiety < 25) return "肚子有点饿";
+        var remaining = data.todos.filter(function (t) { return !t.done; }).length;
+        if (data.todos.length > 0 && remaining === 0) return "待办都完成啦";
+        if (Date.now() - petLastTouchAt < 180000) return "陪着你";
+        return "等你回来";
+      }
+      /* Status dot: red = unread reminder, gray = sleeping,
+         green = focusing together, blue = resting / waiting. */
+      function petStatusDot() {
+        if (!pet) return "blue";
+        if (petNotifyActive()) return "red";
+        if (pet.sleeping) return "gray";
+        if (typeof timer !== "undefined" && timer && timer.running && timer.mode === "focus") return "green";
+        return "blue";
+      }
+      var petStatusCache = "";
+      var petDotCache = "";
+      function updatePetStatus() {
+        var el = document.getElementById("pet-status");
+        if (!el || !pet) return;
+        var textEl = document.getElementById("pet-status-text");
+        var text = petStatusText();
+        if (textEl && text !== petStatusCache) {
+          petStatusCache = text;
+          textEl.textContent = text;
+        }
+        var dotEl = document.getElementById("pet-dot");
+        var kind = petStatusDot();
+        if (dotEl && kind !== petDotCache) {
+          petDotCache = kind;
+          dotEl.className = "pet-dot " + kind;
+        }
+      }
+
+      /* ---------- unread countdown reminder ----------
+         When the nearest important day is within 3 days, the fox hops,
+         shows a bubble and lights the red status dot — like an unread
+         reply badge. It stays unread until the user opens the 重要日子
+         panel (openPanel("days") calls petAckNotify). The acknowledged
+         event+date is persisted, so it does not nag again for the
+         same day; a new or re-dated event raises a fresh reminder. */
+      function petNotifyEvent() {
+        var up = upcomingEvents();
+        return (up.length && up[0].d <= 3) ? up[0] : null;
+      }
+      function petNotifyKey() {
+        var ev = petNotifyEvent();
+        return ev ? String(ev.id) + "|" + ev.date : "";
+      }
+      function petNotifyActive() {
+        if (!pet) return false;
+        var k = petNotifyKey();
+        return !!k && pet.notifyAck !== k;
+      }
+      function petAckNotify() {
+        if (!pet) return;
+        var k = petNotifyKey();
+        if (k && pet.notifyAck !== k) {
+          pet.notifyAck = k;
+          savePet();
+          updatePetStatus();
+        }
+      }
+      function petCheckNotify() {
+        if (!pet || pet.hidden) return;
+        var k = petNotifyKey();
+        if (!k || pet.notifyAck === k) return;
+        updatePetStatus();
+        if (petNotifyJumpedKey === k) return; /* hop + bubble once per reminder */
+        petNotifyJumpedKey = k;
+        if (pet.sleeping) return;
+        var ev = petNotifyEvent();
+        if (!ev) return;
+        if (!reduceMotion) petAct("act-hop", 580);
+        petSfx("jump");
+        petSay("提醒你一下：「" + ev.name + "」" +
+          (ev.d === 0 ? "就是今天啦！" : "还有 " + ev.d + " 天"), 3600);
       }
 
       /* ---------- particle bursts ---------- */
@@ -1762,6 +2734,7 @@
         var el = petEl();
         if (!el) return;
         petActing = true;
+        petLastActAt = Date.now();
         el.classList.add(cls);
         window.setTimeout(function () {
           el.classList.remove(cls);
@@ -1769,45 +2742,218 @@
         }, ms);
       }
 
+      /* ---------- random action pool (weighted, intimacy-gated) ---------- */
+      var FOX_POOL = [
+        { id: "breath", label: "呼吸", w: 30, need: 0, cls: "act-breath", ms: 2600 },
+        { id: "look", label: "东张西望", w: 13, need: 0, cls: "act-look", ms: 1750 },
+        { id: "lick", label: "舔爪子", w: 11, need: 0, cls: "act-munch", ms: 1150 },
+        { id: "stretch", label: "伸懒腰", w: 11, need: 0, cls: "act-stretch", ms: 1500, say: "唔——伸个懒腰" },
+        { id: "yawn", label: "打哈欠", w: 9, need: 0, cls: "act-nod", ms: 1500, face: "yawn", say: "啊呜……有点困" },
+        { id: "doze", label: "打瞌睡", w: 8, need: 0, cls: "act-nod", ms: 2600, face: "sleep", fx: "zzz", say: "Zzz……就眯一小会儿" },
+        { id: "hum", label: "哼歌", w: 8, need: 1, cls: "act-wave", ms: 1000, fx: "note", say: "啦啦啦～" },
+        { id: "yarn", label: "玩线团", w: 8, need: 1, cls: "act-roll", ms: 950, fx: "yarn", say: "线团是我的啦" },
+        { id: "sun", label: "晒太阳", w: 7, need: 1, cls: "act-sun", ms: 3200, face: "happy", say: "太阳晒得暖洋洋" },
+        { id: "snack", label: "吃小鱼", w: 6, need: 2, cls: "", ms: 1200, snack: true },
+        { id: "mirror", label: "照镜子", w: 6, need: 2, cls: "act-magic", ms: 750, face: "happy", fx: "star", say: "今天也是精神的我" },
+        { id: "chase", label: "追尾巴", w: 6, need: 2, cls: "act-spin", ms: 900, say: "尾巴别跑！" },
+        { id: "roll", label: "打滚撒娇", w: 5, need: 3, cls: "act-roll", ms: 950, face: "happy", say: "滚呀滚呀～" },
+      ];
+      var WA_POOL = [
+        { id: "breath", label: "吐纳呼吸", w: 30, need: 0, cls: "act-breath", ms: 2600 },
+        { id: "look", label: "环顾云海", w: 13, need: 0, cls: "act-look", ms: 1750 },
+        { id: "sleeve", label: "轻拂衣袖", w: 11, need: 0, cls: "act-nod", ms: 1500, say: "衣袖要整整齐齐的" },
+        { id: "stretch", label: "舒展蛇尾", w: 11, need: 0, cls: "act-stretch", ms: 1500, say: "唔——尾巴伸个懒腰" },
+        { id: "yawn", label: "打哈欠", w: 9, need: 0, cls: "act-nod", ms: 1500, face: "yawn", say: "啊呜……有点困" },
+        { id: "doze", label: "打瞌睡", w: 8, need: 0, cls: "act-nod", ms: 2600, face: "sleep", fx: "zzz", say: "Zzz……就眯一小会儿" },
+        { id: "hum", label: "哼小调", w: 8, need: 1, cls: "act-wave", ms: 1000, fx: "note", say: "哼一支上古的小调～" },
+        { id: "lantern", label: "擦莲灯", w: 8, need: 1, cls: "act-magic", ms: 750, fx: "star", say: "莲灯要擦得亮亮的" },
+        { id: "sun", label: "云端小憩", w: 7, need: 1, cls: "act-sun", ms: 3200, face: "happy", say: "云端上的阳光暖暖的" },
+        { id: "snack", label: "吃莲子", w: 6, need: 2, cls: "", ms: 1200, snack: true },
+        { id: "mirror", label: "对水照影", w: 6, need: 2, cls: "act-magic", ms: 750, face: "happy", fx: "star", say: "今天的金冠戴正了" },
+        { id: "swim", label: "摆尾游弋", w: 6, need: 2, cls: "act-dance", ms: 950, say: "尾巴摆呀摆" },
+        { id: "roll", label: "盘尾撒娇", w: 5, need: 3, cls: "act-roll", ms: 950, face: "happy", say: "盘起来最舒服啦" },
+      ];
+      function petPickPoolAction() {
+        var tier = petTier();
+        var total = 0;
+        var avail = PET_POOL.filter(function (a) { return tier >= a.need; });
+        avail.forEach(function (a) { total += a.w; });
+        var r = Math.random() * total;
+        for (var i = 0; i < avail.length; i++) {
+          r -= avail[i].w;
+          if (r <= 0) return avail[i];
+        }
+        return avail[0];
+      }
+      function petRunPoolAction(a) {
+        if (a.snack) { petFeedVisual(); petAct("act-munch", 1180); return; }
+        if (a.cls) petAct(a.cls, a.ms);
+        if (a.face) setPetFace(a.face, a.ms);
+        if (a.fx) petBurst(a.fx, a.fx === "note" ? 3 : 2);
+        if (a.say && Math.random() < 0.75) {
+          window.setTimeout(function () { petSay(a.say); }, 250);
+        }
+      }
+      function petFeedVisual() {
+        var fx = document.getElementById("pet-fx");
+        if (!fx) return;
+        var food = document.createElement("div");
+        food.className = "pet-food";
+        food.innerHTML = FX_SVGS[SP().food];
+        fx.appendChild(food);
+        window.setTimeout(function () { if (food.parentNode) food.parentNode.removeChild(food); }, 1250);
+      }
+
+      /* ---------- chatter （碎碎念 & 梦话） ---------- */
+      var FOX_CHATTER = {
+        morning: ["早上好呀，今天也要元气满满", "早安！先喝杯水再开始吧", "新的一天，我陪你一起"],
+        noon: ["到中午啦，记得吃饭休息", "午安，眼睛累了就看看远处", "吃完饭可以眯一会儿，我守着你"],
+        afternoon: ["坐久了，起来活动一下吧", "喝口水，伸个懒腰再继续", "我刚在梦里追到尾巴了"],
+        evening: ["晚上好，今天辛苦啦", "忙了一天，记得夸夸自己", "晚饭吃了吗？别饿着"],
+        night: ["夜深了，早点休息好不好", "还不睡吗？我陪你一小会儿", "熬夜伤身，明天的事明天再做"],
+        generic: ["记得喝水哦", "窗外的云好像小鱼干", "我在练习新动作，猜猜是什么", "今天也要开开心心的", "尾巴今天也很听话"],
+        close: ["最喜欢和你待在一起了", "你忙完了要陪我玩哦", "悄悄说：你是我最喜欢的人"],
+        dream: ["呼……小鱼干……别跑……", "嘿嘿……摸摸……", "Zzz……再睡五分钟……", "尾巴……是我的……"],
+        hungry: ["肚子咕咕叫了……", "有小鱼干吗？就一口", "饿饿，想吃小鱼干"],
+        focus: ["嘘，我在陪你专注", "专注的样子最认真了", "这一段快结束了，加油"],
+      };
+      var WA_CHATTER = {
+        morning: ["晨光熹微，云海初开，早上好呀", "早安，莲灯陪了我一夜，也陪你开始新的一天", "新的一日，愿你有如沐春风的好运气"],
+        noon: ["日上中天，该用午膳啦", "午间小憩片刻，我替你守着莲灯", "吃饱了才有力气走接下来的路"],
+        afternoon: ["云卷云舒，坐久了就起来走走", "喝口水，看看远处的云", "方才有朵小云，长得像颗莲子"],
+        evening: ["暮色四合，莲灯亮起来啦", "忙了一整天，辛苦了", "晚饭要用些好的，别亏待自己"],
+        night: ["夜深了，星河都睡了，你也早点歇息", "莲灯再亮，也盼你早些安睡", "熬夜伤神，明日再继续吧"],
+        generic: ["记得喝水哦", "我的尾巴今天格外顺滑", "莲灯的花瓣开了三朵", "愿你所求皆如愿", "云海那头，好像有仙鹤飞过"],
+        close: ["最喜欢陪着你了", "你忙完，要听我讲上古的故事哦", "悄悄说：你是我最想守护的人"],
+        dream: ["唔……补天……还差一块石头……", "莲子羹……再来一碗……", "Zzz……云朵软软的……", "尾巴……别缠住莲灯……"],
+        hungry: ["肚子有点空空的……", "有莲子或者仙桃吗？就一颗", "饿了，想吃甜甜的仙桃"],
+        focus: ["嘘，我提着灯陪你专注", "专注的模样，有上古贤者的风范", "这一段快结束了，稳住心神"],
+      };
+      function petPickLine(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+      function petTimeBucket() {
+        var h = new Date().getHours();
+        if (h >= 5 && h < 11) return "morning";
+        if (h >= 11 && h < 14) return "noon";
+        if (h >= 14 && h < 18) return "afternoon";
+        if (h >= 18 && h < 23) return "evening";
+        return "night";
+      }
+      function petChatter() {
+        petLastChatAt = Date.now();
+        if (pet.sleeping) {
+          petSay(petPickLine(PET_CHATTER.dream), 3000);
+          return;
+        }
+        if (typeof timer !== "undefined" && timer && timer.running && timer.mode === "focus") {
+          petSay(petPickLine(PET_CHATTER.focus));
+          return;
+        }
+        if (pet.satiety < 25) {
+          petSay(petPickLine(PET_CHATTER.hungry), 3000);
+          return;
+        }
+        var remaining = data.todos.filter(function (t) { return !t.done; }).length;
+        var up = upcomingEvents();
+        var roll = Math.random();
+        if (remaining > 0 && roll < 0.4) {
+          petSay("还有 " + remaining + " 件待办，我陪你一件件来");
+          return;
+        }
+        if (up.length && up[0].d <= 3 && roll < 0.55) {
+          petSay("「" + up[0].name + "」" + (up[0].d === 0 ? "就是今天啦！" : "还有 " + up[0].d + " 天，期待一下"));
+          return;
+        }
+        var pool = PET_CHATTER[petTimeBucket()].concat(PET_CHATTER.generic);
+        if (petTier() >= 2) pool = pool.concat(PET_CHATTER.close);
+        petSay(petPickLine(pool), 3200);
+      }
+
+      /* ---------- sleep / wake ---------- */
+      function petSleep() {
+        pet.sleeping = true;
+        savePet();
+        var el = petEl();
+        if (el) el.classList.add("sleeping");
+        setPetFace("sleep");
+        updatePetStatus();
+      }
+      function petWake(silent) {
+        pet.sleeping = false;
+        savePet();
+        var el = petEl();
+        if (el) el.classList.remove("sleeping");
+        setPetFace("normal");
+        updatePetStatus();
+        if (!silent) {
+          petSfx("pop");
+          petSay(SP().says.wakeSay);
+        }
+      }
+
       /* ---------- interactions ---------- */
       function petDo(act) {
+        if (act === "status") {
+          setPetMenu(false);
+          setPetPanel(true);
+          return;
+        }
+        if (act === "sound") {
+          pet.soundOn = !pet.soundOn;
+          savePet();
+          var menu = document.getElementById("pet-menu");
+          if (menu && petMenuOpen) {
+            menu.innerHTML = petMenuHTML();
+            wirePetMenu();
+          }
+          if (pet.soundOn) petSfx("pop");
+          return;
+        }
         setPetMenu(false);
+        setPetPanel(false);
         if (act === "hide") {
           pet.hidden = true;
           savePet();
           renderPet();
           return;
         }
+        if (act === "sleep") { petSleep(); return; }
+        if (act === "wake") { petWake(); return; }
+        if (pet.sleeping) return;
         if (act === "pet") {
           petAct("act-hop", 580);
           petBurst("heart", 6);
-          petSay(["呼噜呼噜～", "最喜欢被摸摸了", "嘿嘿，好痒"][Math.floor(Math.random() * 3)]);
+          petSfx("jump");
+          petGainIntimacy(2);
+          petSay(petPickLine(SP().says.petLines));
         } else if (act === "feed") {
-          var fx = document.getElementById("pet-fx");
-          if (fx) {
-            var food = document.createElement("div");
-            food.className = "pet-food";
-            food.innerHTML = FX_SVGS.fish;
-            fx.appendChild(food);
-            window.setTimeout(function () { if (food.parentNode) food.parentNode.removeChild(food); }, 1250);
-          }
+          petFeedVisual();
           petAct("act-munch", 1180);
-          window.setTimeout(function () { petSay("小鱼干好好吃！"); }, 620);
+          petSfx("eat");
+          pet.satiety = Math.min(100, pet.satiety + 35);
+          pet.satietyAt = Date.now();
+          petGainIntimacy(3);
+          window.setTimeout(function () { petSay(SP().says.feedSay); }, 620);
         } else if (act === "play") {
           petAct("act-spin", 880);
           petBurst("star", 5);
-          petSay("再来一次，再来一次！");
+          petSfx("jump");
+          petGainIntimacy(2);
+          petSay(SP().says.playSay);
         } else if (act === "magic") {
           petAct("act-magic", 720);
           petBurst("star", 12);
+          petSfx("magic");
+          petGainIntimacy(2);
           window.setTimeout(function () { petBurst("heart", 4); }, 260);
-          petSay("变变变，星星来啦！");
+          petSay(SP().says.specialSay);
         } else if (act.indexOf("bonus-") === 0) {
           var id = act.slice(6);
           for (var i = 0; i < PET_BONUS.length; i++) {
             if (PET_BONUS[i].id === id) {
               petAct(PET_BONUS[i].cls, 950);
               if (PET_BONUS[i].fx) petBurst(PET_BONUS[i].fx, 8);
+              petSfx("jump");
+              petGainIntimacy(1);
               petSay(PET_BONUS[i].say);
             }
           }
@@ -1815,32 +2961,194 @@
       }
       /* Todo completed → the fox hops once to celebrate. */
       function petCelebrateJump() {
-        if (!pet || pet.hidden) return;
+        if (!pet || pet.hidden || pet.sleeping) return;
         petAct("act-hop", 580);
         petBurst("heart", 3);
+        petSfx("jump");
       }
 
-      /* ---------- drag & menu wiring ---------- */
+      /* ---------- double-click freeze: stop / resume the stroll ---------- */
+      function petToggleFreeze() {
+        if (pet.sleeping) petWake(true);
+        pet.frozen = !pet.frozen;
+        savePet();
+        updatePetStatus();
+        if (pet.frozen) {
+          petSay(SP().says.freezeSay, 2600);
+        } else {
+          if (!reduceMotion) petAct("act-hop", 580);
+          petSay(SP().says.unfreezeSay, 2600);
+        }
+      }
+
+      /* ---------- poking: reactions by mood ---------- */
+      function petPoke() {
+        petLastTouchAt = Date.now();
+        if (pet.sleeping) { petWake(); return; }
+        if (petDizzy || petFlying) return;
+        var now = Date.now();
+        if (now - petPokeLast > 2600) petPokeCount = 0;
+        petPokeCount += 1;
+        petPokeLast = now;
+        if (petPokeCount >= 9) { petGoDizzy(); return; }
+        if (petPokeCount >= 5) {
+          setPetFace("angry", 1700);
+          petAct("act-shake", 520);
+          petSay(SP().says.angrySay);
+          return;
+        }
+        var roll = Math.random();
+        if (roll < 0.3) {
+          setPetFace("happy", 1200);
+          petAct("act-hop", 580);
+          petBurst("heart", 3);
+          petSfx("jump");
+          petSay(petPickLine(SP().says.pokeHappy));
+        } else if (roll < 0.55) {
+          setPetFace("surprised", 1100);
+          petSay(petPickLine(SP().says.pokeSurprised));
+        } else if (roll < 0.8) {
+          setPetFace("happy", 1200);
+          petAct("act-wave", 980);
+          petSay(SP().says.pokeTickle);
+        } else {
+          petAct("act-wave", 980);
+          petSfx("pop");
+          petSay(SP().says.pokeWave);
+        }
+        petGainIntimacy(1);
+      }
+      function petGoDizzy() {
+        petDizzy = true;
+        petPokeCount = 0;
+        var el = petEl();
+        if (el) el.classList.add("fainted");
+        setPetFace("dizzy");
+        petSay("眼前……有星星在转……", 3400);
+        updatePetStatus();
+        window.setTimeout(function () {
+          petDizzy = false;
+          var el2 = petEl();
+          if (el2) el2.classList.remove("fainted");
+          setPetFace("normal");
+          petSay("呼……我没事啦");
+          updatePetStatus();
+        }, 4200);
+      }
+
+      /* ---------- fling physics: gravity, bounce, squash ---------- */
+      function petStopPhysics() {
+        if (petPhysTimer) { window.clearInterval(petPhysTimer); petPhysTimer = null; }
+        petFlying = false;
+        var walkEl = document.getElementById("pet-walk");
+        if (walkEl) walkEl.style.transform = "translateX(" + petWalk.x + "px) scaleX(" + petWalk.facing + ")";
+      }
+      function petStartPhysics() {
+        if (reduceMotion) return; /* reduced motion: static frame, no flinging */
+        if (petPhysTimer || !petEl()) return;
+        petFlying = true;
+        var el = petEl();
+        petPhysTimer = window.setInterval(function () {
+          if (!petEl()) { petStopPhysics(); return; }
+          petVel.y += 0.55; /* gravity per frame */
+          pet.x += petVel.x;
+          pet.y += petVel.y;
+          var maxX = Math.max(4, window.innerWidth - 108);
+          var maxY = Math.max(40, window.innerHeight - 122);
+          if (pet.x < 4) { pet.x = 4; petVel.x = -petVel.x * 0.62; }
+          if (pet.x > maxX) { pet.x = maxX; petVel.x = -petVel.x * 0.62; }
+          if (pet.y < 0) { pet.y = 0; petVel.y = Math.abs(petVel.y) * 0.4; }
+          var landed = false;
+          if (pet.y >= maxY) {
+            pet.y = maxY;
+            if (Math.abs(petVel.y) > 2.4) {
+              petVel.y = -petVel.y * 0.42;
+              petVel.x *= 0.74;
+              el.classList.remove("act-squash");
+              void el.offsetWidth;
+              el.classList.add("act-squash");
+              window.setTimeout(function () { el.classList.remove("act-squash"); }, 420);
+            } else {
+              landed = true;
+            }
+          }
+          el.style.left = pet.x + "px";
+          el.style.top = pet.y + "px";
+          var walkEl = document.getElementById("pet-walk");
+          if (walkEl) {
+            var rot = Math.max(-20, Math.min(20, petVel.x * 1.4));
+            walkEl.style.transform = "rotate(" + rot.toFixed(1) + "deg)";
+          }
+          if (landed) {
+            petStopPhysics();
+            savePet();
+          }
+        }, 16);
+      }
+
+      /* ---------- drag, poke & menu wiring ---------- */
       function wirePet() {
         var el = petEl();
         if (!el) return;
+        var statusEl = document.getElementById("pet-status");
+        if (statusEl) {
+          statusEl.addEventListener("click", function (e) {
+            e.stopPropagation();
+            setPetPanel(false);
+            setPetMenu(!petMenuOpen);
+          });
+          statusEl.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              e.stopPropagation();
+              setPetMenu(!petMenuOpen);
+            }
+          });
+        }
         var drag = null;
         var justDragged = false;
+        var suppressClick = false;
+        var pressTimer = null;
+        el.addEventListener("contextmenu", function (e) {
+          e.preventDefault();
+          setPetPanel(false);
+          setPetMenu(true);
+        });
         el.addEventListener("pointerdown", function (e) {
-          if (e.target.closest && e.target.closest(".pet-menu")) return;
+          if (e.target.closest && (e.target.closest(".pet-menu") || e.target.closest(".pet-panel") || e.target.closest(".pet-status"))) return;
+          petStopPhysics();
           drag = {
             pointerId: e.pointerId, startX: e.clientX, startY: e.clientY,
             originX: pet.x, originY: pet.y, moved: false,
+            samples: [{ t: Date.now(), x: e.clientX, y: e.clientY }],
           };
           try { el.setPointerCapture(e.pointerId); } catch (err) {}
+          el.classList.add("held");
+          if (!pet.sleeping && !petDizzy) setPetFace("surprised");
+          pressTimer = window.setTimeout(function () {
+            if (drag && !drag.moved) {
+              suppressClick = true;
+              el.classList.remove("held");
+              setPetFace(pet.sleeping ? "sleep" : "normal");
+              setPetPanel(false);
+              setPetMenu(true);
+            }
+          }, 550);
         });
         el.addEventListener("pointermove", function (e) {
           if (!drag || e.pointerId !== drag.pointerId) return;
           var dx = e.clientX - drag.startX;
           var dy = e.clientY - drag.startY;
           if (!drag.moved && Math.hypot(dx, dy) < 6) return;
-          drag.moved = true;
+          if (!drag.moved) {
+            drag.moved = true;
+            if (pressTimer) { window.clearTimeout(pressTimer); pressTimer = null; }
+            setPetMenu(false);
+            setPetPanel(false);
+          }
           el.style.cursor = "grabbing";
+          drag.samples.push({ t: Date.now(), x: e.clientX, y: e.clientY });
+          if (drag.samples.length > 6) drag.samples.shift();
           var next = clampPetPos(drag.originX + dx, drag.originY + dy);
           pet.x = next.x; pet.y = next.y;
           el.style.left = next.x + "px";
@@ -1848,33 +3156,76 @@
         });
         function endDrag(e) {
           if (!drag || e.pointerId !== drag.pointerId) return;
+          if (pressTimer) { window.clearTimeout(pressTimer); pressTimer = null; }
           var wasMoved = drag.moved;
+          var samples = drag.samples;
           drag = null;
           el.style.cursor = "grab";
+          el.classList.remove("held");
+          if (!pet.sleeping && !petDizzy && petFace === "surprised") setPetFace("normal");
           if (wasMoved) {
             justDragged = true;
-            savePet();
+            /* Release velocity from the last ~90ms of pointer travel. */
+            var vx = 0, vy = 0;
+            if (samples.length >= 2) {
+              var last = samples[samples.length - 1];
+              var first = samples[0];
+              for (var i = samples.length - 1; i > 0; i--) {
+                if (last.t - samples[i].t >= 60) { first = samples[i]; break; }
+                first = samples[i];
+              }
+              var dt = Math.max(1, last.t - first.t);
+              vx = ((last.x - first.x) / dt) * 16;
+              vy = ((last.y - first.y) / dt) * 16;
+            }
+            vx = Math.max(-22, Math.min(22, vx));
+            vy = Math.max(-20, Math.min(12, vy));
+            if (Math.hypot(vx, vy) > 3.2 && !pet.sleeping && !reduceMotion) {
+              petVel.x = vx;
+              petVel.y = vy;
+              petStartPhysics();
+            } else {
+              savePet();
+            }
           }
         }
         el.addEventListener("pointerup", endDrag);
         el.addEventListener("pointercancel", endDrag);
         el.addEventListener("click", function (e) {
-          if (e.target.closest && e.target.closest(".pet-menu")) return;
+          if (e.target.closest && (e.target.closest(".pet-menu") || e.target.closest(".pet-panel") || e.target.closest(".pet-status"))) return;
+          if (suppressClick) { suppressClick = false; return; }
           if (justDragged) { justDragged = false; return; }
-          setPetMenu(!petMenuOpen);
+          /* Two clicks within 300ms freeze / resume the stroll instead
+             of poking; a lone click pokes once the window has passed. */
+          var now = Date.now();
+          if (now - petLastClickAt <= 300) {
+            petLastClickAt = 0;
+            if (petPokeTimer) { window.clearTimeout(petPokeTimer); petPokeTimer = null; }
+            petToggleFreeze();
+            return;
+          }
+          petLastClickAt = now;
+          if (petPokeTimer) window.clearTimeout(petPokeTimer);
+          petPokeTimer = window.setTimeout(function () {
+            petPokeTimer = null;
+            petPoke();
+          }, 300);
         });
         el.addEventListener("keydown", function (e) {
           if (e.key === "Enter" || e.key === " ") {
             if (e.target !== el) return;
             e.preventDefault();
+            setPetPanel(false);
             setPetMenu(!petMenuOpen);
           }
         });
       }
       document.addEventListener("pointerdown", function (e) {
-        if (!petMenuOpen) return;
         var el = petEl();
-        if (el && !el.contains(e.target)) setPetMenu(false);
+        if (el && !el.contains(e.target)) {
+          if (petMenuOpen) setPetMenu(false);
+          if (petPanelOpen) setPetPanel(false);
+        }
       });
       window.addEventListener("resize", function () {
         if (!pet || pet.hidden) return;
@@ -1888,22 +3239,43 @@
       function updatePetSign() {
         var sign = document.getElementById("pet-sign");
         if (!sign) return;
+        var el = petEl();
         var up = upcomingEvents();
         if (up.length && up[0].d <= 3) {
           var name = up[0].name.length > 7 ? up[0].name.slice(0, 7) + "…" : up[0].name;
           sign.innerHTML = esc(name) + "<small>" +
             (up[0].d === 0 ? "就是今天！" : "还有 " + up[0].d + " 天") + "</small>";
           sign.hidden = false;
+          if (el) el.classList.add("has-sign");
         } else {
           sign.hidden = true;
+          if (el) el.classList.remove("has-sign");
         }
       }
 
-      /* ---------- ambient walking ---------- */
+      /* ---------- ambient walking ----------
+         The fox strolls along the bottom around its home spot: it picks
+         a random target inside its roam range, walks to it, often pauses
+         for a few seconds, and turns around (facing flips) at the range
+         edges and whenever the next leg heads the other way. The range
+         is clamped so the fox never walks off-screen. Double-click
+         freezes the stroll (pet.frozen); reduced motion stops it too. */
       var petWalk = { x: 0, target: 34, facing: 1, pauseUntil: 0 };
       var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      function petWalkBounds() {
+        var roam = 260;
+        var min = Math.max(-roam, 6 - pet.x);
+        var max = Math.min(roam, window.innerWidth - 110 - pet.x);
+        if (max < min) { var mid = Math.round((min + max) / 2); min = mid; max = mid; }
+        return { min: min, max: max };
+      }
+      function petPickWalkTarget() {
+        var b = petWalkBounds();
+        petWalk.target = Math.round(b.min + Math.random() * (b.max - b.min));
+      }
       window.setInterval(function () {
-        if (!pet || pet.hidden || petMenuOpen || petSitting || petActing || reduceMotion) return;
+        if (!pet || pet.hidden || pet.frozen || petMenuOpen || petPanelOpen || petSitting || petActing ||
+            pet.sleeping || petDizzy || petFlying || reduceMotion) return;
         var walkEl = document.getElementById("pet-walk");
         if (!walkEl) return;
         var now = Date.now();
@@ -1912,10 +3284,10 @@
         var diff = petWalk.target - petWalk.x;
         if (Math.abs(diff) <= step) {
           petWalk.x = petWalk.target;
-          if (Math.random() < 0.45) {
-            petWalk.pauseUntil = now + 2200 + Math.random() * 3800;
+          if (Math.random() < 0.55) {
+            petWalk.pauseUntil = now + 2500 + Math.random() * 4500;
           } else {
-            petWalk.target = Math.round((Math.random() - 0.5) * 96);
+            petPickWalkTarget();
           }
         } else {
           petWalk.facing = diff > 0 ? 1 : -1;
@@ -1924,16 +3296,37 @@
         walkEl.style.transform = "translateX(" + petWalk.x.toFixed(1) + "px) scaleX(" + petWalk.facing + ")";
       }, 50);
 
-      /* ---------- pomodoro link: sit alongside while focusing ---------- */
+      /* ---------- pomodoro link + status/Zzz ticker ---------- */
       window.setInterval(function () {
         if (!pet || pet.hidden) return;
         var sitting = !!(typeof timer !== "undefined" && timer && timer.running && timer.mode === "focus");
-        if (sitting === petSitting) return;
-        petSitting = sitting;
-        var el = petEl();
-        if (el) el.classList.toggle("sitting", sitting);
-        if (sitting) petSay("陪你专注中", 3000);
+        if (sitting !== petSitting) {
+          petSitting = sitting;
+          var el = petEl();
+          if (el) el.classList.toggle("sitting", sitting);
+          if (sitting) petSay("陪你专注中", 3000);
+        }
+        updatePetStatus();
+        petCheckNotify();
+        if (pet.sleeping && Math.random() < 0.22) petBurst("zzz", 1);
       }, 800);
+
+      /* ---------- ambient brain: random actions & chatter ---------- */
+      window.setInterval(function () {
+        if (!pet || pet.hidden || petMenuOpen || petPanelOpen || petSitting || petActing ||
+            petDizzy || petFlying || reduceMotion) return;
+        var now = Date.now();
+        var idleFor = now - Math.max(petLastActAt, petPokeLast);
+        if (!pet.sleeping && idleFor > 16000 && now - petLastActAt > 15000 + Math.random() * 14000) {
+          petRunPoolAction(petPickPoolAction());
+        }
+        if (now - petLastChatAt > 165000 && Math.random() < 0.55) {
+          if (!petActing) petChatter();
+        }
+        if (pet.sleeping && now - petLastChatAt > 240000 && Math.random() < 0.5) {
+          petChatter(); /* dream talk only while asleep */
+        }
+      }, 5000);
 
       /* ---------- weekly evolution ---------- */
       function checkEvolution() {
@@ -1945,13 +3338,14 @@
         if (pet.stage < 3) {
           pet.stage += 1;
           savePet();
-          petEvolveCelebration("阿绒进化了！现在是「" + PET_STAGES[pet.stage].name + "」");
+          petEvolveCelebration(SP().name + "进化了！现在是「" + PET_STAGES[pet.stage].name + "」");
         } else if (pet.bonus < PET_BONUS.length) {
           pet.bonus += 1;
           savePet();
           renderPet();
           petBurst("star", 10);
-          petToast("新的一周：阿绒学会了新动作「" + PET_BONUS[pet.bonus - 1].label + "」");
+          petSfx("evolve");
+          petToast("新的一周：" + SP().name + "学会了新动作「" + PET_BONUS[pet.bonus - 1].label + "」");
           petSay("我学会新本领啦！");
         } else {
           savePet();
@@ -1959,43 +3353,167 @@
       }
       function petEvolveCelebration(text) {
         pet.hidden = false;
+        if (pet.sleeping) petWake(true);
         petMenuOpen = false;
+        petPanelOpen = false;
         renderPet();
+        petSfx("evolve");
         var el = petEl();
         if (el) {
           el.classList.add("evolving");
-          var ring = document.createElement("div");
-          ring.className = "evo-ring";
-          el.appendChild(ring);
+          var rings = [];
+          for (var ri = 0; ri < 3; ri++) {
+            var ring = document.createElement("div");
+            ring.className = "evo-ring";
+            ring.style.animationDelay = (ri * 0.3) + "s";
+            if (ri === 1) ring.style.borderColor = "rgba(247, 168, 184, 0.9)";
+            if (ri === 2) ring.style.borderColor = "rgba(255, 255, 255, 0.85)";
+            el.appendChild(ring);
+            rings.push(ring);
+          }
           window.setTimeout(function () {
             el.classList.remove("evolving");
-            if (ring.parentNode) ring.parentNode.removeChild(ring);
-          }, 2000);
+            rings.forEach(function (r) { if (r.parentNode) r.parentNode.removeChild(r); });
+          }, 2300);
         }
         window.setTimeout(function () { petBurst("star", 12); }, 650);
+        window.setTimeout(function () { petBurst("petal", 9); }, 850);
         window.setTimeout(function () { petBurst("heart", 5); }, 1000);
         petToast("进化了！" + text, 5200);
         petSay("我长大啦！", 3200);
       }
 
+      /* ---------- switching pets: 换着养，一次一只 ----------
+         The outgoing pet puffs away in a little cloud of smoke, the
+         incoming one materialises the same way. Each species' state
+         was already saved under its own key, so nothing is shared:
+         stage, bonus, intimacy, satiety, hidden flag and position all
+         stay exactly where that pet left them. */
+      function petSmoke() {
+        var el = petEl();
+        if (!el || reduceMotion) return;
+        for (var i = 0; i < 7; i++) {
+          var puff = document.createElement("div");
+          puff.className = "pet-smoke";
+          puff.style.setProperty("--dx", Math.round((Math.random() - 0.5) * 64) + "px");
+          puff.style.setProperty("--dy", Math.round(-14 - Math.random() * 30) + "px");
+          puff.style.left = (38 + Math.random() * 24) + "%";
+          puff.style.animationDelay = (Math.random() * 0.16).toFixed(2) + "s";
+          el.appendChild(puff);
+          (function (node) {
+            window.setTimeout(function () { if (node.parentNode) node.parentNode.removeChild(node); }, 1250);
+          })(puff);
+        }
+      }
+      function petSwitchTo(next) {
+        if (!SPECIES[next] || next === petSpecies) return;
+        savePet();
+        setPetMenu(false);
+        setPetPanel(false);
+        petStopPhysics();
+        var wasHidden = pet.hidden;
+        function doSwap() {
+          petSpecies = next;
+          try { localStorage.setItem(PET_ACTIVE_KEY, next); } catch (e) { /* storage unavailable */ }
+          pet = loadPet(next);
+          applySpeciesTables();
+          petDecaySatiety();
+          savePet();
+          petFace = "normal";
+          if (petFaceTimer) { window.clearTimeout(petFaceTimer); petFaceTimer = null; }
+          petDizzy = false;
+          petPokeCount = 0;
+          petNotifyJumpedKey = "";
+          petWalk.x = 0;
+          petPickWalkTarget();
+          petLastActAt = Date.now();
+          petLastChatAt = Date.now();
+          petLastTouchAt = Date.now();
+          renderPet();
+          petSmoke();
+          checkEvolution();
+          if (!pet.hidden) {
+            var firstMeet = !pet.greeted;
+            if (firstMeet) {
+              pet.greeted = true;
+              pet.lastGreetDay = todayStr();
+              savePet();
+            }
+            window.setTimeout(function () {
+              if (!pet || pet.hidden || pet.sleeping) return;
+              petSay(firstMeet ? SP().says.greetFirst : "我来啦，今天也一起玩", firstMeet ? 3600 : 2600);
+            }, 480);
+          }
+        }
+        if (!wasHidden && petEl()) {
+          petSmoke();
+          window.setTimeout(doSwap, 430);
+        } else {
+          doSwap();
+        }
+      }
+
       /* ---------- pet init ---------- */
       function petInit() {
-        pet = loadPet();
-        var isNew = !pet.greeted;
+        loadPetRoster();
+        try {
+          var savedSpecies = localStorage.getItem(PET_ACTIVE_KEY);
+          if (savedSpecies === "wa" || savedSpecies === "fox") petSpecies = savedSpecies;
+        } catch (e) { /* storage unavailable — start with the fox */ }
+        /* Who comes out today: a lock wins outright; otherwise, with
+           随机换宠 on (and unlocked), the first open of each day picks
+           one of the two at random; otherwise the last companion
+           stays — 阿绒 by default — and never swaps on its own. */
+        if (petRoster.lock) {
+          petSpecies = petRoster.lock;
+        } else if (petRoster.random && petRosterUnlocked() && petRoster.lastRandomDay !== todayStr()) {
+          petSpecies = Math.random() < 0.5 ? "fox" : "wa";
+          petRoster.lastRandomDay = todayStr();
+          savePetRoster();
+        }
+        try { localStorage.setItem(PET_ACTIVE_KEY, petSpecies); } catch (e) { /* storage unavailable */ }
+        pet = loadPet(petSpecies);
+        applySpeciesTables();
+        petDecaySatiety();
+        savePet();
+        petLastActAt = Date.now();
+        petLastChatAt = Date.now();
+        petLastTouchAt = Date.now();
         renderPet();
         checkEvolution();
-        window.setInterval(function () { checkEvolution(); updatePetSign(); }, 60000);
-        if (isNew) {
-          pet.greeted = true;
+        window.setInterval(function () {
+          petDecaySatiety();
           savePet();
-          if (!pet.hidden) {
-            window.setTimeout(function () { petSay("你好，我是阿绒！", 3400); }, 600);
-          }
+          checkEvolution();
+          updatePetSign();
+          if (petPanelOpen) setPetPanel(true);
+        }, 60000);
+        /* Entrance greeting: the very first visit introduces the fox;
+           after that, the first open of each day gets a wave and a
+           time-of-day hello (once per day, persisted via lastGreetDay). */
+        var firstEver = !pet.greeted;
+        var needGreet = pet.lastGreetDay !== todayStr();
+        if (firstEver) pet.greeted = true;
+        if (needGreet) pet.lastGreetDay = todayStr();
+        if (firstEver || needGreet) savePet();
+        if (!pet.hidden && (firstEver || needGreet)) {
+          window.setTimeout(function () {
+            if (!pet || pet.hidden || pet.sleeping) return;
+            if (!reduceMotion) petAct("act-wave", 980);
+            setPetFace("happy", 1500);
+            petSfx("pop");
+            if (firstEver) {
+              petSay(SP().says.greetFirst, 3600);
+            } else {
+              petSay(petPickLine(PET_CHATTER[petTimeBucket()]), 3200);
+            }
+          }, 700);
         }
       }
 
       renderUI();
       petInit();
+
     </script>
   </body>
 </html>
