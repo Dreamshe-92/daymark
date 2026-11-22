@@ -347,7 +347,7 @@
       .day-list .today-badge { border-radius: 999px; background: var(--accent); padding: 4px 10px; font-size: 13px; font-weight: 600; color: #fff; }
       .day-list .past { font-size: 13px; color: var(--dim); }
 
-      /* ---------- desktop pet: 阿绒 the fox ---------- */
+      /* ---------- desktop pet: 小娲 the little snake goddess ---------- */
       .pet {
         position: fixed; z-index: 25; width: 104px; height: 118px;
         touch-action: none; cursor: grab; outline: none;
@@ -358,59 +358,10 @@
       .pet-walk { position: absolute; left: 0; bottom: 0; width: 104px; height: 104px; will-change: transform; }
       .pet-scale { width: 100%; height: 100%; transform: scale(var(--ps, 1)); transform-origin: 50% 100%; }
       .pet svg.fox { width: 100%; height: 100%; display: block; overflow: visible; }
-      .pet .fox-tail {
-        transform-box: fill-box; transform-origin: 10% 88%;
-        animation: tail-wag 3.2s ease-in-out infinite;
-      }
-      @keyframes tail-wag { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(4deg); } }
-      /* tail tip lags half a beat behind the root, so the sway travels
-         down the tail like a smooth sine wave instead of one stiff swing */
-      .pet .fox-tail-tip {
-        transform-box: fill-box; transform-origin: 22% 88%;
-        animation: tail-wave 3.2s ease-in-out infinite;
-      }
-      @keyframes tail-wave { 0%, 100% { transform: rotate(-3.5deg); } 50% { transform: rotate(5.5deg); } }
-      /* quadruped gait: diagonal leg pairs (front-left + back-right /
-         front-right + back-left) step in turn, each paw lifting in a
-         small arc; the body bobs twice per stride while the head
-         counter-bobs so it stays almost level */
-      .pet .fox-leg { transform-box: fill-box; transform-origin: 50% 6%; }
-      .pet.walking:not(.is-wa) .fox-leg-a { animation: leg-step 0.56s ease-in-out infinite; }
-      .pet.walking:not(.is-wa) .fox-leg-b { animation: leg-step 0.56s ease-in-out infinite; animation-delay: -0.28s; }
-      @keyframes leg-step {
-        0%, 100% { transform: rotate(0deg) translateY(0); }
-        28% { transform: rotate(9deg) translateY(-2.6px); }
-        52% { transform: rotate(2deg) translateY(-0.6px); }
-        76% { transform: rotate(-5deg) translateY(0.3px); }
-      }
-      .pet.walking:not(.is-wa) .pet-scale { animation: walk-bob 0.56s ease-in-out infinite; }
-      @keyframes walk-bob {
-        0%, 100% { transform: scale(var(--ps, 1)) translateY(0); }
-        25% { transform: scale(var(--ps, 1)) translateY(-1.6px); }
-        50% { transform: scale(var(--ps, 1)) translateY(-0.4px); }
-        75% { transform: scale(var(--ps, 1)) translateY(-1.6px); }
-      }
-      .pet.walking:not(.is-wa) .fox-head { animation: walk-head 0.56s ease-in-out infinite; }
-      @keyframes walk-head {
-        0%, 100% { transform: translateY(0.5px); }
-        25% { transform: translateY(1.2px); }
-        50% { transform: translateY(0.7px); }
-        75% { transform: translateY(1.2px); }
-      }
-      .pet.walking .fox-tail, .pet.walking .fox-tail-tip { animation-duration: 1.12s; }
       .pet .fox-eyes { transform-box: fill-box; transform-origin: center; animation: fox-blink 4.6s infinite; }
       @keyframes fox-blink { 0%, 91%, 100% { transform: scaleY(1); } 94.5% { transform: scaleY(0.08); } }
       .pet .fox-aura { animation: aura-pulse 3.2s ease-in-out infinite; }
       @keyframes aura-pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.85; } }
-      .pet .fox-ear-l, .pet .fox-ear-r { transform-box: fill-box; transform-origin: 50% 92%; }
-      .pet .fox-ear-l { animation: ear-twitch 5.4s ease-in-out infinite; }
-      .pet .fox-ear-r { animation: ear-twitch 6.3s ease-in-out infinite; animation-delay: -2.4s; }
-      @keyframes ear-twitch {
-        0%, 86%, 100% { transform: rotate(0deg); }
-        89.5% { transform: rotate(-6deg); }
-        93% { transform: rotate(3.5deg); }
-        96.5% { transform: rotate(0deg); }
-      }
       .pet .fox-breath-g { transform-box: fill-box; transform-origin: 50% 100%; animation: breath-soft 3.6s ease-in-out infinite; }
       @keyframes breath-soft { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.022) translateY(-0.4px); } }
       .pet .fox-fire { animation: fire-float 2.7s ease-in-out infinite; }
@@ -423,7 +374,6 @@
         88% { opacity: 0.75; }
         100% { transform: translate(-3px, 52px) rotate(230deg); opacity: 0; }
       }
-      .pet.evolving .fox-tail { animation: evo-fan 1.9s ease both; }
       .pet.evolving .wa-tail { animation: evo-fan 1.9s ease both; }
       @keyframes evo-fan {
         0% { transform: rotate(0deg) scale(1); }
@@ -433,7 +383,6 @@
       }
       .pet .fox-body-g { transform-box: fill-box; transform-origin: 50% 100%; transition: transform 0.35s ease; }
       .pet.sitting .fox-body-g { transform: translateY(5px) scaleY(0.93); }
-      .pet.sitting .fox-tail, .pet.sitting .fox-tail-tip { animation-duration: 5s; }
       .pet .fox-head { transform-box: fill-box; transform-origin: 50% 92%; }
       .pet.act-munch .fox-head { animation: fox-munch 0.28s ease-in-out 4; }
       @keyframes fox-munch { 0%, 100% { transform: rotate(0deg) translateY(0); } 50% { transform: rotate(3deg) translateY(2.5px); } }
@@ -564,7 +513,7 @@
         width: 46px; height: 46px; padding: 0; border-radius: 999px;
         display: flex; align-items: center; justify-content: center;
         border: 1px solid rgba(255, 255, 255, 0.3);
-        background: rgba(16, 26, 38, 0.45); color: #ffb877;
+        background: rgba(16, 26, 38, 0.45); color: #ffd76e;
         box-shadow: 0 6px 20px rgba(8, 16, 26, 0.3);
         backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
         transition: background 0.2s ease, transform 0.2s ease;
@@ -583,8 +532,9 @@
       }
       .pet-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
       @media (prefers-reduced-motion: reduce) {
-        .pet .fox-tail, .pet .fox-tail-tip, .pet .fox-leg, .pet .fox-eyes, .pet .fox-aura, .pet .wa-float-g, .pet .wa-tail, .pet .wa-sleeve, .pet-smoke,
-        .pet .fox-ear-l, .pet .fox-ear-r, .pet .fox-breath-g, .pet .fox-fire, .pet .fox-petal,
+        .pet .fox-eyes, .pet .fox-aura, .pet .wa-float-g, .pet .wa-tail, .pet .wa-sleeve,
+        .pet .chan-wing-l, .pet .chan-wing-r, .pet .ghost-flame, .pet-smoke,
+        .pet .fox-breath-g, .pet .fox-fire, .pet .fox-petal,
         .pet.walking .pet-scale, .pet.walking .fox-head,
         .pet.act-hop .pet-scale, .pet.act-spin .pet-scale, .pet.act-roll .pet-scale,
         .pet.act-flip .pet-scale, .pet.act-dance .pet-scale, .pet.act-magic .pet-scale,
@@ -623,9 +573,7 @@
       .pet.has-sign .pet-status { bottom: 146px; }
       .pet.has-sign .pet-say { bottom: 174px; }
       .pet.held .fox-body-g { transform: rotate(-7deg) translateY(-3px); }
-      .pet.held .fox-tail, .pet.held .fox-tail-tip { animation-duration: 0.55s; }
       .pet.sleeping .fox-body-g { transform: translateY(6px) scaleY(0.9); }
-      .pet.sleeping .fox-tail, .pet.sleeping .fox-tail-tip { animation-duration: 6.5s; }
       .pet.fainted .pet-scale { transform: scale(var(--ps, 1)) rotate(-80deg) translateY(3px); }
       .pet.act-breath .fox-body-g { animation: fox-breath 2.6s ease-in-out; }
       @keyframes fox-breath { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.035) translateY(-0.6px); } }
@@ -691,19 +639,7 @@
       .pet-panel .pp-bar span.sat { background: #7fc96b; }
       .pet-panel .pp-acts { margin: 2px 0 0; line-height: 1.65; color: rgba(255, 255, 255, 0.88); }
       .pet-panel .pp-sec { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.16); color: rgba(255, 255, 255, 0.72); }
-      .pet-panel .pp-switch {
-        display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 10px;
-        min-height: 36px; margin-top: 6px; padding: 7px 10px; border-radius: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.25); background: rgba(255, 255, 255, 0.1);
-        color: #fff; font-size: 13px; font-weight: 600; text-align: left;
-      }
-      .pet-panel .pp-switch:hover { background: rgba(255, 255, 255, 0.2); }
-      .pet-panel .pp-switch span { font-size: 11.5px; font-weight: 500; color: rgba(255, 255, 255, 0.75); white-space: nowrap; }
-      .pet-panel .pp-opt.on { border-color: rgba(255, 207, 125, 0.9); background: rgba(255, 179, 92, 0.24); }
-      .pet-panel .pp-opt.on span { color: #ffcf7d; font-weight: 700; }
-      .pet-panel .pp-note { margin: 6px 0 0; font-size: 11.5px; line-height: 1.6; color: rgba(255, 255, 255, 0.68); }
-
-      /* ---------- second pet: 小娲 the snake goddess (floats, never walks) ---------- */
+      /* ---------- 小娲 the snake goddess: floats, never walks ---------- */
       .pet .wa-float-g { animation: wa-float 3.6s ease-in-out infinite; }
       @keyframes wa-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3.5px); } }
       .pet .wa-tail {
@@ -716,19 +652,52 @@
         animation: wa-sleeve-wave 3.2s ease-in-out infinite;
       }
       @keyframes wa-sleeve-wave { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(2.2deg); } }
+      /* ---------- the other three pets: cicada wings, ghost flames ---------- */
+      .pet .chan-wing-l {
+        transform-box: fill-box; transform-origin: 100% 50%;
+        animation: chan-flutter-l 0.34s ease-in-out infinite alternate;
+      }
+      .pet .chan-wing-r {
+        transform-box: fill-box; transform-origin: 0% 50%;
+        animation: chan-flutter-r 0.34s ease-in-out infinite alternate;
+      }
+      @keyframes chan-flutter-l { from { transform: rotate(7deg); } to { transform: rotate(-9deg); } }
+      @keyframes chan-flutter-r { from { transform: rotate(-7deg); } to { transform: rotate(9deg); } }
+      .pet .ghost-flame {
+        transform-box: fill-box; transform-origin: 50% 100%;
+        animation: ghost-flicker 1.15s ease-in-out infinite alternate;
+      }
+      @keyframes ghost-flicker {
+        0% { transform: scaleY(0.88) scaleX(1.04); opacity: 0.75; }
+        55% { transform: scaleY(1.1) scaleX(0.94); opacity: 1; }
+        100% { transform: scaleY(0.97) scaleX(1); opacity: 0.88; }
+      }
+      /* ---------- pet switching: smoke puff transition + panel picker ---------- */
+      .pet-scale { transition: opacity 0.32s ease; }
+      .pet.switching .pet-scale { opacity: 0.06; }
       .pet-smoke {
         position: absolute; left: 50%; bottom: 30px; z-index: 4;
         width: 16px; height: 16px; margin-left: -8px; border-radius: 999px;
-        background: radial-gradient(circle, rgba(245, 248, 250, 0.95) 0%, rgba(226, 233, 239, 0.55) 55%, rgba(226, 233, 239, 0) 75%);
-        filter: blur(1.5px); pointer-events: none; opacity: 0;
-        animation: smoke-puff 0.8s ease-out both;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(226, 233, 242, 0.55) 55%, rgba(226, 233, 242, 0) 100%);
+        pointer-events: none; animation: smoke-puff 0.68s ease-out both;
       }
       @keyframes smoke-puff {
-        0% { opacity: 0; transform: translate(0, 6px) scale(0.5); }
+        0% { transform: translate(0, 8px) scale(0.4); opacity: 0; }
         22% { opacity: 0.95; }
-        100% { opacity: 0; transform: translate(var(--dx, 0px), var(--dy, -26px)) scale(3.4); }
+        100% { transform: translate(var(--sx, 0px), -36px) scale(2.7); opacity: 0; }
       }
-
+      .pet-panel .pp-pets { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; }
+      .pet-panel .pp-pet {
+        display: flex; flex-direction: column; align-items: flex-start; gap: 1px;
+        padding: 7px 9px; border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 9px;
+        background: rgba(255, 255, 255, 0.07); color: #fff; text-align: left; cursor: pointer;
+        font-family: inherit;
+      }
+      .pet-panel .pp-pet:hover:not(:disabled) { background: rgba(255, 255, 255, 0.15); }
+      .pet-panel .pp-pet:disabled { cursor: default; border-color: rgba(255, 207, 125, 0.55); background: rgba(255, 207, 125, 0.12); }
+      .pet-panel .pp-pet .pp-pet-name { font-size: 13px; font-weight: 600; }
+      .pet-panel .pp-pet .pp-pet-kind { font-size: 10.5px; color: rgba(255, 255, 255, 0.66); }
+      .pet-panel .pp-pet .pp-pet-tag { font-size: 10px; font-weight: 600; color: #ffcf7d; }
       /* ---------- animations (from v8) ---------- */
       .todo-check-path { stroke-dasharray: 1; stroke-dashoffset: 0; animation: check-draw 0.28s ease both; }
       @keyframes check-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
@@ -974,7 +943,7 @@
       function openRing() { ringOpen = true; activeTool = null; renderUI(); }
       function openPanel(id) {
         ringOpen = false; activeTool = id;
-        /* Opening 重要日子 acknowledges the fox's unread countdown reminder. */
+        /* Opening 重要日子 acknowledges 小娲's unread countdown reminder. */
         if (id === "days") petAckNotify();
         renderUI();
       }
@@ -1675,76 +1644,41 @@
         }
       });
 
-      /* ================= desktop pet: 阿绒 the fox =================
-         Original little fox drawn in SVG. Lives near the bottom-left,
-         walks slowly, blinks and wags its tail. Every Monday, once at
-         least 7 days have passed since the last evolution, it grows one
-         stage: 幼狐 → 少年狐 (red scarf) → 成年狐 (cape) → 灵狐 (glow,
-         flower wreath, lantern). At the top stage each new week instead
-         unlocks one extra interaction.
+      /* ================= desktop pets: 小娲 · 小蝉 · 幽冥书生 · 长乐仙子 =================
+         Four original SVG pets share the stage one at a time; the
+         active one is switched from the status panel （换宠物） with a
+         smoke transition, and each keeps its own save. 小娲， the
+         default, is the snake goddess drawn below: gold crown, wide flowing
+         sleeves, a jade snake tail and a lotus lantern that glows
+         brighter after dark. She lives near the bottom-left and floats
+         instead of walking, drifting slowly and swaying her tail.
+         Every Monday, once at least 7 days have passed since the last
+         evolution, she grows one stage: 小蛇女 → 少女 → 仙子 → 神女
+         (crown grander, tail longer and patterned, lantern brighter).
+         At the top stage each new week instead unlocks one extra
+         interaction.
          Upgraded behaviour (inspired by classic desktop pets): a weighted
          random action pool, fling physics with gravity and squash, poke
          reactions by mood, idle chatter, a persistent status line, sleep
          mode, intimacy & satiety meters, a status panel, and optional
          WebAudio sound effects (off by default). State persists in
          localStorage.
-         Plugin-pet round: the fox strolls along the bottom with random
+         Plugin-pet round: she drifts along the bottom with random
          pauses and turns at the edges; two clicks within 300ms freeze /
-         resume the stroll (status pill then reads 休息中）; the status
+         resume the drift (status pill then reads 休息中）; the status
          pill carries a state dot (green focusing, blue resting/waiting,
          red unread reminder, gray sleeping); a countdown within 3 days
          raises an unread reminder — hop, bubble, red dot — cleared by
          opening the 重要日子 panel; and the first open of each day is
-         greeted with a wave. With reduced motion the fox stays a
-         static frame: no strolling, random actions or flinging. */
-      /* Two pets, raised one at a time （换着养）: 阿绒 the fox walks along
-         the bottom; 小娲 the little snake goddess floats instead, her
-         lotus lantern glowing brighter after dark. Each keeps its own
-         stage / intimacy / satiety / hidden / position in its own
-         localStorage key; the panel's 换宠物 button swaps them with a
-         puff of smoke, and the active species is remembered.
-         Companionship modes (unlocked once either pet reaches the top
-         stage): 随机换宠 is OFF by default — with nothing chosen, the
-         current pet (阿绒 at first) simply stays, never swapping on
-         its own. Turning it on in the panel makes the first open of
-         each day pick one of the two at random. 一直陪伴 locks one
-         pet as the permanent companion; lock and random are mutually
-         exclusive in effect and the lock wins. Manual 换宠物 always
-         works regardless. The choice persists in its own key. */
+         greeted with a wave. With reduced motion she stays a
+         static frame: no drifting, random actions or flinging. */
+      /* Four pets share the stage, one at a time （一次一只）: 小娲 the
+         snake goddess (the default), 小蝉 the little golden cicada monk,
+         幽冥书生 the ghost-fire scholar and 长乐仙子 the lotus fairy.
+         Each entry carries its own stages, bonus actions, labels and
+         lines; each pet's progress lives under its own storage key. */
       var PET_ACTIVE_KEY = "daymark-pet-active-v1";
-      var SPECIES = {
-        fox: {
-          id: "fox", key: "daymark-pet-v1", name: "阿绒", kind: "小狐狸",
-          stages: [
-            { name: "幼狐", scale: 0.78 },
-            { name: "少年狐", scale: 0.9 },
-            { name: "成年狐", scale: 1 },
-            { name: "灵狐", scale: 1.06 },
-          ],
-          bonus: [
-            { id: "roll", label: "打滚", cls: "act-roll", say: "滚呀滚呀～" },
-            { id: "dance", label: "跳支舞", cls: "act-dance", say: "看我跳舞！" },
-            { id: "petals", label: "撒花", cls: "act-hop", say: "花瓣雨来啦！", fx: "petal" },
-            { id: "flip", label: "翻跟头", cls: "act-flip", say: "嘿，翻过去啦！" },
-          ],
-          feedLabel: "喂食小鱼", playLabel: "一起玩耍", specialLabel: "变魔术",
-          food: "fish", moveWord: "散步",
-          says: {
-            petLines: ["呼噜呼噜～", "最喜欢被摸摸了", "嘿嘿，好痒"],
-            feedSay: "小鱼干好好吃！",
-            playSay: "再来一次，再来一次！",
-            specialSay: "变变变，星星来啦！",
-            pokeHappy: ["嘿嘿", "在呢在呢", "跳一个给你看"],
-            pokeSurprised: ["哇！吓我一跳", "诶？叫我吗"],
-            pokeTickle: "咯咯咯，好痒好痒",
-            pokeWave: "嗨！元气满满向你挥手",
-            angrySay: "哼！再戳我要生气啦",
-            wakeSay: "唔……醒啦，睡得好香",
-            freezeSay: "好，我就在这儿休息一下",
-            unfreezeSay: "休息够啦，继续散步！",
-            greetFirst: "你好，我是阿绒！长按我可以打开菜单",
-          },
-        },
+      var PET_SPECIES = {
         wa: {
           id: "wa", key: "daymark-pet-wa-v1", name: "小娲", kind: "灵蛇小女娲",
           stages: [
@@ -1775,24 +1709,129 @@
             freezeSay: "好，我就停在这朵云上歇歇",
             unfreezeSay: "歇够啦，继续飘游！",
             greetFirst: "你好，我是小娲！长按我可以打开菜单",
+            comeSay: "我回来啦，继续陪着你",
+          },
+        },
+        chan: {
+          id: "chan", key: "daymark-pet-chan-v1", name: "小蝉", kind: "绯衣小金蝉",
+          stages: [
+            { name: "小金蝉", scale: 0.78 },
+            { name: "禅心蝉", scale: 0.9 },
+            { name: "金翅蝉", scale: 1 },
+            { name: "大觉金蝉", scale: 1.06 },
+          ],
+          bonus: [
+            { id: "chant", label: "诵经祈福", cls: "act-magic", say: "阿弥陀佛，愿你平安顺遂", fx: "note" },
+            { id: "shed", label: "金蝉脱壳", cls: "act-flip", say: "脱去烦恼壳，轻松一身！" },
+            { id: "meditate", label: "莲台打坐", cls: "act-sun", say: "静坐片刻，心就安稳了" },
+            { id: "chime", label: "梵音阵阵", cls: "act-wave", say: "听，禅杖上的环声多清亮", fx: "note" },
+          ],
+          feedLabel: "喂花蜜", playLabel: "振翅绕行", specialLabel: "禅杖祈福",
+          food: "dew", moveWord: "振翅",
+          says: {
+            petLines: ["唔，暖暖的", "阿弥陀佛，心里都静下来了", "嘿嘿，莲冠别碰歪啦"],
+            feedSay: "花蜜清甜，多谢你的供养！",
+            playSay: "再绕一圈，再绕一圈！",
+            specialSay: "禅杖轻点，愿你所行皆坦途",
+            pokeHappy: ["嘿嘿", "在呢，小蝉一直守着你", "振翅给你看"],
+            pokeSurprised: ["哇，吓小蝉一跳", "诶？施主唤我？"],
+            pokeTickle: "咯咯咯，翅膀都笑抖了",
+            pokeWave: "嗨，愿你今日心安事顺",
+            angrySay: "哼！再戳，禅杖可要敲你了",
+            wakeSay: "唔……醒啦，这一觉睡在莲台上",
+            freezeSay: "好，我就停在这儿打坐歇歇",
+            unfreezeSay: "歇够啦，继续振翅！",
+            greetFirst: "你好，我是小蝉！长按我可以打开菜单",
+            comeSay: "阿弥陀佛，小蝉来陪你了",
+          },
+        },
+        shu: {
+          id: "shu", key: "daymark-pet-shu-v1", name: "幽冥书生", kind: "踏火小书生",
+          stages: [
+            { name: "小书生", scale: 0.78 },
+            { name: "夜读书生", scale: 0.9 },
+            { name: "星河书生", scale: 1 },
+            { name: "幽冥文宗", scale: 1.06 },
+          ],
+          bonus: [
+            { id: "read", label: "展卷夜读", cls: "act-nod", say: "书中自有星河万里" },
+            { id: "guide", label: "鬼火引路", cls: "act-magic", say: "鬼火开道，夜路也不怕", fx: "star" },
+            { id: "poem", label: "挥毫题诗", cls: "act-wave", say: "新得了一句好诗", fx: "note" },
+            { id: "stride", label: "踏火凌空", cls: "act-dance", say: "踏着鬼火走一圈给你看" },
+          ],
+          feedLabel: "喂桂花糕", playLabel: "踏火夜行", specialLabel: "星河祈愿",
+          food: "cake", moveWord: "踏火",
+          says: {
+            petLines: ["唔，甚好甚好", "最喜欢被摸摸头了", "嘿嘿，青巾都要歪啦"],
+            feedSay: "桂花糕香甜，还是阳间的点心好！",
+            playSay: "再走一圈，再走一圈！",
+            specialSay: "对着星河许个愿吧——鬼火都听见了",
+            pokeHappy: ["嘿嘿", "在呢，我在星河边看着你", "踏火给你看"],
+            pokeSurprised: ["哇，吓我一跳", "诶？唤我何事"],
+            pokeTickle: "咯咯咯，书箱都笑晃了",
+            pokeWave: "嗨，愿你今日下笔有神",
+            angrySay: "哼！再戳，鬼火可要飘了",
+            wakeSay: "唔……醒啦，这一觉睡在诗篇里",
+            freezeSay: "好，我就停在这儿温书歇歇",
+            unfreezeSay: "歇够啦，继续踏火！",
+            greetFirst: "你好，我是幽冥书生！长按我可以打开菜单",
+            comeSay: "久等了，书生来陪你夜读",
+          },
+        },
+        le: {
+          id: "le", key: "daymark-pet-le-v1", name: "长乐仙子", kind: "莲花小仙子",
+          stages: [
+            { name: "小花仙", scale: 0.78 },
+            { name: "莲心仙子", scale: 0.9 },
+            { name: "花扇仙子", scale: 1 },
+            { name: "长乐天女", scale: 1.06 },
+          ],
+          bonus: [
+            { id: "fan", label: "团扇轻摇", cls: "act-wave", say: "扇一扇，烦恼都散啦" },
+            { id: "step", label: "莲步轻移", cls: "act-dance", say: "莲步生花，跳给你看" },
+            { id: "rain", label: "撒花成雨", cls: "act-hop", say: "花瓣雨来啦！", fx: "petal" },
+            { id: "glow", label: "凤冠流光", cls: "act-magic", say: "凤冠流光，愿你长乐无忧", fx: "star" },
+          ],
+          feedLabel: "喂百花蜜", playLabel: "莲台起舞", specialLabel: "花扇赐福",
+          food: "dew", moveWord: "莲步",
+          says: {
+            petLines: ["唔，好舒服", "最喜欢被摸摸了", "嘿嘿，凤冠都要歪啦"],
+            feedSay: "百花蜜甜丝丝的，好好吃！",
+            playSay: "再跳一支，再跳一支！",
+            specialSay: "花扇轻摇，愿你长乐常安",
+            pokeHappy: ["嘿嘿", "在呢，我在莲台上看着你", "转个圈给你看"],
+            pokeSurprised: ["哇，吓我一跳", "诶？唤我吗"],
+            pokeTickle: "咯咯咯，裙摆都笑皱了",
+            pokeWave: "嗨，愿你今日花开满路",
+            angrySay: "哼！再戳，花扇可要扇你了",
+            wakeSay: "唔……醒啦，这一觉睡在花香里",
+            freezeSay: "好，我就停在莲台上歇歇",
+            unfreezeSay: "歇够啦，继续起舞！",
+            greetFirst: "你好，我是长乐仙子！长按我可以打开菜单",
+            comeSay: "我来啦，带着花香陪你",
           },
         },
       };
-      var petSpecies = "fox";
-      function SP() { return SPECIES[petSpecies]; }
-      /* Live views onto the active species' tables; applySpeciesTables
-         re-points them on every switch. PET_POOL / PET_CHATTER start
-         null and are filled by petInit once FOX_/WA_ tables exist. */
-      var PET_STAGES = SPECIES.fox.stages;
-      var PET_BONUS = SPECIES.fox.bonus;
+      var PET_ORDER = ["wa", "chan", "shu", "le"];
+      var PET_CFG = PET_SPECIES.wa;
+      function SP() { return PET_CFG; }
+      function setActiveSpecies(id) {
+        PET_CFG = PET_SPECIES[id] || PET_SPECIES.wa;
+        PET_STAGES = PET_CFG.stages;
+        PET_BONUS = PET_CFG.bonus;
+      }
+      /* Live views onto the active pet's tables; PET_POOL / PET_CHATTER
+         start null and are filled by applySpeciesTables once the
+         per-species tables exist (called from petInit / petSwitchTo). */
+      var PET_STAGES = PET_CFG.stages;
+      var PET_BONUS = PET_CFG.bonus;
       var PET_POOL = null;
       var PET_CHATTER = null;
       function applySpeciesTables() {
-        var cfg = SPECIES[petSpecies];
-        PET_STAGES = cfg.stages;
-        PET_BONUS = cfg.bonus;
-        PET_POOL = petSpecies === "wa" ? WA_POOL : FOX_POOL;
-        PET_CHATTER = petSpecies === "wa" ? WA_CHATTER : FOX_CHATTER;
+        if (PET_CFG.id === "chan") { PET_POOL = CHAN_POOL; PET_CHATTER = CHAN_CHATTER; }
+        else if (PET_CFG.id === "shu") { PET_POOL = SHU_POOL; PET_CHATTER = SHU_CHATTER; }
+        else if (PET_CFG.id === "le") { PET_POOL = LE_POOL; PET_CHATTER = LE_CHATTER; }
+        else { PET_POOL = WA_POOL; PET_CHATTER = WA_CHATTER; }
       }
       var PET_TIERS = ["陌生", "熟悉", "亲密", "挚友"];
       var PET_TIER_MIN = [0, 20, 60, 120];
@@ -1817,57 +1856,6 @@
       var petLastClickAt = 0;
       var petPokeTimer = null;
       var petNotifyJumpedKey = "";
-
-      /* ---------- companionship modes: 随机换宠 & 一直陪伴 ---------- */
-      var PET_ROSTER_KEY = "daymark-pet-roster-v1";
-      var petRoster = { random: false, lock: "", lastRandomDay: "" };
-      function loadPetRoster() {
-        try {
-          var raw = localStorage.getItem(PET_ROSTER_KEY);
-          if (!raw) return;
-          var s = JSON.parse(raw);
-          if (!s) return;
-          petRoster.random = !!s.random;
-          petRoster.lock = (s.lock === "fox" || s.lock === "wa") ? s.lock : "";
-          petRoster.lastRandomDay = typeof s.lastRandomDay === "string" ? s.lastRandomDay : "";
-        } catch (e) { /* storage unavailable — defaults: no random, no lock */ }
-      }
-      function savePetRoster() {
-        try { localStorage.setItem(PET_ROSTER_KEY, JSON.stringify(petRoster)); } catch (e) { /* storage unavailable */ }
-      }
-      function petStoredStage(species) {
-        if (pet && pet.species === species) return pet.stage;
-        try {
-          var raw = localStorage.getItem(SPECIES[species].key);
-          if (!raw) return 0;
-          var s = JSON.parse(raw);
-          return (s && typeof s.stage === "number") ? Math.min(3, Math.max(0, s.stage)) : 0;
-        } catch (e) { return 0; }
-      }
-      /* Unlocked once either pet reaches the top stage (index 3). */
-      function petRosterUnlocked() {
-        return petStoredStage("fox") >= 3 || petStoredStage("wa") >= 3;
-      }
-      function petSetLock(species) {
-        petRoster.lock = species; /* "" clears the lock */
-        savePetRoster();
-        if (species && species !== petSpecies) {
-          /* The locked companion comes out right away; the switch
-             closes the panel as it arrives. */
-          petSwitchTo(species);
-        } else if (petPanelOpen) {
-          setPetPanel(true);
-          if (species) petToast("已锁定" + SPECIES[species].name + "一直陪伴");
-        }
-      }
-      function petToggleRandom() {
-        petRoster.random = !petRoster.random;
-        savePetRoster();
-        if (petPanelOpen) setPetPanel(true);
-        petToast(petRoster.random
-          ? "随机换宠已开启：每天第一次打开时，阿绒和小娲随机来一只"
-          : "随机换宠已关闭");
-      }
 
       function petDefaultPos() {
         return {
@@ -1898,10 +1886,10 @@
           pet.satietyAt = now;
         }
       }
-      function loadPet(species) {
+      function loadPet() {
         var fallback = petDefaultPos();
         var fresh = {
-          species: species,
+          species: PET_CFG.id,
           stage: 0, bonus: 0, hidden: false,
           adopted: todayStr(), lastEvolve: todayStr(),
           x: fallback.x, y: fallback.y, greeted: false,
@@ -1910,16 +1898,16 @@
           frozen: false, lastGreetDay: "", notifyAck: "",
         };
         try {
-          var raw = localStorage.getItem(SPECIES[species].key);
+          var raw = localStorage.getItem(PET_CFG.key);
           if (!raw) return fresh;
           var s = JSON.parse(raw);
           if (!s || typeof s.stage !== "number") return fresh;
           var pos = (typeof s.x === "number" && typeof s.y === "number")
             ? clampPetPos(s.x, s.y) : fallback;
           var merged = {
-            species: species,
+            species: PET_CFG.id,
             stage: Math.min(3, Math.max(0, s.stage)),
-            bonus: Math.min(SPECIES[species].bonus.length, Math.max(0, s.bonus || 0)),
+            bonus: Math.min(PET_CFG.bonus.length, Math.max(0, s.bonus || 0)),
             hidden: !!s.hidden,
             adopted: s.adopted || todayStr(),
             lastEvolve: s.lastEvolve || s.adopted || todayStr(),
@@ -1938,7 +1926,7 @@
         } catch (e) { return fresh; }
       }
       function savePet() {
-        try { localStorage.setItem(SPECIES[pet.species || "fox"].key, JSON.stringify(pet)); } catch (e) { /* storage unavailable */ }
+        try { localStorage.setItem(PET_CFG.key, JSON.stringify(pet)); } catch (e) { /* storage unavailable */ }
       }
       function petGainIntimacy(n) {
         var before = petTier();
@@ -1997,56 +1985,6 @@
         }
       }
 
-      /* ---------- fox faces ---------- */
-      function foxFaceSVG(face) {
-        var eyes = "", mouth = "";
-        var lashL = '<path d="M42.4 32.8 l-2.5 -1.3 M43.5 30.9 l-1.5 -2.5 M45.3 29.9 l-0.5 -2.8" stroke="#2a170c" stroke-width="1.2" fill="none" stroke-linecap="round"/>';
-        var lashR = '<path d="M77.6 32.8 l2.5 -1.3 M76.5 30.9 l1.5 -2.5 M74.7 29.9 l0.5 -2.8" stroke="#2a170c" stroke-width="1.2" fill="none" stroke-linecap="round"/>';
-        var closed = '<path d="M42.3 36.8 Q47 40.3 51.7 36.8" stroke="#3a2415" stroke-width="2" fill="none" stroke-linecap="round"/>' +
-          '<path d="M68.3 36.8 Q73 40.3 77.7 36.8" stroke="#3a2415" stroke-width="2" fill="none" stroke-linecap="round"/>';
-        if (face === "sleep") {
-          eyes = closed +
-            '<path d="M44.6 40 l-0.8 1.7 M49.6 40.5 l-0.2 1.9 M70.4 40.5 l0.2 1.9 M75.4 40 l0.8 1.7" stroke="#3a2415" stroke-width="1.1" fill="none" stroke-linecap="round"/>';
-          mouth = '<circle cx="60" cy="50.8" r="1.7" fill="#4a2c1a"/>';
-        } else if (face === "dizzy") {
-          eyes = '<path d="M43.2 32.2 l7.6 7.6 M50.8 32.2 l-7.6 7.6" stroke="#3a2415" stroke-width="2" stroke-linecap="round"/>' +
-            '<path d="M69.2 32.2 l7.6 7.6 M76.8 32.2 l-7.6 7.6" stroke="#3a2415" stroke-width="2" stroke-linecap="round"/>';
-          mouth = '<path d="M55 52.6 Q57.5 50.4 60 52.6 Q62.5 54.8 65 52.6" stroke="#4a2c1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>';
-        } else if (face === "angry") {
-          eyes = '<path d="M41.5 30.2 L52.5 34.2" stroke="#3a2415" stroke-width="2.2" stroke-linecap="round"/>' +
-            '<path d="M78.5 30.2 L67.5 34.2" stroke="#3a2415" stroke-width="2.2" stroke-linecap="round"/>' +
-            '<ellipse cx="47" cy="38.8" rx="3.4" ry="2.3" fill="#3a2415"/>' +
-            '<ellipse cx="73" cy="38.8" rx="3.4" ry="2.3" fill="#3a2415"/>';
-          mouth = '<path d="M56.5 53.6 Q60 51.4 63.5 53.6" stroke="#4a2c1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>';
-        } else if (face === "surprised") {
-          eyes = '<circle cx="47" cy="36" r="5.3" fill="url(#eyeGrad)"/><circle cx="73" cy="36" r="5.3" fill="url(#eyeGrad)"/>' +
-            '<circle cx="48.7" cy="34" r="1.7" fill="#fff"/><circle cx="74.7" cy="34" r="1.7" fill="#fff"/>' +
-            '<circle cx="45.6" cy="38.4" r="0.8" fill="#fff" opacity="0.9"/><circle cx="71.6" cy="38.4" r="0.8" fill="#fff" opacity="0.9"/>' + lashL + lashR;
-          mouth = '<circle cx="60" cy="52" r="2.4" fill="#4a2c1a"/>';
-        } else if (face === "happy") {
-          eyes = '<path d="M42.3 38.2 Q47 32.8 51.7 38.2" stroke="#3a2415" stroke-width="2.3" fill="none" stroke-linecap="round"/>' +
-            '<path d="M68.3 38.2 Q73 32.8 77.7 38.2" stroke="#3a2415" stroke-width="2.3" fill="none" stroke-linecap="round"/>';
-          mouth = '<path d="M55 50 Q60 55.8 65 50 Q60 52.1 55 50 Z" fill="#8a4a24"/>' +
-            '<path d="M57.4 52.4 Q60 54.5 62.6 52.4 Q60 53.2 57.4 52.4 Z" fill="#f28ba0"/>';
-        } else if (face === "yawn") {
-          eyes = closed;
-          mouth = '<ellipse cx="60" cy="53" rx="3.3" ry="4.3" fill="#8a4a24"/>' +
-            '<ellipse cx="60" cy="54.9" rx="2" ry="1.6" fill="#f28ba0"/>';
-        } else {
-          eyes = '<g class="fox-eyes">' +
-            '<ellipse cx="47" cy="36" rx="4.6" ry="6.1" fill="url(#eyeGrad)"/>' +
-            '<ellipse cx="73" cy="36" rx="4.6" ry="6.1" fill="url(#eyeGrad)"/>' +
-            '<path d="M42.2 32.9 Q47 29.4 51.8 32.9" stroke="#2a170c" stroke-width="1.8" fill="none" stroke-linecap="round"/>' +
-            '<path d="M68.2 32.9 Q73 29.4 77.8 32.9" stroke="#2a170c" stroke-width="1.8" fill="none" stroke-linecap="round"/>' +
-            '<circle cx="48.6" cy="33.4" r="1.6" fill="#fff"/><circle cx="74.6" cy="33.4" r="1.6" fill="#fff"/>' +
-            '<circle cx="45.4" cy="38.6" r="0.8" fill="#fff" opacity="0.9"/><circle cx="71.4" cy="38.6" r="0.8" fill="#fff" opacity="0.9"/></g>' +
-            lashL + lashR;
-          mouth = '<path d="M56 50.8 Q60 53.6 64 50.8" stroke="#4a2c1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>';
-        }
-        return eyes +
-          '<ellipse cx="60" cy="44.8" rx="3.2" ry="2.3" fill="url(#noseGrad)"/>' +
-          '<ellipse cx="59" cy="44" rx="1" ry="0.6" fill="#ffffff" opacity="0.6"/>' + mouth;
-      }
       function setPetFace(face, ms) {
         petFace = face;
         var scale = document.getElementById("pet-scale");
@@ -2065,166 +2003,10 @@
         return petFace;
       }
 
-      /* ---------- fox artwork (original SVG, redrawn per stage) ---------- */
-      function foxSVG(stage, face) {
-        var gold = stage >= 3;
-        var fur1 = gold ? "#ffd873" : "#f69f47";
-        var fur2 = gold ? "#f4bc45" : "#ee7f2b";
-        var fur3 = gold ? "#e59a17" : "#da6218";
-        var tail1 = gold ? "#f9d976" : "#f59a44";
-        var tail2 = gold ? "#f0ae22" : "#e8762c";
-        var tip1 = gold ? "#fff6cf" : "#ffffff";
-        var tip2 = gold ? "#ffd76e" : "#ffe9c9";
-        var s = "";
-        s += '<svg class="fox" viewBox="0 0 120 112" fill="none" aria-hidden="true">';
-        s += '<defs>' +
-          '<linearGradient id="furGrad" x1="0" y1="0" x2="0" y2="1">' +
-            '<stop offset="0%" stop-color="' + fur1 + '"/><stop offset="55%" stop-color="' + fur2 + '"/><stop offset="100%" stop-color="' + fur3 + '"/></linearGradient>' +
-          '<linearGradient id="tailGrad" x1="0" y1="1" x2="0.35" y2="0">' +
-            '<stop offset="0%" stop-color="' + tail2 + '"/><stop offset="100%" stop-color="' + tail1 + '"/></linearGradient>' +
-          '<linearGradient id="tipGrad" x1="0" y1="1" x2="0" y2="0">' +
-            '<stop offset="0%" stop-color="' + tip2 + '"/><stop offset="100%" stop-color="' + tip1 + '"/></linearGradient>' +
-          '<linearGradient id="creamGrad" x1="0" y1="0" x2="0" y2="1">' +
-            '<stop offset="0%" stop-color="#fffaf0"/><stop offset="100%" stop-color="#ffe9c4"/></linearGradient>' +
-          '<radialGradient id="eyeGrad" cx="50%" cy="32%" r="78%">' +
-            '<stop offset="0%" stop-color="#7a4525"/><stop offset="55%" stop-color="#4a2a14"/><stop offset="100%" stop-color="#241105"/></radialGradient>' +
-          '<linearGradient id="noseGrad" x1="0" y1="0" x2="0" y2="1">' +
-            '<stop offset="0%" stop-color="#f9b3c6"/><stop offset="100%" stop-color="#ef6f92"/></linearGradient>' +
-          '<linearGradient id="earGrad" x1="0" y1="0" x2="0" y2="1">' +
-            '<stop offset="0%" stop-color="#ffd0da"/><stop offset="100%" stop-color="#f78fa7"/></linearGradient>' +
-          '<linearGradient id="scarfGrad" x1="0" y1="0" x2="0" y2="1">' +
-            '<stop offset="0%" stop-color="#e2494d"/><stop offset="100%" stop-color="#bc2a30"/></linearGradient>' +
-          '<linearGradient id="capeGrad" x1="0" y1="0" x2="0" y2="1">' +
-            '<stop offset="0%" stop-color="#2e7d72"/><stop offset="100%" stop-color="#1b4a44"/></linearGradient>' +
-          '<radialGradient id="fireGrad" cx="50%" cy="68%" r="68%">' +
-            '<stop offset="0%" stop-color="#cdefff"/><stop offset="55%" stop-color="#6fc2ff"/><stop offset="100%" stop-color="#2f7fe0"/></radialGradient>' +
-          (gold ? '<radialGradient id="pet-glow" cx="50%" cy="50%" r="50%">' +
-            '<stop offset="0%" stop-color="#ffd76e" stop-opacity="0.85"/>' +
-            '<stop offset="60%" stop-color="#ffb84d" stop-opacity="0.35"/>' +
-            '<stop offset="100%" stop-color="#ffb84d" stop-opacity="0"/></radialGradient>' : '') +
-          '</defs>';
-        if (gold) {
-          s += '<ellipse class="fox-aura" cx="60" cy="58" rx="55" ry="53" fill="url(#pet-glow)"/>' +
-            '<circle class="fox-aura" cx="60" cy="36" r="31.5" fill="none" stroke="#ffcf5e" stroke-width="2" opacity="0.55"/>';
-        }
-        /* soft ground shadow */
-        s += '<ellipse cx="60" cy="105" rx="30" ry="4.6" fill="#1c2a1a" opacity="0.16"/>';
-        /* tails: 1 / 3 / 6 / 9 fanned behind the body, each wagging on its own beat */
-        var tailCounts = [1, 3, 6, 9];
-        var nTails = tailCounts[stage];
-        for (var ti = 0; ti < nTails; ti++) {
-          var tt = nTails === 1 ? 0.62 : ti / (nTails - 1);
-          var tAng = (-44 + tt * 78).toFixed(1);
-          var tSc = (0.9 + 0.16 * Math.sin(tt * Math.PI)).toFixed(2);
-          var tDly = (-(ti * 0.33)).toFixed(2);
-          var tFan = Math.round(-44 + tt * 78) * 0.85;
-          var tipDly = (parseFloat(tDly) - 0.55).toFixed(2);
-          s += '<g transform="rotate(' + tAng + ' 72 93)">' +
-            '<g class="fox-tail" style="animation-delay:' + tDly + 's;--fan:' + tFan.toFixed(0) + 'deg">' +
-            '<g transform="translate(72 93) scale(' + tSc + ') translate(-72 -93)">' +
-            '<path d="M72 95 C88 94 99 82 98.5 58 C98 43 88 34.5 77.5 40.5 C67.5 46 71 60 67.5 72 C64.5 81.5 65.5 90 72 95 Z" fill="url(#tailGrad)"/>' +
-            '<g class="fox-tail-tip" style="animation-delay:' + tipDly + 's">' +
-            '<path d="M77.5 40.5 C88 34.5 98 43 98.5 58 C92.5 50.5 84 47 77.5 40.5 Z" fill="url(#tipGrad)"/>' +
-            (gold && ti % 2 === 0 ? '<path d="M96.5 64 C97 51 90.5 42.5 82 40.8" stroke="#f7a8b8" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.75"/>' : '') +
-            '</g></g></g></g>';
-        }
-        /* cape (stage 2+) behind body */
-        if (stage >= 2) {
-          s += '<path d="M39 57 Q30 82 39.5 100 L80.5 100 Q90 82 81 57 Q60 68 39 57 Z" fill="url(#capeGrad)"/>' +
-            '<path d="M39 57 Q30 82 39.5 100 L49 100 Q41.5 80 45.5 60.5 Z" fill="#14332f" opacity="0.55"/>' +
-            '<path d="M40.5 98 L79.5 98" stroke="#f2c14e" stroke-width="1.6" opacity="0.8"/>';
-        }
-        s += '<g class="fox-body-g">';
-        /* small round body + cream belly, gently breathing; four legs:
-           hind paws peek out at the sides, front paws stand
-           under the belly; diagonal pairs step together while walking */
-        s += '<g transform="translate(38.5 97.5)"><g class="fox-leg fox-leg-b"><ellipse rx="6.5" ry="3.8" fill="' + fur3 + '"/><ellipse cy="0.9" rx="2.6" ry="1.5" fill="#f2a0a8" opacity="0.9"/></g></g>' +
-          '<g transform="translate(81.5 97.5)"><g class="fox-leg fox-leg-a"><ellipse rx="6.5" ry="3.8" fill="' + fur3 + '"/><ellipse cy="0.9" rx="2.6" ry="1.5" fill="#f2a0a8" opacity="0.9"/></g></g>';
-        s += '<g class="fox-breath-g">' +
-          '<ellipse cx="60" cy="84" rx="21" ry="16" fill="url(#furGrad)"/>' +
-          '<ellipse cx="60" cy="88" rx="11.5" ry="10" fill="url(#creamGrad)"/></g>';
-        s += '<g transform="translate(50.5 98)"><g class="fox-leg fox-leg-a"><path d="M-4.6 -6.5 L4.6 -6.5 L4.6 0.5 Q4.6 3.8 0 3.8 Q-4.6 3.8 -4.6 0.5 Z" fill="' + fur2 + '"/><ellipse cy="1.9" rx="2.3" ry="1.3" fill="#f2a0a8" opacity="0.95"/></g></g>' +
-          '<g transform="translate(69.5 98)"><g class="fox-leg fox-leg-b"><path d="M-4.6 -6.5 L4.6 -6.5 L4.6 0.5 Q4.6 3.8 0 3.8 Q-4.6 3.8 -4.6 0.5 Z" fill="' + fur2 + '"/><ellipse cy="1.9" rx="2.3" ry="1.3" fill="#f2a0a8" opacity="0.95"/></g></g>';
-        /* lantern (stage 3) hanging at the left paw */
-        if (stage >= 3) {
-          s += '<g>' +
-            '<circle class="fox-aura" cx="15" cy="70" r="13" fill="#ffd76e" opacity="0.4"/>' +
-            '<path d="M26 52 L16 60" stroke="#8a5a24" stroke-width="2" stroke-linecap="round"/>' +
-            '<rect x="9" y="60" width="4.5" height="3" rx="1" fill="#8a5a24"/>' +
-            '<rect x="7" y="63" width="17" height="15" rx="6.5" fill="#ffd76e" stroke="#d99a26" stroke-width="1.6"/>' +
-            '<path d="M11.5 65 v11 M15.5 64.5 v12 M19.5 65 v11" stroke="#e0aa3e" stroke-width="1.1"/>' +
-            '<rect x="10.5" y="78" width="10" height="3" rx="1" fill="#8a5a24"/></g>';
-        }
-        /* fluffy cream neck ruff (Eevee-style collar) */
-        s += '<path d="M34 52 Q37 60 43 56.5 Q45.5 64.5 51.5 59 Q54 67.5 60 60.5 Q66 67.5 68.5 59 Q74.5 64.5 77 56.5 Q83 60 86 52 Q85 66 74.5 70 L45.5 70 Q35 66 34 52 Z" fill="url(#creamGrad)"/>' +
-          '<path d="M43 59.5 Q60 67 77 59.5" stroke="#f3d9ae" stroke-width="1.4" fill="none" opacity="0.7"/>';
-        /* head */
-        s += '<g class="fox-head">' +
-          '<g class="fox-ear-l">' +
-            '<path d="M37 24 C34.5 12 38 -0.5 45 -2 C52 2.5 57 9 59 16.5 C52 21 44 23.5 37 24 Z" fill="url(#furGrad)"/>' +
-            '<path d="M41.5 19.5 C40.5 11 42.5 4.5 46 2.5 C49.5 6 52.5 10.5 54 14.5 C50 17.5 45.8 18.8 41.5 19.5 Z" fill="url(#earGrad)"/>' +
-            '<path d="M45 -2 l-1.8 -3 M45 -2 l2.6 -2.2" stroke="' + fur2 + '" stroke-width="1.6" fill="none" stroke-linecap="round"/></g>' +
-          '<g class="fox-ear-r">' +
-            '<path d="M83 24 C85.5 12 82 -0.5 75 -2 C68 2.5 63 9 61 16.5 C68 21 76 23.5 83 24 Z" fill="url(#furGrad)"/>' +
-            '<path d="M78.5 19.5 C79.5 11 77.5 4.5 74 2.5 C70.5 6 67.5 10.5 66 14.5 C70 17.5 74.2 18.8 78.5 19.5 Z" fill="url(#earGrad)"/>' +
-            '<path d="M75 -2 l1.8 -3 M75 -2 l-2.6 -2.2" stroke="' + fur2 + '" stroke-width="1.6" fill="none" stroke-linecap="round"/></g>' +
-          '<path d="M36.5 30 L28 34.5 L34 38.5 L27 43.5 L34.5 46.5 L29.5 51.5 L37.5 52 C34 45 34 37 36.5 30 Z" fill="url(#furGrad)"/>' +
-          '<path d="M83.5 30 L92 34.5 L86 38.5 L93 43.5 L85.5 46.5 L90.5 51.5 L82.5 52 C86 45 86 37 83.5 30 Z" fill="url(#furGrad)"/>' +
-          '<circle cx="60" cy="37" r="26" fill="url(#furGrad)"/>' +
-          '<ellipse cx="48" cy="23" rx="10" ry="6" fill="#ffffff" opacity="0.18"/>' +
-          '<path d="M47 15.5 C50 6.5 58 5 59.8 11.5 C62 5.5 69.5 7 68 15 C61 11 53 11.5 47 15.5 Z" fill="url(#furGrad)"/>' +
-          (gold ? '<path d="M55.5 13.2 C57.5 9.8 61.2 9.2 62.3 13 C60.2 11.7 57.6 11.9 55.5 13.2 Z" fill="#f7a8b8" opacity="0.9"/>' : '') +
-          '<ellipse cx="60" cy="47.5" rx="13.5" ry="9.5" fill="url(#creamGrad)"/>' +
-          '<ellipse cx="38.5" cy="45" rx="5" ry="2.8" fill="#f49bb0" opacity="0.78"/>' +
-          '<ellipse cx="81.5" cy="45" rx="5" ry="2.8" fill="#f49bb0" opacity="0.78"/>' +
-          foxFaceSVG(face || "normal");
-        /* flower wreath (stage 3) */
-        if (stage >= 3) {
-          var flowers = [[43, 18, "#f7a8b8"], [52, 12.5, "#ffffff"], [61, 11, "#f9d976"], [70, 12.5, "#f7a8b8"], [78, 18, "#ffffff"]];
-          flowers.forEach(function (f) {
-            for (var k = 0; k < 5; k++) {
-              var a = (k / 5) * Math.PI * 2;
-              s += '<circle cx="' + (f[0] + 2.6 * Math.cos(a)).toFixed(1) + '" cy="' +
-                (f[1] + 2.6 * Math.sin(a)).toFixed(1) + '" r="2.1" fill="' + f[2] + '"/>';
-            }
-            s += '<circle cx="' + f[0] + '" cy="' + f[1] + '" r="1.5" fill="#f2a541"/>';
-          });
-          s += '<path d="M47 15.5 q-3.5 -1 -5.5 1.5 q3 1.8 5.5 -1.5 Z" fill="#7fb069"/>' +
-            '<path d="M73 15.5 q3.5 -1 5.5 1.5 q-3 1.8 -5.5 -1.5 Z" fill="#7fb069"/>';
-        }
-        s += "</g>"; /* head */
-        /* scarf (stage 1+) over the ruff */
-        if (stage >= 1) {
-          s += '<path d="M35 53.5 Q60 65 85 53.5 L85 61.5 Q60 72.5 35 61.5 Z" fill="url(#scarfGrad)"/>' +
-            '<path d="M35 57.2 Q60 68.2 85 57.2" stroke="#8f1f24" stroke-width="1.2" fill="none" opacity="0.5"/>' +
-            '<path d="M71 61.5 L80 61.5 L77.5 78.5 L68.5 76 Z" fill="url(#scarfGrad)"/>' +
-            '<path d="M70.7 69.5 l6.4 1.7 M71.7 73.8 l6.2 1.6" stroke="#8f1f24" stroke-width="1" opacity="0.55"/>' +
-            '<circle cx="73" cy="61.5" r="4.2" fill="url(#scarfGrad)"/>';
-        }
-        /* cape clasp (stage 2+) */
-        if (stage >= 2) {
-          s += '<circle cx="60" cy="60.5" r="3.6" fill="#f2c14e" stroke="#b8860b" stroke-width="1.2"/>' +
-            '<circle cx="58.9" cy="59.4" r="1.1" fill="#fff3c4"/>';
-        }
-        /* foxfire + drifting petals and stars (stage 3) */
-        if (stage >= 3) {
-          var flame = '<path d="M0 -7 C3.4 -2.5 4.6 1.2 0 7 C-4.6 1.2 -3.4 -2.5 0 -7 Z" fill="url(#fireGrad)"/><circle cx="0" cy="2.6" r="1.7" fill="#eaf9ff"/>';
-          s += '<g transform="translate(9 40)"><g class="fox-fire">' + flame + '</g></g>' +
-            '<g transform="translate(111 30) scale(0.8)"><g class="fox-fire" style="animation-delay:-0.9s">' + flame + '</g></g>' +
-            '<g transform="translate(103 68) scale(0.62)"><g class="fox-fire" style="animation-delay:-1.7s">' + flame + '</g></g>' +
-            '<path class="fox-petal" style="animation-delay:-1.2s" d="M26 2 c2.2 2.6 2.8 5 0 7.6 c-2.8 -2.6 -2.2 -5 0 -7.6 Z" fill="#f7a8b8" opacity="0.85"/>' +
-            '<path class="fox-petal" style="animation-delay:-3.4s" d="M94 0 c2 2.4 2.5 4.6 0 7 c-2.5 -2.4 -2 -4.6 0 -7 Z" fill="#fbc2cd" opacity="0.8"/>' +
-            '<path class="fox-petal" style="animation-delay:-2.1s" d="M108 14 l1.3 2.9 2.9 1.3 -2.9 1.3 -1.3 2.9 -1.3 -2.9 -2.9 -1.3 2.9 -1.3 Z" fill="#ffd76e"/>' +
-            '<path class="fox-petal" style="animation-delay:-4.3s" d="M10 66 c1.8 2.2 2.3 4.2 0 6.4 c-2.3 -2.2 -1.8 -4.2 0 -6.4 Z" fill="#f7a8b8" opacity="0.75"/>';
-        }
-        s += "</g></svg>";
-        return s;
-      }
-
       /* ---------- wa artwork (original SVG: 小娲， the little snake goddess) ----------
-         Same painterly style as the fox, same animation hooks (fox-head /
-         fox-body-g / fox-breath-g / fox-eyes classes) so every existing
-         action animation works on her too. She floats: the whole figure
+         She shares the generic animation hooks (fox-head / fox-body-g /
+         fox-breath-g / fox-eyes classes) with the action animations.
+         She floats: the whole figure
          bobs on the wa-float group, her jade snake tail sways beneath
          the ivory robe, and the lotus lantern in her hand glows
          brighter with each stage — and brighter still after dark. */
@@ -2369,14 +2151,364 @@
         return s;
       }
       function petSVG(stage, face) {
-        return petSpecies === "wa" ? waSVG(stage, face) : foxSVG(stage, face);
+        if (PET_CFG.id === "chan") return chanSVG(stage, face);
+        if (PET_CFG.id === "shu") return shuSVG(stage, face);
+        if (PET_CFG.id === "le") return leSVG(stage, face);
+        return waSVG(stage, face);
       }
-      var PAW_SVG = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
-        '<ellipse cx="12" cy="15.5" rx="4.6" ry="3.9"/>' +
-        '<ellipse cx="5.4" cy="10.6" rx="1.9" ry="2.4" transform="rotate(-18 5.4 10.6)"/>' +
-        '<ellipse cx="9.2" cy="7.6" rx="1.9" ry="2.5"/>' +
-        '<ellipse cx="14.8" cy="7.6" rx="1.9" ry="2.5"/>' +
-        '<ellipse cx="18.6" cy="10.6" rx="1.9" ry="2.4" transform="rotate(18 18.6 10.6)"/></svg>';
+
+      /* ---------- shared face for the three newer pets ----------
+         Same expressions and geometry as 小娲's face, parameterized by
+         the species' eye-gradient id so each pet keeps its own eyes. */
+      function petFaceSVG(face, eyeId) {
+        var eyes = "", mouth = "";
+        var closed = '<path d="M49.8 39.4 Q53 41.8 56.2 39.4" stroke="#3a2415" stroke-width="1.9" fill="none" stroke-linecap="round"/>' +
+          '<path d="M63.8 39.4 Q67 41.8 70.2 39.4" stroke="#3a2415" stroke-width="1.9" fill="none" stroke-linecap="round"/>';
+        if (face === "sleep") {
+          eyes = closed;
+          mouth = '<circle cx="60" cy="48.6" r="1.5" fill="#8a4a3a"/>';
+        } else if (face === "dizzy") {
+          eyes = '<path d="M50.3 36.2 l5.4 5.4 M55.7 36.2 l-5.4 5.4" stroke="#3a2415" stroke-width="1.9" stroke-linecap="round"/>' +
+            '<path d="M64.3 36.2 l5.4 5.4 M69.7 36.2 l-5.4 5.4" stroke="#3a2415" stroke-width="1.9" stroke-linecap="round"/>';
+          mouth = '<path d="M55.5 50.2 Q57.7 48.4 60 50.2 Q62.3 52 64.5 50.2" stroke="#8a4a3a" stroke-width="1.4" fill="none" stroke-linecap="round"/>';
+        } else if (face === "angry") {
+          eyes = '<path d="M49.4 34.4 L56.6 36.8" stroke="#3a2415" stroke-width="2" stroke-linecap="round"/>' +
+            '<path d="M70.6 34.4 L63.4 36.8" stroke="#3a2415" stroke-width="2" stroke-linecap="round"/>' +
+            '<ellipse cx="53" cy="40.4" rx="2.5" ry="1.8" fill="#3a2415"/>' +
+            '<ellipse cx="67" cy="40.4" rx="2.5" ry="1.8" fill="#3a2415"/>';
+          mouth = '<path d="M56.8 51 Q60 49.2 63.2 51" stroke="#8a4a3a" stroke-width="1.4" fill="none" stroke-linecap="round"/>';
+        } else if (face === "surprised") {
+          eyes = '<circle cx="53" cy="38.8" r="3.9" fill="url(#' + eyeId + ')"/><circle cx="67" cy="38.8" r="3.9" fill="url(#' + eyeId + ')"/>' +
+            '<circle cx="54.2" cy="37.4" r="1.2" fill="#fff"/><circle cx="68.2" cy="37.4" r="1.2" fill="#fff"/>';
+          mouth = '<circle cx="60" cy="49.2" r="1.9" fill="#8a4a3a"/>';
+        } else if (face === "happy") {
+          eyes = '<path d="M49.6 40.4 Q53 36.4 56.4 40.4" stroke="#3a2415" stroke-width="2.1" fill="none" stroke-linecap="round"/>' +
+            '<path d="M63.6 40.4 Q67 36.4 70.4 40.4" stroke="#3a2415" stroke-width="2.1" fill="none" stroke-linecap="round"/>';
+          mouth = '<path d="M55.8 47.6 Q60 52.4 64.2 47.6 Q60 49.4 55.8 47.6 Z" fill="#a04a3a"/>' +
+            '<path d="M57.8 50 Q60 51.7 62.2 50 Q60 50.7 57.8 50 Z" fill="#f28ba0"/>';
+        } else if (face === "yawn") {
+          eyes = closed;
+          mouth = '<ellipse cx="60" cy="50" rx="2.7" ry="3.5" fill="#a04a3a"/>' +
+            '<ellipse cx="60" cy="51.6" rx="1.6" ry="1.3" fill="#f28ba0"/>';
+        } else {
+          eyes = '<g class="fox-eyes">' +
+            '<ellipse cx="53" cy="38.8" rx="3" ry="4.1" fill="url(#' + eyeId + ')"/>' +
+            '<ellipse cx="67" cy="38.8" rx="3" ry="4.1" fill="url(#' + eyeId + ')"/>' +
+            '<path d="M49.7 35.8 Q53 33.2 56.3 35.8" stroke="#2a170c" stroke-width="1.6" fill="none" stroke-linecap="round"/>' +
+            '<path d="M63.7 35.8 Q67 33.2 70.3 35.8" stroke="#2a170c" stroke-width="1.6" fill="none" stroke-linecap="round"/>' +
+            '<circle cx="54.1" cy="36.9" r="1.1" fill="#fff"/><circle cx="68.1" cy="36.9" r="1.1" fill="#fff"/></g>';
+          mouth = '<path d="M56.8 48.4 Q60 50.6 63.2 48.4" stroke="#8a4a3a" stroke-width="1.4" fill="none" stroke-linecap="round"/>';
+        }
+        return eyes + mouth;
+      }
+
+      /* ---------- chan artwork (original SVG: 小蝉， the little golden
+         cicada monk) — crimson kasaya, a flame-lotus crown that grows
+         grander per stage, translucent wings that never stop fluttering,
+         prayer beads, and a nine-ring staff whose rings multiply as he
+         grows (3 / 5 / 7 / 9). He floats on the shared wa-float bob. */
+      function chanSVG(stage, face) {
+        var s = "";
+        s += '<svg class="fox" viewBox="0 0 120 112" fill="none" aria-hidden="true">';
+        s += '<defs>' +
+          '<linearGradient id="chanSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff3e4"/><stop offset="100%" stop-color="#ffd9b8"/></linearGradient>' +
+          '<linearGradient id="chanRobe" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f0664f"/><stop offset="100%" stop-color="#b03024"/></linearGradient>' +
+          '<linearGradient id="chanGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffe9a3"/><stop offset="100%" stop-color="#d99a26"/></linearGradient>' +
+          '<linearGradient id="chanWing" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fff3c4" stop-opacity="0.9"/><stop offset="100%" stop-color="#f6c945" stop-opacity="0.35"/></linearGradient>' +
+          '<radialGradient id="chanEye" cx="50%" cy="32%" r="78%"><stop offset="0%" stop-color="#a87f42"/><stop offset="55%" stop-color="#5d3d16"/><stop offset="100%" stop-color="#241203"/></radialGradient>' +
+          '<radialGradient id="chanGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffe9a3" stop-opacity="0.8"/><stop offset="60%" stop-color="#ffd76e" stop-opacity="0.3"/><stop offset="100%" stop-color="#ffd76e" stop-opacity="0"/></radialGradient>' +
+          '</defs>';
+        s += '<ellipse cx="60" cy="107" rx="23" ry="3.4" fill="#1c2a1a" opacity="0.1"/>';
+        s += '<g class="wa-float-g">';
+        if (stage >= 3) {
+          s += '<ellipse class="fox-aura" cx="60" cy="56" rx="52" ry="50" fill="url(#chanGlow)"/>' +
+            '<circle class="fox-aura" cx="60" cy="36" r="27.5" fill="none" stroke="#ffcf5e" stroke-width="1.8" opacity="0.5"/>';
+        }
+        /* translucent cicada wings behind the robe, always fluttering */
+        var ws = (0.7 + stage * 0.16).toFixed(2);
+        s += '<g transform="translate(60 54) scale(' + ws + ') translate(-60 -54)">' +
+          '<path class="chan-wing-l" d="M50 52 C34 34 16 30 6 40 C14 48 18 58 24 66 C34 64 44 60 50 58 Z" fill="url(#chanWing)" stroke="#e8b64c" stroke-width="1" opacity="0.85"/>' +
+          '<path class="chan-wing-r" d="M70 52 C86 34 104 30 114 40 C106 48 102 58 96 66 C86 64 76 60 70 58 Z" fill="url(#chanWing)" stroke="#e8b64c" stroke-width="1" opacity="0.85"/>' +
+          '<path d="M48 54 C36 46 24 43 12 41 M47 57.5 C37 54.5 28 56.5 20 62.5" stroke="#e8b64c" stroke-width="0.9" fill="none" opacity="0.55"/>' +
+          '<path d="M72 54 C84 46 96 43 108 41 M73 57.5 C83 54.5 92 56.5 100 62.5" stroke="#e8b64c" stroke-width="0.9" fill="none" opacity="0.55"/>' +
+          '</g>';
+        /* crimson kasaya with a gold sash, prayer beads from stage 1 */
+        s += '<g class="fox-body-g"><g class="fox-breath-g">' +
+          '<path d="M46 51 Q60 45.5 74 51 L83 84 Q60 91 37 84 Z" fill="url(#chanRobe)"/>' +
+          '<path d="M48.5 49.8 L78.5 80.2 L73 86 L43.8 55.2 Z" fill="url(#chanGold)" opacity="0.92"/>' +
+          '<path d="M52 51.5 L60 59.5 L68 51.5 L65.5 47.8 Q60 46.4 54.5 47.8 Z" fill="#7e1d14"/>';
+        if (stage >= 1) {
+          var beadPos = [[-13, 55.5], [-10.5, 59.5], [-7, 62.5], [-3, 64], [3, 64], [7, 62.5], [10.5, 59.5], [13, 55.5]];
+          for (var bi = 0; bi < beadPos.length; bi++) {
+            s += '<circle cx="' + (60 + beadPos[bi][0]) + '" cy="' + beadPos[bi][1] + '" r="1.55" fill="#6b4423" stroke="#4a2c12" stroke-width="0.5"/>';
+          }
+          s += '<circle cx="60" cy="65.5" r="2.1" fill="url(#chanGold)" stroke="#b8860b" stroke-width="0.7"/>';
+        }
+        if (stage >= 2) {
+          s += '<path d="M38.5 83.2 Q60 89.8 81.5 83.2" stroke="#ffd76e" stroke-width="1.6" fill="none" opacity="0.9"/>';
+        }
+        s += '<circle cx="34.5" cy="79" r="3" fill="url(#chanSkin)"/>' +
+          '</g>';
+        /* nine-ring staff in his right hand: 3 / 5 / 7 / 9 rings */
+        var rings = 3 + stage * 2;
+        s += '<g>' +
+          '<path d="M76 58 L95 63" stroke="url(#chanRobe)" stroke-width="5.5" stroke-linecap="round"/>' +
+          '<path d="M97.5 27 L97.5 99" stroke="#8a5a24" stroke-width="2.4" stroke-linecap="round"/>' +
+          '<circle cx="97.5" cy="23" r="3.3" fill="url(#chanGold)" stroke="#b8860b" stroke-width="0.9"/>' +
+          '<path d="M89 29.5 Q97.5 24.5 106 29.5" stroke="#d99a26" stroke-width="1.7" fill="none" stroke-linecap="round"/>';
+        for (var ri2 = 0; ri2 < rings; ri2++) {
+          var rx = rings === 1 ? 97.5 : 89 + ri2 * (17 / (rings - 1));
+          s += '<circle cx="' + rx.toFixed(1) + '" cy="33.5" r="1.7" fill="none" stroke="url(#chanGold)" stroke-width="1.1"/>';
+        }
+        s += '<circle cx="95.5" cy="63.5" r="3" fill="url(#chanSkin)"/></g>';
+        s += '</g>'; /* body */
+        /* head: shaved little monk with incense dots and a flame-lotus crown */
+        s += '<g class="fox-head">' +
+          '<circle cx="39.6" cy="38" r="3.4" fill="url(#chanSkin)"/>' +
+          '<circle cx="80.4" cy="38" r="3.4" fill="url(#chanSkin)"/>' +
+          '<circle cx="60" cy="35" r="20.5" fill="url(#chanSkin)"/>' +
+          '<path d="M40.5 31 Q43 15.5 60 15 Q77 15.5 79.5 31 Q73 19.5 60 19.5 Q47 19.5 40.5 31 Z" fill="#eec39a" opacity="0.55"/>' +
+          '<ellipse cx="46.8" cy="44.5" rx="3.6" ry="2.1" fill="#f49bb0" opacity="0.55"/>' +
+          '<ellipse cx="73.2" cy="44.5" rx="3.6" ry="2.1" fill="#f49bb0" opacity="0.55"/>';
+        if (stage >= 2) {
+          s += '<circle cx="56" cy="26.5" r="0.95" fill="#b06a3a"/><circle cx="60" cy="25.6" r="0.95" fill="#b06a3a"/><circle cx="64" cy="26.5" r="0.95" fill="#b06a3a"/>';
+        }
+        s += petFaceSVG(face || "normal", "chanEye");
+        var petal = '<path d="M60 16.5 C56.8 12.8 56.2 8 60 4.2 C63.8 8 63.2 12.8 60 16.5 Z" fill="url(#chanGold)" stroke="#b8860b" stroke-width="0.7"/>';
+        var flame = '<path d="M60 4.8 C62 2.8 62 0.9 60 -0.8 C58 0.9 58 2.8 60 4.8 Z" fill="#f2762e"/>';
+        if (stage === 0) {
+          s += petal;
+        } else if (stage === 1) {
+          s += '<g transform="rotate(-26 60 16)">' + petal + '</g>' + petal +
+            '<g transform="rotate(26 60 16)">' + petal + '</g>';
+        } else if (stage === 2) {
+          s += '<g transform="rotate(-40 60 16)">' + petal + '</g>' +
+            '<g transform="rotate(-20 60 16)">' + petal + flame + '</g>' +
+            petal + flame +
+            '<g transform="rotate(20 60 16)">' + petal + flame + '</g>' +
+            '<g transform="rotate(40 60 16)">' + petal + '</g>' +
+            '<circle cx="60" cy="14.5" r="1.9" fill="#e2494d" stroke="#ffffff" stroke-width="0.7"/>';
+        } else {
+          s += '<g transform="rotate(-50 60 16)">' + petal + flame + '</g>' +
+            '<g transform="rotate(-33 60 16)">' + petal + flame + '</g>' +
+            '<g transform="rotate(-16 60 16)">' + petal + flame + '</g>' +
+            petal + flame +
+            '<g transform="rotate(16 60 16)">' + petal + flame + '</g>' +
+            '<g transform="rotate(33 60 16)">' + petal + flame + '</g>' +
+            '<g transform="rotate(50 60 16)">' + petal + flame + '</g>' +
+            '<circle cx="60" cy="14.5" r="2.3" fill="#e2494d" stroke="#ffffff" stroke-width="0.8"/>' +
+            '<path d="M49 19.5 Q60 16.8 71 19.5" stroke="#d99a26" stroke-width="1.8" fill="none" stroke-linecap="round"/>';
+        }
+        s += '</g>'; /* head */
+        if (stage >= 3) {
+          s += '<path class="fox-petal" style="animation-delay:-1.4s" d="M24 6 c2 2.4 2.5 4.6 0 7 c-2.5 -2.4 -2 -4.6 0 -7 Z" fill="#f9d976" opacity="0.85"/>' +
+            '<path class="fox-petal" style="animation-delay:-3.6s" d="M98 4 c1.9 2.2 2.3 4.3 0 6.5 c-2.3 -2.2 -1.9 -4.3 0 -6.5 Z" fill="#ffd76e" opacity="0.8"/>';
+        }
+        s += '</g></svg>';
+        return s;
+      }
+
+      /* ---------- shu artwork (original SVG: 幽冥书生， the ghost scholar)
+         Teal head-cloth, a book box on his back that fills up per stage,
+         a starfield robe with flame trim, and blue ghost flames flickering
+         beneath his feet — he hovers on them instead of walking. */
+      function shuSVG(stage, face) {
+        var s = "";
+        s += '<svg class="fox" viewBox="0 0 120 112" fill="none" aria-hidden="true">';
+        s += '<defs>' +
+          '<linearGradient id="shuSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fdf6ec"/><stop offset="100%" stop-color="#e9dcc9"/></linearGradient>' +
+          '<linearGradient id="shuRobe" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2c3a5e"/><stop offset="100%" stop-color="#141d33"/></linearGradient>' +
+          '<linearGradient id="shuSleeve" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3a5080"/><stop offset="100%" stop-color="#1d2a4a"/></linearGradient>' +
+          '<linearGradient id="shuGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffe9a3"/><stop offset="100%" stop-color="#d99a26"/></linearGradient>' +
+          '<radialGradient id="shuEye" cx="50%" cy="32%" r="78%"><stop offset="0%" stop-color="#5d7ab8"/><stop offset="55%" stop-color="#2c3a6e"/><stop offset="100%" stop-color="#101736"/></radialGradient>' +
+          '<radialGradient id="shuFlame" cx="50%" cy="72%" r="65%"><stop offset="0%" stop-color="#eaf7ff"/><stop offset="45%" stop-color="#7cc0f2"/><stop offset="100%" stop-color="#2f6fd0" stop-opacity="0.25"/></radialGradient>' +
+          '<radialGradient id="shuGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#a8d4ff" stop-opacity="0.75"/><stop offset="60%" stop-color="#6ea8e8" stop-opacity="0.28"/><stop offset="100%" stop-color="#6ea8e8" stop-opacity="0"/></radialGradient>' +
+          '</defs>';
+        s += '<ellipse cx="60" cy="108" rx="24" ry="3.2" fill="#101a2a" opacity="0.14"/>';
+        s += '<g class="wa-float-g">';
+        if (stage >= 3) {
+          s += '<ellipse class="fox-aura" cx="60" cy="54" rx="52" ry="50" fill="url(#shuGlow)"/>' +
+            '<circle class="fox-aura" cx="60" cy="36" r="27.5" fill="none" stroke="#8fc1ff" stroke-width="1.8" opacity="0.45"/>';
+        }
+        /* book box on his back, filling with books and scrolls per stage */
+        var bookCols = ["#b0483e", "#3e6e8e", "#c9a227", "#5d7a4a", "#7a4a8e"];
+        s += '<g transform="rotate(-5 29 56)">';
+        for (var bk = 0; bk < 2 + stage; bk++) {
+          s += '<rect x="' + (21.5 + bk * 4.6) + '" y="' + (29 + (bk % 2) * 2) + '" width="4" height="11" rx="1" fill="' + bookCols[bk % bookCols.length] + '"/>';
+        }
+        if (stage >= 2) {
+          s += '<rect x="17.5" y="33" width="3.4" height="13" rx="1.7" fill="#e8dcc0" transform="rotate(-14 19 39)"/>';
+        }
+        s += '<rect x="19" y="39" width="21" height="35" rx="2.5" fill="#7a4a2a" stroke="#5d371d" stroke-width="1.2"/>' +
+          '<path d="M19 48 L40 48 M19 65 L40 65" stroke="#5d371d" stroke-width="1.1"/>' +
+          '<rect x="26.5" y="53" width="6" height="7" rx="1" fill="url(#shuGold)" opacity="0.9"/></g>';
+        /* starfield robe with wide sleeves */
+        s += '<g class="fox-body-g"><g class="fox-breath-g">' +
+          '<g class="wa-sleeve"><path d="M45 53 Q27 55 21 71 Q24 82 36 81 Q44 80 47 70 Z" fill="url(#shuSleeve)"/></g>' +
+          '<g class="wa-sleeve" style="animation-delay:-1.4s"><path d="M75 53 Q93 55 99 71 Q96 82 84 81 Q76 80 73 70 Z" fill="url(#shuSleeve)"/></g>' +
+          '<path d="M46 51 Q60 45.5 74 51 L82 84 Q60 90.5 38 84 Z" fill="url(#shuRobe)"/>' +
+          '<path d="M52 51 L60 59 L68 51 L66 47.6 Q60 46.2 54 47.6 Z" fill="#e8ecf4"/>' +
+          '<path d="M44 66 Q60 71 76 66 L76.8 71 Q60 75.5 43.2 71 Z" fill="#0e1526"/>' +
+          '<circle cx="60" cy="68.6" r="2.6" fill="url(#shuGold)" stroke="#8a5a24" stroke-width="0.8"/>';
+        var starPos = [[50, 56], [68, 58], [57, 63], [45, 70], [74, 72], [52, 76], [64, 80], [70, 64], [48, 62], [60, 72], [42, 79], [78, 80], [56, 84], [66, 52], [44, 55], [76, 60]];
+        var starN = Math.min(starPos.length, 4 + stage * 4);
+        for (var si = 0; si < starN; si++) {
+          s += '<circle cx="' + starPos[si][0] + '" cy="' + starPos[si][1] + '" r="' + (si % 3 === 0 ? 1.25 : 0.85) + '" fill="#ffe9a3" opacity="' + (si % 3 === 0 ? 0.95 : 0.7) + '"/>';
+        }
+        if (stage >= 2) {
+          s += '<path d="M40.5 84 L45.5 78.5 L50.5 84 L55.5 78.5 L60.5 84 L65.5 78.5 L70.5 84 L75.5 78.5 L79.5 83.5 L78.5 86.5 Q60 90.8 41.5 86.5 Z" fill="#e2703a" opacity="0.92"/>';
+        }
+        s += '<circle cx="34.5" cy="79" r="3" fill="url(#shuSkin)"/>' +
+          '</g>';
+        /* an open book in his right hand from stage 1 */
+        if (stage >= 1) {
+          s += '<g transform="rotate(10 90 66)">' +
+            '<path d="M82 60 Q90 56.5 98 60 L98 71 Q90 67.8 82 71 Z" fill="#f2e7c8" stroke="#b09a5e" stroke-width="1"/>' +
+            '<path d="M90 57.5 L90 68.5" stroke="#b09a5e" stroke-width="1"/>' +
+            '<path d="M84.5 62.5 Q87.5 61.5 89 62.3 M84.5 66 Q87.5 65 89 65.8 M91 62.3 Q92.5 61.5 95.5 62.5 M91 65.8 Q92.5 65 95.5 66" stroke="#8a7a52" stroke-width="0.8" fill="none"/></g>' +
+            '<circle cx="84" cy="64" r="3" fill="url(#shuSkin)"/>';
+        } else {
+          s += '<circle cx="85" cy="66" r="3" fill="url(#shuSkin)"/>';
+        }
+        s += '</g>'; /* body */
+        /* head: black hair under a teal scholar's cloth */
+        s += '<g class="fox-head">' +
+          '<path class="wa-sleeve" d="M79 27 Q87 40 85 54" stroke="#2e7f86" stroke-width="4.2" fill="none" stroke-linecap="round"/>' +
+          '<path class="wa-sleeve" style="animation-delay:-1.1s" d="M82 29 Q88 39 87.5 49" stroke="#256a70" stroke-width="3.4" fill="none" stroke-linecap="round"/>' +
+          '<circle cx="60" cy="35" r="20.5" fill="#262130"/>' +
+          '<ellipse cx="60" cy="39" rx="15.8" ry="14.6" fill="url(#shuSkin)"/>' +
+          '<path d="M44.5 37 Q43.5 21.5 60 20.5 Q76.5 21.5 75.5 37 Q70 27.5 60 28.5 Q50 27.5 44.5 37 Z" fill="#262130"/>' +
+          '<path d="M39.8 29 Q60 15.5 80.2 29 L79.6 21.5 Q60 9.5 40.4 21.5 Z" fill="#2e7f86"/>' +
+          '<path d="M39.8 29 Q60 15.5 80.2 29" stroke="#256a70" stroke-width="1.4" fill="none"/>' +
+          '<circle cx="79.8" cy="25" r="3.1" fill="#256a70"/>' +
+          '<ellipse cx="46.8" cy="44.5" rx="3.6" ry="2.1" fill="#c9a3b8" opacity="0.5"/>' +
+          '<ellipse cx="73.2" cy="44.5" rx="3.6" ry="2.1" fill="#c9a3b8" opacity="0.5"/>' +
+          petFaceSVG(face || "normal", "shuEye") +
+          '</g>'; /* head */
+        /* blue ghost flames flicker beneath his feet: 2 / 3 / 4 / 5 */
+        var flameXs = [[50, 70], [43, 60, 77], [38, 53, 67, 82], [35, 48, 61, 74, 86]][stage];
+        for (var fi = 0; fi < flameXs.length; fi++) {
+          var fx = flameXs[fi];
+          s += '<g class="ghost-flame" style="animation-delay:-' + (fi * 0.37).toFixed(2) + 's">' +
+            '<path d="M' + fx + ' 91 C' + (fx + 4.2) + ' 96.5 ' + (fx + 4.6) + ' 101 ' + fx + ' 106.5 C' + (fx - 4.6) + ' 101 ' + (fx - 4.2) + ' 96.5 ' + fx + ' 91 Z" fill="url(#shuFlame)"/>' +
+            '<circle cx="' + fx + '" cy="101.5" r="2.1" fill="#dff2ff" opacity="0.9"/></g>';
+        }
+        if (stage >= 3) {
+          s += '<path class="fox-petal" style="animation-delay:-0.6s" d="M110 22 l1.2 2.7 2.7 1.2 -2.7 1.2 -1.2 2.7 -1.2 -2.7 -2.7 -1.2 2.7 -1.2 Z" fill="#a8d4ff"/>' +
+            '<path class="fox-petal" style="animation-delay:-3.1s" d="M14 16 l1 2.2 2.2 1 -2.2 1 -1 2.2 -1 -2.2 -2.2 -1 2.2 -1 Z" fill="#ffe9a3"/>';
+        }
+        s += '</g></svg>';
+        return s;
+      }
+
+      /* ---------- le artwork (original SVG: 长乐仙子， the lotus fairy)
+         Silver hair and a phoenix crown that grows grander per stage,
+         a pink top and green skirt, a flower fan in her hand, and a
+         lotus platform under her feet that blooms wider as she grows.
+         She rides the platform on the shared wa-float bob. */
+      function leSVG(stage, face) {
+        var s = "";
+        s += '<svg class="fox" viewBox="0 0 120 112" fill="none" aria-hidden="true">';
+        s += '<defs>' +
+          '<linearGradient id="leSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff3e4"/><stop offset="100%" stop-color="#ffd9b8"/></linearGradient>' +
+          '<linearGradient id="leHair" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fdfdff"/><stop offset="100%" stop-color="#c3cede"/></linearGradient>' +
+          '<linearGradient id="leTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f9c2d0"/><stop offset="100%" stop-color="#ef8fb0"/></linearGradient>' +
+          '<linearGradient id="leSkirt" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#bfe3b0"/><stop offset="100%" stop-color="#5da864"/></linearGradient>' +
+          '<linearGradient id="leLotus" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fbd3e0"/><stop offset="100%" stop-color="#ef8fb5"/></linearGradient>' +
+          '<linearGradient id="leGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffe9a3"/><stop offset="100%" stop-color="#d99a26"/></linearGradient>' +
+          '<radialGradient id="leEye" cx="50%" cy="32%" r="78%"><stop offset="0%" stop-color="#9a5d8a"/><stop offset="55%" stop-color="#54263f"/><stop offset="100%" stop-color="#22060f"/></radialGradient>' +
+          '<radialGradient id="leGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffd9e8" stop-opacity="0.8"/><stop offset="60%" stop-color="#f7a8c4" stop-opacity="0.3"/><stop offset="100%" stop-color="#f7a8c4" stop-opacity="0"/></radialGradient>' +
+          '</defs>';
+        s += '<ellipse cx="60" cy="108" rx="24" ry="3.2" fill="#1c2a1a" opacity="0.1"/>';
+        s += '<g class="wa-float-g">';
+        if (stage >= 3) {
+          s += '<ellipse class="fox-aura" cx="60" cy="54" rx="52" ry="50" fill="url(#leGlow)"/>' +
+            '<circle class="fox-aura" cx="60" cy="36" r="27.5" fill="none" stroke="#f7a8c4" stroke-width="1.8" opacity="0.5"/>';
+        }
+        /* body: pink top, green skirt, floating ribbons */
+        s += '<g class="fox-body-g"><g class="fox-breath-g">' +
+          '<path class="wa-sleeve" d="M45 53 Q30 62 25 80" stroke="url(#leTop)" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.8"/>' +
+          '<path d="M47 61 Q60 57 73 61 L81 90 Q60 96 39 90 Z" fill="url(#leSkirt)"/>' +
+          (stage >= 2 ? '<path d="M40.5 89 Q60 94.8 79.5 89" stroke="#ffd76e" stroke-width="1.6" fill="none" opacity="0.9"/>' : '') +
+          '<path d="M45.5 50 Q60 45 74.5 50 L73.2 63.5 Q60 67.5 46.8 63.5 Z" fill="url(#leTop)"/>' +
+          '<path d="M46.8 61.5 Q60 65.5 73.2 61.5 L73.6 65.5 Q60 69.5 46.4 65.5 Z" fill="url(#leGold)"/>' +
+          '<path d="M52 50.5 L60 57.5 L68 50.5 L66 47.4 Q60 45.9 54 47.4 Z" fill="#fdf3d8"/>' +
+          '<circle cx="35" cy="76" r="3" fill="url(#leSkin)"/>' +
+          '</g>';
+        /* flower fan in her right hand, opening wider per stage */
+        var fanR = (10.5 + stage * 1.6).toFixed(1);
+        s += '<g>' +
+          '<path d="M74 57 L88 49" stroke="url(#leTop)" stroke-width="5" stroke-linecap="round"/>' +
+          '<g class="wa-sleeve">' +
+            '<path transform="translate(92 47) scale(' + (fanR / 11).toFixed(2) + ') translate(-92 -47)" d="M81.5 47 A10.5 10.5 0 0 1 102.5 47 L92 47 Z" fill="url(#leLotus)" stroke="#e2709e" stroke-width="1"/>' +
+            '<circle cx="87" cy="42.5" r="1.3" fill="#fff3f8"/><circle cx="92" cy="40.5" r="1.3" fill="#fff3f8"/><circle cx="97" cy="42.5" r="1.3" fill="#fff3f8"/>' +
+            '<path d="M92 47 L92 58" stroke="#b8860b" stroke-width="1.8" stroke-linecap="round"/>' +
+          '</g>' +
+          '<circle cx="86" cy="50.5" r="3" fill="url(#leSkin)"/></g>';
+        s += '</g>'; /* body */
+        /* head: long silver hair and a phoenix crown */
+        s += '<g class="fox-head">' +
+          '<path d="M41.5 29 Q35 56 39.5 73 L47 73 Q43.5 50 45.5 33 Z" fill="url(#leHair)"/>' +
+          '<path d="M78.5 29 Q85 56 80.5 73 L73 73 Q76.5 50 74.5 33 Z" fill="url(#leHair)"/>' +
+          '<circle cx="60" cy="35" r="20.5" fill="url(#leHair)"/>' +
+          '<ellipse cx="60" cy="39" rx="15.8" ry="14.6" fill="url(#leSkin)"/>' +
+          '<path d="M44.5 37 Q43.5 21.5 60 20.5 Q76.5 21.5 75.5 37 Q70 27.5 60 28.5 Q50 27.5 44.5 37 Z" fill="url(#leHair)"/>' +
+          '<ellipse cx="46.8" cy="44.5" rx="3.6" ry="2.1" fill="#f49bb0" opacity="0.6"/>' +
+          '<ellipse cx="73.2" cy="44.5" rx="3.6" ry="2.1" fill="#f49bb0" opacity="0.6"/>' +
+          petFaceSVG(face || "normal", "leEye");
+        if (stage === 0) {
+          s += '<circle cx="54.5" cy="14.5" r="2" fill="#f7a8b8"/><circle cx="60" cy="12" r="2.2" fill="#f7a8b8"/><circle cx="65.5" cy="14.5" r="2" fill="#f7a8b8"/>' +
+            '<circle cx="57.2" cy="16.8" r="1.7" fill="#f9c2d0"/><circle cx="62.8" cy="16.8" r="1.7" fill="#f9c2d0"/>' +
+            '<circle cx="60" cy="14.8" r="1.5" fill="url(#leGold)"/>';
+        } else if (stage === 1) {
+          s += '<path d="M51 16 Q60 5.5 69 16 Q60 12 51 16 Z" fill="url(#leGold)" stroke="#b8860b" stroke-width="0.8"/>' +
+            '<circle cx="69" cy="12.5" r="1.7" fill="url(#leGold)" stroke="#b8860b" stroke-width="0.7"/>' +
+            '<path d="M51 16 Q46 14 44 10.5 Q48.5 10.5 51 13 Z" fill="url(#leGold)" opacity="0.95"/>';
+        } else if (stage === 2) {
+          s += '<path d="M49.5 16.5 Q60 4 70.5 16.5 Q60 11.5 49.5 16.5 Z" fill="url(#leGold)" stroke="#b8860b" stroke-width="0.9"/>' +
+            '<circle cx="70.5" cy="12" r="2" fill="url(#leGold)" stroke="#b8860b" stroke-width="0.8"/>' +
+            '<path d="M49.5 16.5 Q43.5 14.5 41 9.5 Q46.5 9.5 49.5 13.5 Z" fill="url(#leGold)" opacity="0.95"/>' +
+            '<path d="M46 19 L46 23.5" stroke="#d99a26" stroke-width="1"/><circle cx="46" cy="25" r="1.4" fill="#f7a8b8"/>' +
+            '<path d="M74 19 L74 23.5" stroke="#d99a26" stroke-width="1"/><circle cx="74" cy="25" r="1.4" fill="#f7a8b8"/>' +
+            '<circle cx="60" cy="13.5" r="1.8" fill="#e2494d" stroke="#ffffff" stroke-width="0.7"/>';
+        } else {
+          s += '<path d="M47.5 17 Q60 1.5 72.5 17 Q60 11 47.5 17 Z" fill="url(#leGold)" stroke="#b8860b" stroke-width="1"/>' +
+            '<circle cx="72.5" cy="11.5" r="2.3" fill="url(#leGold)" stroke="#b8860b" stroke-width="0.8"/>' +
+            '<path d="M47.5 17 Q40.5 15 37.5 8.5 Q44 8.5 47.5 13.5 Z" fill="url(#leGold)" opacity="0.95"/>' +
+            '<path d="M72.5 17 Q79.5 15 82.5 8.5 Q76 8.5 72.5 13.5 Z" fill="url(#leGold)" opacity="0.95"/>' +
+            '<circle cx="60" cy="13.8" r="2.1" fill="#e2494d" stroke="#ffffff" stroke-width="0.8"/>' +
+            '<path d="M44.5 19.5 L44.5 26" stroke="#d99a26" stroke-width="1"/><circle cx="44.5" cy="24" r="1.2" fill="#ffd76e"/><circle cx="44.5" cy="28" r="1.5" fill="#f7a8b8"/>' +
+            '<path d="M75.5 19.5 L75.5 26" stroke="#d99a26" stroke-width="1"/><circle cx="75.5" cy="24" r="1.2" fill="#ffd76e"/><circle cx="75.5" cy="28" r="1.5" fill="#f7a8b8"/>' +
+            '<circle cx="60" cy="21" r="1" fill="#ffd76e"/><circle cx="60" cy="24.2" r="1.5" fill="#e2494d" stroke="#ffffff" stroke-width="0.5"/>';
+        }
+        s += '</g>'; /* head */
+        /* lotus platform: blooms wider with each stage */
+        var lp = '<path d="M60 105 C55.5 99.5 55.5 93.5 60 89.5 C64.5 93.5 64.5 99.5 60 105 Z" fill="url(#leLotus)" stroke="#e2709e" stroke-width="0.8"/>';
+        s += '<g>';
+        if (stage >= 2) {
+          s += '<g opacity="0.8">' +
+            '<g transform="rotate(-42 60 103)">' + lp + '</g>' +
+            '<g transform="rotate(-21 60 103)">' + lp + '</g>' +
+            '<g transform="rotate(21 60 103)">' + lp + '</g>' +
+            '<g transform="rotate(42 60 103)">' + lp + '</g></g>';
+        }
+        var front = stage === 0 ? [-24, 0, 24] : stage === 1 ? [-32, -16, 0, 16, 32] : [-38, -25, -12, 0, 12, 25, 38];
+        for (var li = 0; li < front.length; li++) {
+          s += '<g transform="rotate(' + front[li] + ' 60 104)">' + lp + '</g>';
+        }
+        s += '<ellipse cx="60" cy="104.5" rx="17" ry="3" fill="#d96a9c" opacity="0.55"/>';
+        if (stage >= 3) {
+          s += '<ellipse class="fox-aura" cx="60" cy="100" rx="30" ry="8" fill="url(#leGlow)"/>' +
+            '<circle cx="60" cy="97.5" r="2.2" fill="url(#leGold)" stroke="#b8860b" stroke-width="0.7"/>';
+        }
+        s += '</g>';
+        if (stage >= 3) {
+          s += '<path class="fox-petal" style="animation-delay:-0.9s" d="M22 6 c2 2.4 2.5 4.6 0 7 c-2.5 -2.4 -2 -4.6 0 -7 Z" fill="#f7a8b8" opacity="0.85"/>' +
+            '<path class="fox-petal" style="animation-delay:-3.3s" d="M99 5 c1.9 2.2 2.3 4.3 0 6.5 c-2.3 -2.2 -1.9 -4.3 0 -6.5 Z" fill="#f9c2d0" opacity="0.8"/>';
+        }
+        s += '</g></svg>';
+        return s;
+      }
       var LOTUS_SVG = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
         '<path d="M12 3.6c1.9 2.1 2.9 4.5 2.9 7.1 0 2.1-1.1 3.9-2.9 5.1-1.8-1.2-2.9-3-2.9-5.1 0-2.6 1-5 2.9-7.1z"/>' +
         '<path d="M4.3 9.2c2.8.2 5.1 1.3 6.9 3.2-1.6 1.5-3.8 2-6 1.4C3.9 12.5 3.7 10.7 4.3 9.2z"/>' +
@@ -2386,11 +2518,11 @@
         heart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21C7 16.5 3 13 3 8.8 3 5.9 5.2 4 7.7 4c1.7 0 3.3 0.9 4.3 2.4C13 4.9 14.6 4 16.3 4 18.8 4 21 5.9 21 8.8c0 4.2-4 7.7-9 12.2z" fill="#f2607a"/></svg>',
         star: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 5.9 6.5 0.8-4.8 4.4 1.3 6.4L12 17l-5.8 3.1 1.3-6.4L2.7 9.3l6.5-0.8z" fill="#f6c945"/></svg>',
         petal: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3.5 3.2 5 6.6 5 10a5 5 0 1 1-10 0c0-3.4 1.5-6.8 5-10z" fill="#f7a8b8"/></svg>',
-        fish: '<svg viewBox="0 0 32 22" aria-hidden="true"><path d="M2 11 C7 4.5 13 2 19 2 C25 2 28 6 30 11 C28 16 25 20 19 20 C13 20 7 17.5 2 11 Z" fill="#5b8dd9"/><path d="M2 11 L7.5 5.5 L7.5 16.5 Z" fill="#3f6fb5"/><circle cx="23.5" cy="9" r="1.6" fill="#fff"/></svg>',
         peach: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.8 3.4c1.8-1.4 4.2-1.3 5.9.2-1.4 1.7-3.8 2.2-5.9 1z" fill="#7fb069"/><path d="M12 21.5c-4.9 0-8.5-3.4-8.5-8 0-3.9 2.8-6.7 6.2-6.7.8 0 1.6.2 2.3.5.7-.3 1.5-.5 2.3-.5 3.4 0 6.2 2.8 6.2 6.7 0 4.6-3.6 8-8.5 8z" fill="#f79db1"/><path d="M12 7.3c-.5 2.4-.5 4.9.2 7.2" stroke="#e85d7f" stroke-width="1.3" fill="none" stroke-linecap="round"/></svg>',
+        dew: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3.2 3.9 5.4 7.3 5.4 10.4a5.4 5.4 0 1 1-10.8 0C6.6 10.3 8.8 6.9 12 3z" fill="#8fd0f2"/><path d="M9.4 13.2a2.8 2.8 0 0 0 2 3.4" stroke="#eaf7ff" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M15.5 4.6c1.9-1.2 4-.9 5.4.6-1.7 1.3-3.9 1.4-5.4-.6z" fill="#7fb069"/></svg>',
+        cake: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="8" width="16" height="11" rx="2.5" fill="#f6c945"/><rect x="4" y="8" width="16" height="4" rx="2" fill="#ffe9a3"/><circle cx="8.5" cy="10" r="0.9" fill="#e2703a"/><circle cx="12" cy="9.6" r="0.9" fill="#e2703a"/><circle cx="15.5" cy="10" r="0.9" fill="#e2703a"/><circle cx="10" cy="15" r="1" fill="#d99a26"/><circle cx="14" cy="15.8" r="1" fill="#d99a26"/></svg>',
         note: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3v10.55A4 4 0 1 0 12 17V7.8L20 6v8.05A4 4 0 1 0 22 17.5V3L10 3z" fill="#8a6fc9" transform="scale(0.92) translate(1,0)"/></svg>',
         zzz: '<svg viewBox="0 0 24 24" aria-hidden="true"><text x="12" y="17" font-size="14" font-weight="700" fill="#7d9cc4" text-anchor="middle" font-family="inherit">Z</text></svg>',
-        yarn: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#7fb2d9"/><path d="M4 10 Q12 14.5 20 9.5 M4.5 15.5 Q12 18.5 19.5 13.5 M8.5 4 Q11.5 12 9 20.5" stroke="#5b8ab5" fill="none" stroke-width="1.6"/></svg>',
       };
 
       /* ---------- pet rendering ---------- */
@@ -2486,38 +2618,36 @@
           "</span></div>";
         html += '<div class="pp-sec">已解锁的动作</div><p class="pp-acts">' +
           petUnlockedActions().join("、") + "</p>";
-        var otherPet = SPECIES[petSpecies === "wa" ? "fox" : "wa"];
-        html += '<div class="pp-sec">换宠物</div>' +
-          '<button type="button" class="pp-switch" id="pet-switch-btn">换成' + otherPet.name +
-          '<span>' + otherPet.kind + ' · 各养各的</span></button>';
-        html += '<div class="pp-sec">陪伴方式</div>';
-        if (!petRosterUnlocked()) {
-          html += '<p class="pp-note">任意一只宠物进化到顶阶（第 4 阶）后，这里会解锁「随机换宠」和「一直陪伴」。在那之前，就由现在这只一直陪着你。</p>';
-        } else {
-          html += '<button type="button" class="pp-switch pp-opt' + (petRoster.lock === "fox" ? " on" : "") +
-            '" id="pet-lock-fox">阿绒一直陪伴<span>' + (petRoster.lock === "fox" ? "已锁定" : "锁定") + "</span></button>";
-          html += '<button type="button" class="pp-switch pp-opt' + (petRoster.lock === "wa" ? " on" : "") +
-            '" id="pet-lock-wa">小娲一直陪伴<span>' + (petRoster.lock === "wa" ? "已锁定" : "锁定") + "</span></button>";
-          html += '<button type="button" class="pp-switch pp-opt' + (petRoster.lock === "" ? " on" : "") +
-            '" id="pet-lock-none">不锁定<span>' + (petRoster.lock === "" ? "当前" : "取消锁定") + "</span></button>";
-          html += '<button type="button" class="pp-switch pp-opt' + (petRoster.random ? " on" : "") +
-            '" id="pet-random-btn">随机换宠<span>' + (petRoster.random ? "已开启" : "已关闭") + "</span></button>";
-          if (petRoster.lock) {
-            html += '<p class="pp-note">已锁定' + SPECIES[petRoster.lock].name +
-              '一直陪伴，随机换宠暂不生效；想恢复随机，先点「不锁定」。手动换宠物随时可用。</p>';
-          } else if (petRoster.random) {
-            html += '<p class="pp-note">随机换宠已开启：每天第一次打开页面时，阿绒和小娲随机来一只。手动换宠物随时可用，第二天打开仍按随机规则。</p>';
-          } else {
-            html += '<p class="pp-note">随机没开，也没有锁定——就由现在这只一直陪着你，不会自己乱换。</p>';
-          }
-        }
+        html += '<div class="pp-sec">换宠物</div><div class="pp-pets">';
+        PET_ORDER.forEach(function (pid) {
+          var c = PET_SPECIES[pid];
+          var cur = pid === PET_CFG.id;
+          html += '<button type="button" class="pp-pet" data-pet="' + pid + '"' +
+            (cur ? " disabled" : "") + '><span class="pp-pet-name">' + c.name + "</span>" +
+            '<span class="pp-pet-kind">' + c.kind + "</span>" +
+            (cur ? '<span class="pp-pet-tag">陪伴中</span>' : "") + "</button>";
+        });
+        html += "</div>";
         return html;
+      }
+      /* The recall button wears the active pet's own emblem. */
+      function petPawSVG() {
+        if (PET_CFG.id === "chan") {
+          return '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5c1.5 1.9 2.2 4 2.2 6.3 0 2-1 3.7-2.2 4.9-1.2-1.2-2.2-2.9-2.2-4.9C9.8 6.5 10.5 4.4 12 2.5z"/><path d="M5.2 6.8c2.3.7 4.2 2 5.6 3.9-1.4 1.2-3.3 1.6-5.1 1C4.4 10.4 4.4 8.4 5.2 6.8zM18.8 6.8c.8 1.6.8 3.6-.5 4.9-1.8.6-3.7.2-5.1-1 1.4-1.9 3.3-3.2 5.6-3.9z"/><path d="M5.4 15.4c2.1 1.4 4.3 2.1 6.6 2.1s4.5-.7 6.6-2.1c-.7 2-2.7 3.3-6.6 3.3s-5.9-1.3-6.6-3.3z"/><circle cx="12" cy="20.6" r="1.1"/></svg>';
+        }
+        if (PET_CFG.id === "shu") {
+          return '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.8c2.6 3.3 4.1 6.1 4.1 9A4.6 4.6 0 1 1 7.9 11.8c0-1.5.6-3 1.6-4.5.4 1 1.1 1.7 2 2.1-.3-2.3.1-4.7.5-6.6z"/><circle cx="12" cy="15.4" r="1.7" fill="#16283f"/></svg>';
+        }
+        if (PET_CFG.id === "le") {
+          return '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="8" r="2.6"/><circle cx="6.8" cy="10.8" r="2.3"/><circle cx="17.2" cy="10.8" r="2.3"/><circle cx="8.6" cy="16" r="2.3"/><circle cx="15.4" cy="16" r="2.3"/><circle cx="12" cy="12.4" r="1.5" fill="#ffd76e"/></svg>';
+        }
+        return LOTUS_SVG;
       }
       function renderPet() {
         if (pet.hidden) {
           petRoot.innerHTML =
             '<button type="button" class="pet-paw" id="pet-paw" aria-label="把' + SP().name + '叫回来">' +
-            (pet.species === "wa" ? LOTUS_SVG : PAW_SVG) + "</button>" +
+            petPawSVG() + "</button>" +
             '<div class="pet-toast" id="pet-toast" role="status"></div>';
           document.getElementById("pet-paw").addEventListener("click", function () {
             pet.hidden = false;
@@ -2530,7 +2660,7 @@
         var pos = clampPetPos(pet.x, pet.y);
         pet.x = pos.x; pet.y = pos.y;
         petRoot.innerHTML =
-          '<div class="pet' + (pet.species === "wa" ? " is-wa" : "") + (pet.sleeping ? " sleeping" : "") + (petDizzy ? " fainted" : "") +
+          '<div class="pet' + (pet.sleeping ? " sleeping" : "") + (petDizzy ? " fainted" : "") +
             '" id="pet" role="button" tabindex="0" aria-haspopup="true" aria-expanded="' +
             (petMenuOpen ? "true" : "false") + '" aria-label="桌宠' + SP().name + '，' + PET_STAGES[pet.stage].name +
             '，点一下和它打招呼，双击让它原地休息或继续' + SP().moveWord + '，长按或右键打开互动菜单，也可以拖动、甩出去" style="left:' + pet.x + "px;top:" + pet.y + 'px;--ps:' +
@@ -2602,41 +2732,12 @@
               setPetPanel(false);
             });
           }
-          var switchBtn = document.getElementById("pet-switch-btn");
-          if (switchBtn) {
-            switchBtn.addEventListener("click", function (e) {
+          Array.prototype.forEach.call(panel.querySelectorAll("button[data-pet]"), function (btn) {
+            btn.addEventListener("click", function (e) {
               e.stopPropagation();
-              petSwitchTo(petSpecies === "wa" ? "fox" : "wa");
+              petSwitchTo(btn.getAttribute("data-pet"));
             });
-          }
-          var lockFoxBtn = document.getElementById("pet-lock-fox");
-          if (lockFoxBtn) {
-            lockFoxBtn.addEventListener("click", function (e) {
-              e.stopPropagation();
-              petSetLock("fox");
-            });
-          }
-          var lockWaBtn = document.getElementById("pet-lock-wa");
-          if (lockWaBtn) {
-            lockWaBtn.addEventListener("click", function (e) {
-              e.stopPropagation();
-              petSetLock("wa");
-            });
-          }
-          var lockNoneBtn = document.getElementById("pet-lock-none");
-          if (lockNoneBtn) {
-            lockNoneBtn.addEventListener("click", function (e) {
-              e.stopPropagation();
-              petSetLock("");
-            });
-          }
-          var randomBtn = document.getElementById("pet-random-btn");
-          if (randomBtn) {
-            randomBtn.addEventListener("click", function (e) {
-              e.stopPropagation();
-              petToggleRandom();
-            });
-          }
+          });
         } else {
           panel.classList.remove("open");
           window.setTimeout(function () {
@@ -2706,7 +2807,7 @@
       }
 
       /* ---------- unread countdown reminder ----------
-         When the nearest important day is within 3 days, the fox hops,
+         When the nearest important day is within 3 days, 小娲 hops,
          shows a bubble and lights the red status dot — like an unread
          reply badge. It stays unread until the user opens the 重要日子
          panel (openPanel("days") calls petAckNotify). The acknowledged
@@ -2784,21 +2885,6 @@
       }
 
       /* ---------- random action pool (weighted, intimacy-gated) ---------- */
-      var FOX_POOL = [
-        { id: "breath", label: "呼吸", w: 30, need: 0, cls: "act-breath", ms: 2600 },
-        { id: "look", label: "东张西望", w: 13, need: 0, cls: "act-look", ms: 1750 },
-        { id: "lick", label: "舔爪子", w: 11, need: 0, cls: "act-munch", ms: 1150 },
-        { id: "stretch", label: "伸懒腰", w: 11, need: 0, cls: "act-stretch", ms: 1500, say: "唔——伸个懒腰" },
-        { id: "yawn", label: "打哈欠", w: 9, need: 0, cls: "act-nod", ms: 1500, face: "yawn", say: "啊呜……有点困" },
-        { id: "doze", label: "打瞌睡", w: 8, need: 0, cls: "act-nod", ms: 2600, face: "sleep", fx: "zzz", say: "Zzz……就眯一小会儿" },
-        { id: "hum", label: "哼歌", w: 8, need: 1, cls: "act-wave", ms: 1000, fx: "note", say: "啦啦啦～" },
-        { id: "yarn", label: "玩线团", w: 8, need: 1, cls: "act-roll", ms: 950, fx: "yarn", say: "线团是我的啦" },
-        { id: "sun", label: "晒太阳", w: 7, need: 1, cls: "act-sun", ms: 3200, face: "happy", say: "太阳晒得暖洋洋" },
-        { id: "snack", label: "吃小鱼", w: 6, need: 2, cls: "", ms: 1200, snack: true },
-        { id: "mirror", label: "照镜子", w: 6, need: 2, cls: "act-magic", ms: 750, face: "happy", fx: "star", say: "今天也是精神的我" },
-        { id: "chase", label: "追尾巴", w: 6, need: 2, cls: "act-spin", ms: 900, say: "尾巴别跑！" },
-        { id: "roll", label: "打滚撒娇", w: 5, need: 3, cls: "act-roll", ms: 950, face: "happy", say: "滚呀滚呀～" },
-      ];
       var WA_POOL = [
         { id: "breath", label: "吐纳呼吸", w: 30, need: 0, cls: "act-breath", ms: 2600 },
         { id: "look", label: "环顾云海", w: 13, need: 0, cls: "act-look", ms: 1750 },
@@ -2813,6 +2899,51 @@
         { id: "mirror", label: "对水照影", w: 6, need: 2, cls: "act-magic", ms: 750, face: "happy", fx: "star", say: "今天的金冠戴正了" },
         { id: "swim", label: "摆尾游弋", w: 6, need: 2, cls: "act-dance", ms: 950, say: "尾巴摆呀摆" },
         { id: "roll", label: "盘尾撒娇", w: 5, need: 3, cls: "act-roll", ms: 950, face: "happy", say: "盘起来最舒服啦" },
+      ];
+      var CHAN_POOL = [
+        { id: "breath", label: "打坐吐纳", w: 30, need: 0, cls: "act-breath", ms: 2600 },
+        { id: "look", label: "环顾四周", w: 13, need: 0, cls: "act-look", ms: 1750 },
+        { id: "robe", label: "整理袈裟", w: 11, need: 0, cls: "act-nod", ms: 1500, say: "袈裟要穿得端端正正" },
+        { id: "stretch", label: "伸展翅膀", w: 11, need: 0, cls: "act-stretch", ms: 1500, say: "唔——翅膀伸个懒腰" },
+        { id: "yawn", label: "打哈欠", w: 9, need: 0, cls: "act-nod", ms: 1500, face: "yawn", say: "啊呜……有点困" },
+        { id: "doze", label: "打瞌睡", w: 8, need: 0, cls: "act-nod", ms: 2600, face: "sleep", fx: "zzz", say: "Zzz……就眯一小会儿" },
+        { id: "chant", label: "轻诵经文", w: 8, need: 1, cls: "act-wave", ms: 1000, fx: "note", say: "诵一段经，心就静了～" },
+        { id: "staff", label: "擦禅杖", w: 8, need: 1, cls: "act-magic", ms: 750, fx: "star", say: "禅杖的环要擦得亮亮的" },
+        { id: "sun", label: "晒晒太阳", w: 7, need: 1, cls: "act-sun", ms: 3200, face: "happy", say: "阳光暖暖的，像晒被子" },
+        { id: "snack", label: "喝花蜜", w: 6, need: 2, cls: "", ms: 1200, snack: true },
+        { id: "crown", label: "正莲冠", w: 6, need: 2, cls: "act-magic", ms: 750, face: "happy", fx: "star", say: "今天的莲冠戴正了" },
+        { id: "circle", label: "振翅盘旋", w: 6, need: 2, cls: "act-dance", ms: 950, say: "翅膀扇呀扇" },
+        { id: "rest", label: "蜷起小憩", w: 5, need: 3, cls: "act-roll", ms: 950, face: "happy", say: "蜷起来最舒服啦" },
+      ];
+      var SHU_POOL = [
+        { id: "breath", label: "闭目养神", w: 30, need: 0, cls: "act-breath", ms: 2600 },
+        { id: "look", label: "环顾夜色", w: 13, need: 0, cls: "act-look", ms: 1750 },
+        { id: "box", label: "整理书箱", w: 11, need: 0, cls: "act-nod", ms: 1500, say: "书箱要理得整整齐齐" },
+        { id: "stretch", label: "伸个懒腰", w: 11, need: 0, cls: "act-stretch", ms: 1500, say: "唔——坐久了，腰都酸了" },
+        { id: "yawn", label: "打哈欠", w: 9, need: 0, cls: "act-nod", ms: 1500, face: "yawn", say: "啊呜……夜读久了有点困" },
+        { id: "doze", label: "打瞌睡", w: 8, need: 0, cls: "act-nod", ms: 2600, face: "sleep", fx: "zzz", say: "Zzz……就眯一小会儿" },
+        { id: "hum", label: "哼小曲", w: 8, need: 1, cls: "act-wave", ms: 1000, fx: "note", say: "哼一支幽冥的小调～" },
+        { id: "flame", label: "拨鬼火", w: 8, need: 1, cls: "act-magic", ms: 750, fx: "star", say: "鬼火要拨得旺旺的" },
+        { id: "stars", label: "望星空", w: 7, need: 1, cls: "act-sun", ms: 3200, face: "happy", say: "今晚的星河格外亮" },
+        { id: "snack", label: "吃桂花糕", w: 6, need: 2, cls: "", ms: 1200, snack: true },
+        { id: "poem", label: "对月吟诗", w: 6, need: 2, cls: "act-magic", ms: 750, face: "happy", fx: "star", say: "举头望明月……下一句是什么来着" },
+        { id: "stride", label: "踏火踱步", w: 6, need: 2, cls: "act-dance", ms: 950, say: "踏火而行，步步生风" },
+        { id: "roll", label: "卷中乾坤", w: 5, need: 3, cls: "act-roll", ms: 950, face: "happy", say: "书卷里藏着大乾坤" },
+      ];
+      var LE_POOL = [
+        { id: "breath", label: "吐纳花香", w: 30, need: 0, cls: "act-breath", ms: 2600 },
+        { id: "look", label: "环顾花丛", w: 13, need: 0, cls: "act-look", ms: 1750 },
+        { id: "skirt", label: "整理裙摆", w: 11, need: 0, cls: "act-nod", ms: 1500, say: "裙摆要整整齐齐的" },
+        { id: "stretch", label: "舒展腰肢", w: 11, need: 0, cls: "act-stretch", ms: 1500, say: "唔——腰肢伸个懒腰" },
+        { id: "yawn", label: "打哈欠", w: 9, need: 0, cls: "act-nod", ms: 1500, face: "yawn", say: "啊呜……有点困" },
+        { id: "doze", label: "打瞌睡", w: 8, need: 0, cls: "act-nod", ms: 2600, face: "sleep", fx: "zzz", say: "Zzz……就眯一小会儿" },
+        { id: "hum", label: "轻哼花调", w: 8, need: 1, cls: "act-wave", ms: 1000, fx: "note", say: "哼一支花间的小调～" },
+        { id: "fan", label: "擦花扇", w: 8, need: 1, cls: "act-magic", ms: 750, fx: "star", say: "花扇要擦得香香的" },
+        { id: "sun", label: "晒晒太阳", w: 7, need: 1, cls: "act-sun", ms: 3200, face: "happy", say: "阳光落在莲台上，暖暖的" },
+        { id: "snack", label: "吃花蜜", w: 6, need: 2, cls: "", ms: 1200, snack: true },
+        { id: "crown", label: "对镜理冠", w: 6, need: 2, cls: "act-magic", ms: 750, face: "happy", fx: "star", say: "今天的凤冠戴正了" },
+        { id: "dance", label: "莲台旋舞", w: 6, need: 2, cls: "act-dance", ms: 950, say: "裙摆转呀转" },
+        { id: "rest", label: "蜷坐莲心", w: 5, need: 3, cls: "act-roll", ms: 950, face: "happy", say: "坐在莲心里最舒服啦" },
       ];
       function petPickPoolAction() {
         var tier = petTier();
@@ -2846,18 +2977,6 @@
       }
 
       /* ---------- chatter （碎碎念 & 梦话） ---------- */
-      var FOX_CHATTER = {
-        morning: ["早上好呀，今天也要元气满满", "早安！先喝杯水再开始吧", "新的一天，我陪你一起"],
-        noon: ["到中午啦，记得吃饭休息", "午安，眼睛累了就看看远处", "吃完饭可以眯一会儿，我守着你"],
-        afternoon: ["坐久了，起来活动一下吧", "喝口水，伸个懒腰再继续", "我刚在梦里追到尾巴了"],
-        evening: ["晚上好，今天辛苦啦", "忙了一天，记得夸夸自己", "晚饭吃了吗？别饿着"],
-        night: ["夜深了，早点休息好不好", "还不睡吗？我陪你一小会儿", "熬夜伤身，明天的事明天再做"],
-        generic: ["记得喝水哦", "窗外的云好像小鱼干", "我在练习新动作，猜猜是什么", "今天也要开开心心的", "尾巴今天也很听话"],
-        close: ["最喜欢和你待在一起了", "你忙完了要陪我玩哦", "悄悄说：你是我最喜欢的人"],
-        dream: ["呼……小鱼干……别跑……", "嘿嘿……摸摸……", "Zzz……再睡五分钟……", "尾巴……是我的……"],
-        hungry: ["肚子咕咕叫了……", "有小鱼干吗？就一口", "饿饿，想吃小鱼干"],
-        focus: ["嘘，我在陪你专注", "专注的样子最认真了", "这一段快结束了，加油"],
-      };
       var WA_CHATTER = {
         morning: ["晨光熹微，云海初开，早上好呀", "早安，莲灯陪了我一夜，也陪你开始新的一天", "新的一日，愿你有如沐春风的好运气"],
         noon: ["日上中天，该用午膳啦", "午间小憩片刻，我替你守着莲灯", "吃饱了才有力气走接下来的路"],
@@ -2869,6 +2988,42 @@
         dream: ["唔……补天……还差一块石头……", "莲子羹……再来一碗……", "Zzz……云朵软软的……", "尾巴……别缠住莲灯……"],
         hungry: ["肚子有点空空的……", "有莲子或者仙桃吗？就一颗", "饿了，想吃甜甜的仙桃"],
         focus: ["嘘，我提着灯陪你专注", "专注的模样，有上古贤者的风范", "这一段快结束了，稳住心神"],
+      };
+      var CHAN_CHATTER = {
+        morning: ["晨钟初响，早课开始啦，早上好呀", "早安，翅膀晒晒太阳，一天都精神", "新的一日，愿你心安如止水"],
+        noon: ["日上中天，该用午膳啦", "午间打坐片刻，我替你守着禅杖", "吃饱了才有力气走接下来的路"],
+        afternoon: ["云卷云舒，坐久了就起来走走", "喝口水，听听风过竹林", "方才有只小蝶，绕着莲冠飞了三圈"],
+        evening: ["暮鼓声声，花蜜也收好了", "忙了一整天，辛苦了", "晚饭要用些好的，别亏待自己"],
+        night: ["夜深了，禅房的灯都熄了，你也早点歇息", "月亮升上来了，该安睡了", "熬夜伤神，明日再继续吧"],
+        generic: ["记得喝水哦", "我的翅膀今天格外亮", "禅杖上的环，又多了回响", "愿你所行皆坦途", "山那头，好像有钟声传来"],
+        close: ["最喜欢陪着你了", "你忙完，要听我讲取经的故事哦", "悄悄说：你是我最想守护的人"],
+        dream: ["唔……经书……还没念完……", "花蜜……再来一勺……", "Zzz……莲台软软的……", "翅膀……别压着禅杖……"],
+        hungry: ["肚子有点空空的……", "有花蜜吗？就一勺", "饿了，想喝甜甜的花蜜"],
+        focus: ["嘘，我收起翅膀陪你专注", "专注的模样，有高僧入定的风范", "这一段快结束了，稳住心神"],
+      };
+      var SHU_CHATTER = {
+        morning: ["晨光熹微，鬼火也歇了，早上好呀", "早安，一日之计在于晨，先读两页书", "新的一日，愿你下笔如有神"],
+        noon: ["日上中天，该用午膳啦", "午间小憩片刻，我替你守着书箱", "吃饱了才有力气走接下来的路"],
+        afternoon: ["云卷云舒，坐久了就起来走走", "喝口水，看看远处的星河", "方才有颗流星，长得像支毛笔"],
+        evening: ["暮色四合，鬼火亮起来啦", "忙了一整天，辛苦了", "晚饭要用些好的，别亏待自己"],
+        night: ["夜深了，正是夜读的好时辰——但你该睡了", "星河都垂下来了，早点歇息吧", "熬夜伤神，明日再继续吧"],
+        generic: ["记得喝水哦", "我的书箱又添了两本好书", "鬼火今天格外听话", "愿你文思如泉涌", "幽冥那头，好像有诗会要开"],
+        close: ["最喜欢陪着你了", "你忙完，要听我讲幽冥的奇闻哦", "悄悄说：你是我最想守护的人"],
+        dream: ["唔……这首诗……还没写完……", "桂花糕……再来一块……", "Zzz……书页软软的……", "鬼火……别烧着书箱……"],
+        hungry: ["肚子有点空空的……", "有桂花糕吗？就一块", "饿了，想吃阳间的点心"],
+        focus: ["嘘，我点着鬼火陪你专注", "专注的模样，有状元苦读的风范", "这一段快结束了，稳住心神"],
+      };
+      var LE_CHATTER = {
+        morning: ["晨光熹微，莲瓣初开，早上好呀", "早安，花香陪了我一夜，也陪你开始新的一天", "新的一日，愿你有如沐春风的好运气"],
+        noon: ["日上中天，该用午膳啦", "午间小憩片刻，我替你守着莲台", "吃饱了才有力气走接下来的路"],
+        afternoon: ["云卷云舒，坐久了就起来走走", "喝口水，看看远处的花海", "方才有只小蜂，在花扇上歇了脚"],
+        evening: ["暮色四合，莲台泛起微光啦", "忙了一整天，辛苦了", "晚饭要用些好的，别亏待自己"],
+        night: ["夜深了，花都合上了，你也早点歇息", "月光落在裙摆上，该安睡了", "熬夜伤神，明日再继续吧"],
+        generic: ["记得喝水哦", "我的裙摆今天格外飘逸", "莲台的花瓣又开了一层", "愿你所到之处花开满路", "云海那头，好像有花香飘来"],
+        close: ["最喜欢陪着你了", "你忙完，要听我讲天宫的花会哦", "悄悄说：你是我最想守护的人"],
+        dream: ["唔……花会……还没跳完……", "百花蜜……再来一勺……", "Zzz……莲心软软的……", "裙摆……别缠住莲台……"],
+        hungry: ["肚子有点空空的……", "有百花蜜吗？就一勺", "饿了，想吃甜甜的花蜜"],
+        focus: ["嘘，我摇着花扇陪你专注", "专注的模样，有仙子临凡的风范", "这一段快结束了，稳住心神"],
       };
       function petPickLine(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
       function petTimeBucket() {
@@ -3000,7 +3155,7 @@
           }
         }
       }
-      /* Todo completed → the fox hops once to celebrate. */
+      /* Todo completed → the pet hops once to celebrate. */
       function petCelebrateJump() {
         if (!pet || pet.hidden || pet.sleeping) return;
         petAct("act-hop", 580);
@@ -3008,7 +3163,7 @@
         petSfx("jump");
       }
 
-      /* ---------- double-click freeze: stop / resume the stroll ---------- */
+      /* ---------- double-click freeze: stop / resume the drift ---------- */
       function petToggleFreeze() {
         if (pet.sleeping) petWake(true);
         pet.frozen = !pet.frozen;
@@ -3295,14 +3450,13 @@
       }
 
       /* ---------- ambient walking ----------
-         The fox strolls along the bottom around its home spot: it picks
-         a random target inside its roam range, walks to it, often pauses
-         for a few seconds, and turns around (facing flips) at the range
-         edges and whenever the next leg heads the other way. The range
-         is clamped so the fox never walks off-screen. While it is
-         actually stepping, the root carries .walking, which runs the
-         quadruped gait (diagonal leg pairs, body bob, steady head) and
-         quickens the tail wave. Double-click freezes the stroll
+         小娲 drifts along the bottom around her home spot: she picks
+         a random target inside her roam range, floats to it, often
+         pauses for a few seconds, and turns around (facing flips) at
+         the range edges and whenever the next leg heads the other way.
+         The range is clamped so she never drifts off-screen. While she
+         is actually moving, the root carries .walking. Double-click
+         freezes the drift
          (pet.frozen); reduced motion stops it too. */
       var petWalk = { x: 0, target: 34, facing: 1, pauseUntil: 0 };
       var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -3433,96 +3587,83 @@
         petSay("我长大啦！", 3200);
       }
 
-      /* ---------- switching pets: 换着养，一次一只 ----------
-         The outgoing pet puffs away in a little cloud of smoke, the
-         incoming one materialises the same way. Each species' state
-         was already saved under its own key, so nothing is shared:
-         stage, bonus, intimacy, satiety, hidden flag and position all
-         stay exactly where that pet left them. */
-      function petSmoke() {
-        var el = petEl();
-        if (!el || reduceMotion) return;
-        for (var i = 0; i < 7; i++) {
+      /* ---------- switching pets: one at a time, smoke transition ----------
+         The outgoing pet's state is saved under its own key first, then
+         a puff of smoke covers the swap; the incoming pet loads its own
+         save (stage, intimacy, satiety, hidden, position all its own)
+         and the active-pet pointer remembers who is out for next time. */
+      var petSwitching = false;
+      function petSmokePuffs(el) {
+        for (var i = 0; i < 8; i++) {
           var puff = document.createElement("div");
           puff.className = "pet-smoke";
-          puff.style.setProperty("--dx", Math.round((Math.random() - 0.5) * 64) + "px");
-          puff.style.setProperty("--dy", Math.round(-14 - Math.random() * 30) + "px");
+          puff.style.setProperty("--sx", Math.round((Math.random() - 0.5) * 64) + "px");
           puff.style.left = (38 + Math.random() * 24) + "%";
+          puff.style.bottom = (18 + Math.random() * 30) + "px";
           puff.style.animationDelay = (Math.random() * 0.16).toFixed(2) + "s";
           el.appendChild(puff);
           (function (node) {
-            window.setTimeout(function () { if (node.parentNode) node.parentNode.removeChild(node); }, 1250);
+            window.setTimeout(function () { if (node.parentNode) node.parentNode.removeChild(node); }, 950);
           })(puff);
         }
       }
-      function petSwitchTo(next) {
-        if (!SPECIES[next] || next === petSpecies) return;
-        savePet();
+      function petSwitchTo(id) {
+        if (petSwitching || !PET_SPECIES[id] || id === PET_CFG.id) {
+          setPetPanel(false);
+          return;
+        }
+        petSwitching = true;
         setPetMenu(false);
         setPetPanel(false);
         petStopPhysics();
-        var wasHidden = pet.hidden;
-        function doSwap() {
-          petSpecies = next;
-          try { localStorage.setItem(PET_ACTIVE_KEY, next); } catch (e) { /* storage unavailable */ }
-          pet = loadPet(next);
+        savePet(); /* the outgoing pet keeps everything it earned */
+        var el = petEl();
+        if (el && !reduceMotion) {
+          el.classList.add("switching");
+          petSmokePuffs(el);
+        }
+        window.setTimeout(function () {
+          setActiveSpecies(id);
+          try { localStorage.setItem(PET_ACTIVE_KEY, id); } catch (e) { /* storage unavailable */ }
+          pet = loadPet();
           applySpeciesTables();
           petDecaySatiety();
-          savePet();
+          petDizzy = false;
           petFace = "normal";
           if (petFaceTimer) { window.clearTimeout(petFaceTimer); petFaceTimer = null; }
-          petDizzy = false;
+          petSitting = false;
+          petActing = false;
           petPokeCount = 0;
-          petNotifyJumpedKey = "";
           petWalk.x = 0;
           petPickWalkTarget();
-          petLastActAt = Date.now();
-          petLastChatAt = Date.now();
           petLastTouchAt = Date.now();
+          petLastActAt = Date.now();
+          savePet();
           renderPet();
-          petSmoke();
           checkEvolution();
-          if (!pet.hidden) {
-            var firstMeet = !pet.greeted;
-            if (firstMeet) {
-              pet.greeted = true;
-              pet.lastGreetDay = todayStr();
-              savePet();
-            }
-            window.setTimeout(function () {
-              if (!pet || pet.hidden || pet.sleeping) return;
-              petSay(firstMeet ? SP().says.greetFirst : "我来啦，今天也一起玩", firstMeet ? 3600 : 2600);
-            }, 480);
+          petSwitching = false;
+          if (!pet.hidden && !pet.sleeping) {
+            petSay(SP().says.comeSay, 2800);
           }
-        }
-        if (!wasHidden && petEl()) {
-          petSmoke();
-          window.setTimeout(doSwap, 430);
-        } else {
-          doSwap();
-        }
+        }, reduceMotion ? 60 : 470);
       }
 
       /* ---------- pet init ---------- */
       function petInit() {
-        loadPetRoster();
+        /* Four pets, one at a time. The active-pet pointer says who
+           was out last (default 小娲）; each pet's own save is loaded
+           untouched. The fox's old saves are cleared for good — she
+           is not in the roster — and a stale pointer to anything
+           unknown falls back to 小娲. */
+        var startId = "wa";
         try {
-          var savedSpecies = localStorage.getItem(PET_ACTIVE_KEY);
-          if (savedSpecies === "wa" || savedSpecies === "fox") petSpecies = savedSpecies;
-        } catch (e) { /* storage unavailable — start with the fox */ }
-        /* Who comes out today: a lock wins outright; otherwise, with
-           随机换宠 on (and unlocked), the first open of each day picks
-           one of the two at random; otherwise the last companion
-           stays — 阿绒 by default — and never swaps on its own. */
-        if (petRoster.lock) {
-          petSpecies = petRoster.lock;
-        } else if (petRoster.random && petRosterUnlocked() && petRoster.lastRandomDay !== todayStr()) {
-          petSpecies = Math.random() < 0.5 ? "fox" : "wa";
-          petRoster.lastRandomDay = todayStr();
-          savePetRoster();
-        }
-        try { localStorage.setItem(PET_ACTIVE_KEY, petSpecies); } catch (e) { /* storage unavailable */ }
-        pet = loadPet(petSpecies);
+          localStorage.removeItem("daymark-pet-v1");
+          localStorage.removeItem("daymark-pet-roster-v1");
+          var savedActive = localStorage.getItem(PET_ACTIVE_KEY);
+          if (savedActive && PET_SPECIES[savedActive]) startId = savedActive;
+        } catch (e) { /* storage unavailable */ }
+        setActiveSpecies(startId);
+        pet = loadPet();
         applySpeciesTables();
         petDecaySatiety();
         savePet();
@@ -3538,7 +3679,7 @@
           updatePetSign();
           if (petPanelOpen) setPetPanel(true);
         }, 60000);
-        /* Entrance greeting: the very first visit introduces the fox;
+        /* Entrance greeting: the very first visit introduces 小娲;
            after that, the first open of each day gets a wave and a
            time-of-day hello (once per day, persisted via lastGreetDay). */
         var firstEver = !pet.greeted;
