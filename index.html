@@ -130,6 +130,38 @@
         color: rgba(255, 255, 255, 0.7); text-shadow: 0 1px 10px rgba(9, 20, 32, 0.55);
       }
 
+      /* ---------- 夜读 (top-right, under the date block) ---------- */
+      .nightread { margin-top: 14px; display: flex; justify-content: flex-end; }
+      .nightread[hidden] { display: none; }
+      .nr-card {
+        display: flex; align-items: flex-start; gap: 12px;
+        max-width: min(92vw, 400px); cursor: pointer; text-align: left;
+        border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 16px;
+        background: rgba(12, 22, 34, 0.42);
+        padding: 12px 16px;
+        box-shadow: 0 4px 18px rgba(9, 20, 32, 0.25);
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        color: #fff;
+      }
+      .nr-card:hover { background: rgba(12, 22, 34, 0.55); }
+      .nr-card:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.85); outline-offset: 2px; }
+      .nr-main { min-width: 0; }
+      .nr-label { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; color: #ffb340; }
+      .nr-title { margin: 4px 0 0; font-size: 15px; font-weight: 600; line-height: 1.45; }
+      .nr-summary {
+        margin: 3px 0 0; font-size: 13px; color: rgba(255, 255, 255, 0.85);
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px;
+      }
+      .nr-source { margin: 5px 0 0; font-size: 11px; color: rgba(255, 255, 255, 0.65); }
+      .nr-play {
+        flex-shrink: 0; width: 34px; height: 34px; margin-top: 2px; padding: 0;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.35);
+        background: rgba(255, 255, 255, 0.12); color: #fff; cursor: pointer;
+      }
+      .nr-play:hover { background: rgba(255, 255, 255, 0.24); }
+      .nr-play svg { width: 14px; height: 14px; display: block; }
+
       /* ---------- floating tool dot (iOS AssistiveTouch style) ---------- */
       .tool-dot {
         position: fixed; z-index: 30; display: block; padding: 0; border: 0;
@@ -736,6 +768,7 @@
             <p class="dateline" id="dateline"></p>
             <p class="summary" id="summary" hidden></p>
             <div class="reminder" id="reminder" hidden></div>
+            <div class="nightread" id="nightread" hidden></div>
           </div>
         </header>
       </main>
@@ -908,6 +941,250 @@
       /* Recompute day-based bits (summary / reminder) once a minute so a
          midnight rollover or a day passing updates without a reload. */
       window.setInterval(renderHeaderExtras, 60000);
+
+      /* ================= 夜读 (人民日报) =================
+         Fetched at runtime from the People's Daily app homepage
+         (https://www.peopleapp.com/home, served with
+         Access-Control-Allow-Origin: *). Its __NUXT_DATA__ payload carries
+         the latest 夜读 record: abstract, title, article id, a "13" type
+         marker, a 13-digit publish timestamp and the narration mp3.
+         The result is cached in localStorage, rechecked hourly, and the
+         block stays hidden when there is nothing to show — no error ever
+         reaches the wallpaper. */
+      var NR_KEY = "daymark-nightread-v1";
+      var NR_HOME = "https://www.peopleapp.com/home";
+      var nrEl = document.getElementById("nightread");
+      var nrAudio = null;
+      var nrPlaying = false;
+      var nrShownId = "";
+
+      function nrLoadCache() {
+        try {
+          var raw = localStorage.getItem(NR_KEY);
+          if (!raw) return null;
+          var p = JSON.parse(raw);
+          if (p && typeof p.title === "string" && p.title && typeof p.url === "string" && p.url) return p;
+        } catch (e) { /* corrupted cache — ignore */ }
+        return null;
+      }
+      function nrSaveCache(rec) {
+        try { localStorage.setItem(NR_KEY, JSON.stringify(rec)); } catch (e) { /* storage unavailable */ }
+      }
+      function nrCleanTitle(t) {
+        return String(t).replace(/^夜读\s*[|｜]\s*/, "").trim();
+      }
+      function nrPlayIcon() {
+        return '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 1.8v12.4c0 .8.9 1.3 1.6.9l8.6-6.2c.6-.4.6-1.4 0-1.8L5.6.9C4.9.5 4 1 4 1.8z"/></svg>';
+      }
+      function nrPauseIcon() {
+        return '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3.5 2h3.2v12H3.5zM9.3 2h3.2v12H9.3z"/></svg>';
+      }
+      function nrSetPlayBtn(btn) {
+        if (!btn) return;
+        btn.innerHTML = nrPlaying ? nrPauseIcon() : nrPlayIcon();
+        btn.setAttribute("aria-label", nrPlaying ? "暂停夜读朗读" : "播放夜读朗读");
+      }
+      function nrStopAudio() {
+        if (nrAudio) { try { nrAudio.pause(); } catch (e) { /* ignore */ } }
+        nrPlaying = false;
+      }
+      function nrToggleAudio(rec, btn) {
+        if (!rec.audio) return;
+        if (!nrAudio) {
+          nrAudio = new Audio();
+          nrAudio.addEventListener("ended", function () {
+            nrPlaying = false;
+            nrSetPlayBtn(document.getElementById("nr-play"));
+          });
+        }
+        if (nrPlaying) {
+          nrStopAudio();
+          nrSetPlayBtn(btn);
+          return;
+        }
+        if (nrAudio.getAttribute("src") !== rec.audio) nrAudio.src = rec.audio;
+        var p = nrAudio.play();
+        nrPlaying = true;
+        nrSetPlayBtn(btn);
+        if (p && typeof p.catch === "function") {
+          p.catch(function () {
+            nrPlaying = false;
+            nrSetPlayBtn(document.getElementById("nr-play"));
+          });
+        }
+      }
+      function nrRender(rec) {
+        if (!rec || !rec.title || !rec.url) {
+          nrEl.hidden = true;
+          nrEl.innerHTML = "";
+          nrShownId = "";
+          return;
+        }
+        /* Same article already on screen: keep it (and any playing audio). */
+        if (rec.id && rec.id === nrShownId && !nrEl.hidden) return;
+        nrStopAudio();
+        var d = rec.ts ? new Date(rec.ts) : new Date();
+        var label = "夜读 · " + (d.getMonth() + 1) + "月" + d.getDate() + "日";
+        var html = "";
+        html += '<div class="nr-card" role="link" tabindex="0" aria-label="打开人民日报夜读：' +
+          esc(nrCleanTitle(rec.title)) + '">';
+        html += '<div class="nr-main">';
+        html += '<p class="nr-label">' + esc(label) + "</p>";
+        html += '<p class="nr-title">' + esc(nrCleanTitle(rec.title)) + "</p>";
+        if (rec.summary) html += '<p class="nr-summary">' + esc(rec.summary) + "</p>";
+        html += '<p class="nr-source">来源：人民日报</p>';
+        html += "</div>";
+        if (rec.audio) {
+          html += '<button type="button" class="nr-play" id="nr-play" aria-label="播放夜读朗读">' +
+            nrPlayIcon() + "</button>";
+        }
+        html += "</div>";
+        nrEl.hidden = false;
+        nrEl.innerHTML = html;
+        nrShownId = rec.id || "";
+        var open = function () { window.open(rec.url, "_blank", "noopener"); };
+        var card = nrEl.querySelector(".nr-card");
+        card.addEventListener("click", open);
+        card.addEventListener("keydown", function (ev) {
+          if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); open(); }
+        });
+        var btn = document.getElementById("nr-play");
+        if (btn) {
+          btn.addEventListener("click", function (ev) {
+            ev.stopPropagation();
+            nrToggleAudio(rec, btn);
+          });
+        }
+      }
+
+      function nrIsTitle(s) {
+        return typeof s === "string" && s.length < 200 && /夜读\s*[|｜]/.test(s);
+      }
+      /* Primary parse: scan the flattened __NUXT_DATA__ array for 夜读
+         titles. The record layout around a title is: abstract just
+         before it, then "文章id","13","13位发布时间戳" right after it;
+         the narration mp3 sits a little earlier, referenced by a nearby
+         {audioUrl: n} / {voiceUrl: n} object whose value indexes the
+         mp3 string in the same array. Pick the latest publish time. */
+      function nrFromArray(arr) {
+        var best = null;
+        for (var i = 0; i < arr.length; i++) {
+          if (!nrIsTitle(arr[i])) continue;
+          var rec = { title: arr[i], summary: "", id: "", ts: 0, audio: "" };
+          if (typeof arr[i + 1] === "string" && /^\d{8,12}$/.test(arr[i + 1]) &&
+              String(arr[i + 2]) === "13" && /^\d{13}$/.test(String(arr[i + 3]))) {
+            rec.id = arr[i + 1];
+            rec.ts = Number(arr[i + 3]);
+          }
+          var lo = Math.max(0, i - 18);
+          var hi = Math.min(arr.length - 1, i + 18);
+          var j, v;
+          var audioCands = [];
+          for (j = lo; j <= hi; j++) {
+            v = arr[j];
+            if (typeof v === "number" && v > 1e12 && v < 1e14 && v > rec.ts) rec.ts = v;
+            if (typeof v === "string") {
+              if (/^\d{13}$/.test(v) && Number(v) > rec.ts) rec.ts = Number(v);
+              if (!rec.id && /^\d{8,12}$/.test(v)) rec.id = v;
+            }
+            if (v && typeof v === "object" && !Array.isArray(v)) {
+              var ref = typeof v.audioUrl === "number" ? v.audioUrl :
+                        typeof v.voiceUrl === "number" ? v.voiceUrl : -1;
+              if (ref >= 0 && typeof arr[ref] === "string" && /\.mp3($|\?)/.test(arr[ref])) {
+                audioCands.push({ url: arr[ref], at: j });
+              }
+            }
+          }
+          /* Neighbouring articles contribute their own voice objects to
+             the window; the 夜读 narration is the full-length file
+             (…/vod/content/output/…_opt.mp3), so prefer that, then the
+             first candidate belonging to this record (at/after title). */
+          for (j = 0; j < audioCands.length; j++) {
+            if (audioCands[j].url.indexOf("/output/") >= 0) { rec.audio = audioCands[j].url; break; }
+          }
+          if (!rec.audio) {
+            for (j = 0; j < audioCands.length; j++) {
+              if (audioCands[j].at >= i) { rec.audio = audioCands[j].url; break; }
+            }
+          }
+          if (!rec.audio && audioCands.length) rec.audio = audioCands[0].url;
+          for (j = i - 1; j >= lo; j--) {
+            v = arr[j];
+            if (typeof v === "string" && v.length >= 4 && v.length <= 140 &&
+                !/^https?:/.test(v) && !/^\d+$/.test(v) && !nrIsTitle(v)) {
+              rec.summary = v;
+              break;
+            }
+          }
+          if (!best || rec.ts > best.ts) best = rec;
+        }
+        return best;
+      }
+      /* Fallback parse: quoted "夜读 | …" strings in the raw HTML, with the
+         "id","13",timestamp triple searched in the surrounding text. */
+      function nrFromText(html) {
+        var best = null;
+        var re = /"((?:[^"\\]|\\.)*夜读\s*[|｜](?:[^"\\]|\\.)*)"/g;
+        var m;
+        while ((m = re.exec(html)) !== null) {
+          var title = m[1];
+          try { title = JSON.parse('"' + m[1] + '"'); } catch (e) { /* keep raw */ }
+          if (typeof title !== "string" || !title) continue;
+          var rec = { title: title, summary: "", id: "", ts: 0, audio: "" };
+          var tail = html.slice(m.index, m.index + 300);
+          var idm = tail.match(/"(\d{8,12})"\s*,\s*"?13"?\s*,\s*"(\d{13})"/) ||
+                    html.slice(Math.max(0, m.index - 500), m.index + 2000)
+                      .match(/"(\d{8,12})"\s*,\s*"?13"?\s*,\s*"?(\d{13})"?/);
+          if (idm) { rec.id = idm[1]; rec.ts = Number(idm[2]); }
+          /* The full narration file (…/vod/content/output/…_opt.mp3) sits
+             shortly before the title; per-voice segment mp3s are not it. */
+          var mp3s = html.slice(Math.max(0, m.index - 2500), m.index + 500)
+            .match(/https?:[^"\s\\]+?\.mp3/g) || [];
+          for (var q = mp3s.length - 1; q >= 0; q--) {
+            if (mp3s[q].indexOf("/output/") >= 0) { rec.audio = mp3s[q]; break; }
+          }
+          var sm = html.slice(Math.max(0, m.index - 300), m.index)
+            .match(/"((?:[^"\\]|\\.){4,140})"\s*,\s*$/);
+          if (sm) {
+            try { rec.summary = JSON.parse('"' + sm[1] + '"'); } catch (e) { rec.summary = sm[1]; }
+          }
+          if (!best || rec.ts > best.ts) best = rec;
+        }
+        if (best) return best;
+        /* Last resort: a bare 夜读 title in the page text, no id known. */
+        var bm = html.match(/夜读\s*[|｜][^<"\n]{4,100}/);
+        if (bm) return { title: bm[0], summary: "", id: "", ts: 0, audio: "" };
+        return null;
+      }
+      function nrFetch() {
+        if (typeof fetch !== "function") return;
+        fetch(NR_HOME, { credentials: "omit" }).then(function (r) {
+          if (!r.ok) throw new Error("night-read fetch failed");
+          return r.text();
+        }).then(function (html) {
+          var rec = null;
+          var dm = html.match(/<script[^>]*id="__NUXT_DATA__"[^>]*>([\s\S]*?)<\/script>/);
+          if (dm) {
+            try {
+              var arr = JSON.parse(dm[1]);
+              if (Array.isArray(arr)) rec = nrFromArray(arr);
+            } catch (e) { /* fall through to the text parse */ }
+          }
+          if (!rec) rec = nrFromText(html);
+          if (rec && rec.title) {
+            rec.url = rec.id ? "https://www.peopleapp.com/?id=" + rec.id : NR_HOME;
+            if (!rec.ts) rec.ts = Date.now();
+            nrSaveCache(rec);
+            nrRender(rec);
+          }
+          /* On any failure above, whatever is already shown (the cached
+             record) simply stays — nothing is reported on the wallpaper. */
+        }).catch(function () { /* keep the cached record, stay silent */ });
+      }
+
+      nrRender(nrLoadCache());
+      nrFetch();
+      window.setInterval(nrFetch, 3600000);
 
       /* ================= app state ================= */
       var uiRoot = document.getElementById("ui-root");
