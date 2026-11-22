@@ -145,6 +145,14 @@
         transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease, background 0.2s ease;
       }
       .tool-dot:hover .dot-face { background: rgba(16, 26, 38, 0.58); }
+      /* Unread countdown reminder badge on the floating dot. */
+      .dot-badge {
+        position: absolute; top: 0; right: 0; z-index: 1;
+        width: 12px; height: 12px; border-radius: 999px; display: none;
+        background: #ff6b6b; border: 2px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 1px 6px rgba(8, 16, 26, 0.4);
+      }
+      .dot-badge.show { display: block; animation: pet-dot-pulse 1.5s ease-in-out infinite; }
 
       /* ---------- ring menu ---------- */
       .ring-overlay {
@@ -173,6 +181,11 @@
       }
       .ring-tool .t-label { font-size: 14px; font-weight: 600; }
       .ring-tool .t-hint { font-size: 11px; color: rgba(255, 255, 255, 0.85); }
+      /* Live pet-status dot pinned to the 桌宠 sector. */
+      .ring-pet-dot {
+        position: absolute; top: 0; right: 16px;
+        width: 9px; height: 9px;
+      }
       .ring-hub {
         position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
         width: 104px; height: 104px; border-radius: 999px; padding: 0;
@@ -585,20 +598,10 @@
         .pet.sitting .pet-sprite { background-position: 0 -791px; }
       }
 
-      /* ---------- pet upgrade: status pill, panel, extra actions ---------- */
-      .pet-status {
-        position: absolute; bottom: 108px; left: 50%; transform: translateX(-50%);
-        z-index: 2; max-width: 200px; padding: 3px 10px 3px 8px; border-radius: 999px;
-        display: flex; align-items: center; gap: 5px;
-        border: 1px solid rgba(255, 255, 255, 0.65);
-        background: rgba(255, 252, 246, 0.48); color: #4c3f31;
-        box-shadow: 0 3px 12px rgba(9, 20, 32, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-        backdrop-filter: blur(12px) saturate(1.35); -webkit-backdrop-filter: blur(12px) saturate(1.35);
-        font-size: 10.5px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap;
-        overflow: hidden; text-overflow: ellipsis; cursor: pointer;
-        transition: bottom 0.25s ease, background 0.2s ease;
-      }
-      .pet-status:hover { background: rgba(255, 252, 246, 0.66); }
+      /* ---------- pet upgrade: panel, extra actions ---------- */
+      /* The pet's status now lives in the ring menu: a coloured dot on
+         the 桌宠 sector (see .ring-pet-dot) and a red badge on the
+         floating dot for unread countdown reminders. */
       .pet-dot {
         width: 6px; height: 6px; border-radius: 999px; flex-shrink: 0;
         background: #8fc1ff; box-shadow: 0 0 6px 2px rgba(143, 193, 255, 0.5);
@@ -611,7 +614,6 @@
         0%, 100% { box-shadow: 0 0 4px 1px rgba(255, 157, 157, 0.55); }
         50% { box-shadow: 0 0 8px 4px rgba(255, 157, 157, 0.26); }
       }
-      .pet.has-sign .pet-status { bottom: 146px; }
       .pet.has-sign .pet-say { bottom: 174px; }
       .pet.held .pet-fig { transform: rotate(-6deg) translateY(-3px); }
       .pet.sleeping .pet-fig { transform: translateY(3px); }
@@ -910,12 +912,13 @@
       /* ================= app state ================= */
       var uiRoot = document.getElementById("ui-root");
       var ringOpen = false;
-      var activeTool = null; /* "timer" | "todos" | "days" | null */
+      var activeTool = null; /* "timer" | "todos" | "days" | null ("pet" opens the pet panel instead) */
 
       var TOOLS = [
         { id: "timer", label: "番茄钟", hint: "专注计时", color: "var(--accent)", colorRaw: "#d13438" },
         { id: "todos", label: "待办", hint: "清单", color: "var(--blue)", colorRaw: "#0067c0" },
         { id: "days", label: "重要日子", hint: "倒计时", color: "var(--orange)", colorRaw: "#ca5010" },
+        { id: "pet", label: "桌宠", hint: "状态与互动", color: "#e7a6bb", colorRaw: "#b84a6e" },
       ];
       function toolById(id) {
         for (var i = 0; i < TOOLS.length; i++) if (TOOLS[i].id === id) return TOOLS[i];
@@ -927,6 +930,9 @@
         }
         if (id === "todos") {
           return '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6.5l1.6 1.6L8.5 5M4 12.5l1.6 1.6L8.5 11M4 18.5l1.6 1.6L8.5 17M11.5 6.5H20M11.5 12.5H20M11.5 18.5H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        }
+        if (id === "pet") {
+          return '<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="7" cy="7.6" r="2.1"/><circle cx="12" cy="5.4" r="2.2"/><circle cx="17" cy="7.6" r="2.1"/><circle cx="5.4" cy="12.4" r="1.9"/><circle cx="18.6" cy="12.4" r="1.9"/><path d="M12 11.2c2.9 0 5.3 2.3 5.3 4.7 0 1.9-1.5 3.1-3.4 3.1-0.7 0-1.2-0.2-1.9-0.2s-1.2 0.2-1.9 0.2c-1.9 0-3.4-1.2-3.4-3.1 0-2.4 2.4-4.7 5.3-4.7z"/></svg>';
         }
         return '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 9.8h17M8 3v3.4M16 3v3.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8.2 16.2l2.4 2.4 4.6-4.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       }
@@ -953,6 +959,20 @@
         /* Opening 重要日子 acknowledges 小娲's unread countdown reminder. */
         if (id === "days") petAckNotify();
         renderUI();
+      }
+      /* The 桌宠 sector does not open a tool panel: it closes the ring
+         and opens the pet's own status panel above the pet instead. */
+      function openPetFromRing() {
+        ringOpen = false; activeTool = null;
+        renderUI();
+        if (typeof pet === "undefined" || !pet) return;
+        if (pet.hidden) {
+          pet.hidden = false;
+          savePet();
+          renderPet();
+        }
+        setPetMenu(false);
+        setPetPanel(true);
       }
 
       /* ================= floating tool dot =================
@@ -1002,11 +1022,11 @@
       }
       function dotHTML() {
         return '<button type="button" class="tool-dot" id="tool-dot" ' +
-          'aria-label="打开工具圆环：番茄钟、待办、重要日子（可拖动，松手自动贴边隐藏）" aria-haspopup="menu" ' +
+          'aria-label="打开工具圆环：番茄钟、待办、重要日子、桌宠（可拖动，松手自动贴边隐藏）" aria-haspopup="menu" ' +
           'style="left:' + dotState.pos.x + "px;top:" + dotState.pos.y + "px;width:" + DOT_SIZE + "px;height:" + DOT_SIZE + 'px;cursor:grab">' +
           '<span class="dot-face" style="transform:' + dotShift() + ";opacity:" + (dotState.dock ? "0.6" : "0.9") + '">' +
           '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="5.2" r="1.6" fill="currentColor"/><circle cx="17.9" cy="15.4" r="1.6" fill="currentColor"/><circle cx="6.1" cy="15.4" r="1.6" fill="currentColor"/></svg>' +
-          "</span></button>";
+          '</span><span class="dot-badge' + (petNotifyActive() ? " show" : "") + '" id="dot-badge" aria-hidden="true"></span></button>';
       }
       function wireDot() {
         var btn = document.getElementById("tool-dot");
@@ -1099,7 +1119,7 @@
       dotState = loadDotState();
 
       /* ================= ring menu =================
-         Pie-menu pattern: direction-based 120° slices, centre dead-zone
+         Pie-menu pattern: direction-based 90° slices, centre dead-zone
          cancel, dimming overlay that click-closes, staggered pop-in. */
       var ringHovered = null;
       function wedgePath(cx, cy, rOuter, rInner, a0, a1) {
@@ -1121,8 +1141,8 @@
         html += '<div class="ring" id="ring" role="menu" aria-label="选择工具">';
         html += '<svg class="ring-svg" viewBox="0 0 ' + SIZE + " " + SIZE + '" aria-hidden="true">';
         TOOLS.forEach(function (tool, i) {
-          var a0 = -90 + i * 120 + 3;
-          var a1 = -90 + (i + 1) * 120 - 3;
+          var a0 = -90 + i * 90 + 3;
+          var a1 = -90 + (i + 1) * 90 - 3;
           html += '<g class="ring-wedge" style="animation-delay:' + (i * 0.12) + 's">';
           html += '<path class="wedge-fill" data-tool="' + tool.id + '" d="' +
             wedgePath(C, C, 166, 64, a0, a1) + '" fill="' + tool.colorRaw + '" opacity="0.55" style="transition:opacity 0.15s ease"/>';
@@ -1133,18 +1153,21 @@
         });
         html += "</svg>";
         TOOLS.forEach(function (tool, i) {
-          var mid = ((-90 + i * 120 + 60) * Math.PI) / 180;
+          var mid = ((-90 + i * 90 + 45) * Math.PI) / 180;
           var left = 50 + 33.8 * Math.cos(mid);
           var top = 50 + 33.8 * Math.sin(mid);
           html += '<button type="button" class="ring-tool" role="menuitem" data-tool="' + tool.id +
             '" aria-label="打开' + tool.label + '" style="left:' + left + "%;top:" + top + '%">' +
             toolIcon(tool.id) +
+            (tool.id === "pet"
+              ? '<span class="pet-dot ring-pet-dot ' + petStatusDot() + '" id="ring-pet-dot" aria-hidden="true"></span>'
+              : "") +
             '<span class="t-label">' + tool.label + '</span><span class="t-hint">' + tool.hint + "</span></button>";
         });
         html += '<button type="button" class="ring-hub" id="ring-hub" aria-label="取消，回到壁纸">' +
           '<span class="hub-clock">' + clockText() + '</span><span class="hub-sub">选择工具</span></button>';
         html += "</div>";
-        html += '<p class="ring-keys">按 1 / 2 / 3 快速打开 · Esc 关闭</p>';
+        html += '<p class="ring-keys">按 1 / 2 / 3 / 4 快速打开 · Esc 关闭</p>';
         html += "</div>";
         return html;
       }
@@ -1181,13 +1204,16 @@
           if (Math.hypot(dx, dy) < rect.width * 0.17) { setRingHover(null); return; }
           var deg = (Math.atan2(dy, dx) * 180) / Math.PI;
           var sector = ((deg + 90) % 360 + 360) % 360;
-          var tool = TOOLS[Math.floor(sector / 120)];
+          var tool = TOOLS[Math.floor(sector / 90)];
           setRingHover(tool ? tool.id : null);
         });
         ring.addEventListener("pointerleave", function () { setRingHover(null); });
         Array.prototype.forEach.call(ring.querySelectorAll(".ring-tool"), function (btn) {
           var id = btn.getAttribute("data-tool");
-          btn.addEventListener("click", function () { openPanel(id); });
+          btn.addEventListener("click", function () {
+            if (id === "pet") openPetFromRing();
+            else openPanel(id);
+          });
           btn.addEventListener("mouseenter", function () { setRingHover(id); });
           btn.addEventListener("focus", function () { setRingHover(id); });
         });
@@ -1625,14 +1651,17 @@
       }
 
       /* ================= global keys =================
-         Esc closes ring/panel; 1/2/3 pick a tool while the ring is open;
+         Esc closes ring/panel; 1/2/3/4 pick a tool while the ring is open;
          timer shortcuts (Space / R / S) live only while the timer is open. */
       window.addEventListener("keydown", function (e) {
         if (ringOpen) {
           if (e.key === "Escape") { closeAll(); return; }
-          if (e.key === "1" || e.key === "2" || e.key === "3") {
+          if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
             var tool = TOOLS[Number(e.key) - 1];
-            if (tool) openPanel(tool.id);
+            if (tool) {
+              if (tool.id === "pet") openPetFromRing();
+              else openPanel(tool.id);
+            }
           }
           return;
         }
@@ -1673,7 +1702,9 @@
          celebration is unchanged.
          Upgraded behaviour (inspired by classic desktop pets): a weighted
          random action pool, fling physics with gravity and squash, poke
-         reactions by mood, idle chatter, a persistent status line, sleep
+         reactions by mood, idle chatter, a status dot on the ring menu's
+         桌宠 sector (plus a red badge on the floating dot for unread
+         countdown reminders), sleep
          mode, intimacy & satiety meters, a status panel, and optional
          WebAudio sound effects (off by default). State persists in
          localStorage.
@@ -2174,9 +2205,6 @@
             '，点一下和它打招呼，双击让它原地休息或继续' + SP().moveWord + '，长按或右键打开互动菜单，也可以拖动、甩出去" style="left:' + pet.x + "px;top:" + pet.y + 'px;--ps:' +
             PET_STAGES[pet.stage].scale + '">' +
             '<div class="pet-sign" id="pet-sign" hidden></div>' +
-            '<div class="pet-status" id="pet-status" role="button" tabindex="0" title="打开' + SP().name + '的菜单">' +
-              '<span class="pet-dot blue" id="pet-dot" aria-hidden="true"></span>' +
-              '<span id="pet-status-text"></span></div>' +
             '<div class="pet-say" id="pet-say" aria-live="polite"></div>' +
             '<div class="pet-menu' + (petMenuOpen ? " open" : "") + '" id="pet-menu" role="menu" aria-label="和' + SP().name + '互动">' +
               (petMenuOpen ? petMenuHTML() : "") + "</div>" +
@@ -2192,8 +2220,8 @@
         if (petMenuOpen) wirePetMenu();
         if (petPanelOpen) setPetPanel(true);
         updatePetSign();
-        petStatusCache = "";
         petDotCache = "";
+        petBadgeCache = null;
         updatePetStatus();
       }
       function petEl() { return document.getElementById("pet"); }
@@ -2256,7 +2284,7 @@
         }
       }
 
-      /* ---------- speech bubble, status line & toast ---------- */
+      /* ---------- speech bubble & toast ---------- */
       function petSay(text, ms) {
         var el = document.getElementById("pet-say");
         if (!el) return;
@@ -2273,23 +2301,12 @@
         if (petToastTimer) window.clearTimeout(petToastTimer);
         petToastTimer = window.setTimeout(function () { el.classList.remove("show"); }, ms || 4200);
       }
-      function petStatusText() {
-        if (!pet) return "";
-        if (pet.sleeping) return "睡着了 · Zzz";
-        if (petDizzy) return "晕乎乎……";
-        if (petNotifyActive()) return "有重要日子快到了";
-        if (typeof timer !== "undefined" && timer && timer.running) {
-          return timer.mode === "focus" ? "专注中 · 陪你一起" : "休息中 · 歇一会儿";
-        }
-        if (pet.frozen) return "休息中";
-        if (pet.satiety < 25) return "肚子有点饿";
-        var remaining = data.todos.filter(function (t) { return !t.done; }).length;
-        if (data.todos.length > 0 && remaining === 0) return "待办都完成啦";
-        if (Date.now() - petLastTouchAt < 180000) return "陪着你";
-        return "等你回来";
-      }
       /* Status dot: red = unread reminder, gray = sleeping,
-         green = focusing together, blue = resting / waiting. */
+         green = focusing together, blue = resting / waiting.
+         There is no status pill above the pet any more — the pet's
+         sprite rows show its state, and this dot lives on the 桌宠
+         sector of the ring menu; an unread reminder also raises a red
+         pulsing badge on the floating tool dot. */
       function petStatusDot() {
         if (!pet) return "blue";
         if (petNotifyActive()) return "red";
@@ -2297,22 +2314,21 @@
         if (typeof timer !== "undefined" && timer && timer.running && timer.mode === "focus") return "green";
         return "blue";
       }
-      var petStatusCache = "";
       var petDotCache = "";
+      var petBadgeCache = null;
       function updatePetStatus() {
-        var el = document.getElementById("pet-status");
-        if (!el || !pet) return;
-        var textEl = document.getElementById("pet-status-text");
-        var text = petStatusText();
-        if (textEl && text !== petStatusCache) {
-          petStatusCache = text;
-          textEl.textContent = text;
-        }
-        var dotEl = document.getElementById("pet-dot");
+        if (!pet) return;
         var kind = petStatusDot();
-        if (dotEl && kind !== petDotCache) {
+        if (kind !== petDotCache) {
           petDotCache = kind;
-          dotEl.className = "pet-dot " + kind;
+          var ringDot = document.getElementById("ring-pet-dot");
+          if (ringDot) ringDot.className = "pet-dot ring-pet-dot " + kind;
+        }
+        var badgeOn = petNotifyActive();
+        if (badgeOn !== petBadgeCache) {
+          petBadgeCache = badgeOn;
+          var badge = document.getElementById("dot-badge");
+          if (badge) badge.classList.toggle("show", badgeOn);
         }
       }
 
@@ -2798,21 +2814,6 @@
       function wirePet() {
         var el = petEl();
         if (!el) return;
-        var statusEl = document.getElementById("pet-status");
-        if (statusEl) {
-          statusEl.addEventListener("click", function (e) {
-            e.stopPropagation();
-            setPetPanel(false);
-            setPetMenu(!petMenuOpen);
-          });
-          statusEl.addEventListener("keydown", function (e) {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              e.stopPropagation();
-              setPetMenu(!petMenuOpen);
-            }
-          });
-        }
         var drag = null;
         var justDragged = false;
         var suppressClick = false;
@@ -2823,7 +2824,7 @@
           setPetMenu(true);
         });
         el.addEventListener("pointerdown", function (e) {
-          if (e.target.closest && (e.target.closest(".pet-menu") || e.target.closest(".pet-panel") || e.target.closest(".pet-status"))) return;
+          if (e.target.closest && (e.target.closest(".pet-menu") || e.target.closest(".pet-panel"))) return;
           petStopPhysics();
           drag = {
             pointerId: e.pointerId, startX: e.clientX, startY: e.clientY,
@@ -2900,7 +2901,7 @@
         el.addEventListener("pointerup", endDrag);
         el.addEventListener("pointercancel", endDrag);
         el.addEventListener("click", function (e) {
-          if (e.target.closest && (e.target.closest(".pet-menu") || e.target.closest(".pet-panel") || e.target.closest(".pet-status"))) return;
+          if (e.target.closest && (e.target.closest(".pet-menu") || e.target.closest(".pet-panel"))) return;
           if (suppressClick) { suppressClick = false; return; }
           if (justDragged) { justDragged = false; return; }
           /* Two clicks within 300ms freeze / resume the stroll instead
