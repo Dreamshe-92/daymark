@@ -347,7 +347,7 @@
       .day-list .today-badge { border-radius: 999px; background: var(--accent); padding: 4px 10px; font-size: 13px; font-weight: 600; color: #fff; }
       .day-list .past { font-size: 13px; color: var(--dim); }
 
-      /* ---------- desktop pet: 小娲 the little snake goddess ---------- */
+      /* ---------- desktop pets: original sprite sheets from the pet repo ---------- */
       .pet {
         position: fixed; z-index: 25; width: 104px; height: 118px;
         touch-action: none; cursor: grab; outline: none;
@@ -357,35 +357,70 @@
       .pet:focus-visible { filter: drop-shadow(0 0 6px rgba(255, 190, 90, 0.8)); }
       .pet-walk { position: absolute; left: 0; bottom: 0; width: 104px; height: 104px; will-change: transform; }
       .pet-scale { width: 100%; height: 100%; transform: scale(var(--ps, 1)); transform-origin: 50% 100%; }
-      .pet svg.fox { width: 100%; height: 100%; display: block; overflow: visible; }
-      .pet .fox-eyes { transform-box: fill-box; transform-origin: center; animation: fox-blink 4.6s infinite; }
-      @keyframes fox-blink { 0%, 91%, 100% { transform: scaleY(1); } 94.5% { transform: scaleY(0.08); } }
-      .pet .fox-aura { animation: aura-pulse 3.2s ease-in-out infinite; }
-      @keyframes aura-pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.85; } }
-      .pet .fox-breath-g { transform-box: fill-box; transform-origin: 50% 100%; animation: breath-soft 3.6s ease-in-out infinite; }
-      @keyframes breath-soft { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.022) translateY(-0.4px); } }
-      .pet .fox-fire { animation: fire-float 2.7s ease-in-out infinite; }
-      @keyframes fire-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4.5px); } }
-      .pet .fox-petal { animation: petal-fall 5.6s linear infinite; }
-      @keyframes petal-fall {
-        0% { transform: translate(0, -4px) rotate(0deg); opacity: 0; }
-        14% { opacity: 0.9; }
-        55% { transform: translate(5px, 24px) rotate(120deg); }
-        88% { opacity: 0.75; }
-        100% { transform: translate(-3px, 52px) rotate(230deg); opacity: 0; }
+      /* Sprite sheet: 1536×1872, 8 cols × 9 rows of 192×208 cells,
+         shown at 104×113 per cell (sheet scaled to 832×1017).
+         Row 0 idle · 1/2 walk right/left · 3 wave · 4 jump ·
+         5 fall asleep · 6 waiting · 7 focus work. Each row plays
+         with steps() so the original frames tick one by one. */
+      .pet-fig { position: absolute; inset: 0; transition: transform 0.35s ease; }
+      .pet-sprite {
+        position: absolute; left: 0; bottom: 0; width: 104px; height: 113px;
+        background-repeat: no-repeat; background-size: 832px 1017px;
+        background-position: 0 0;
+        animation: spr-idle 1.1s steps(6) infinite;
       }
-      .pet.evolving .wa-tail { animation: evo-fan 1.9s ease both; }
-      @keyframes evo-fan {
-        0% { transform: rotate(0deg) scale(1); }
-        35% { transform: rotate(var(--fan, 8deg)) scale(1.12); }
-        68% { transform: rotate(calc(var(--fan, 8deg) * -0.35)) scale(1.05); }
-        100% { transform: rotate(0deg) scale(1); }
+      @keyframes spr-idle { from { background-position: 0 0; } to { background-position: -624px 0; } }
+      @keyframes spr-walk-r { from { background-position: 0 -113px; } to { background-position: -832px -113px; } }
+      @keyframes spr-walk-l { from { background-position: 0 -226px; } to { background-position: -832px -226px; } }
+      @keyframes spr-wave { from { background-position: 0 -339px; } to { background-position: -416px -339px; } }
+      @keyframes spr-jump { from { background-position: 0 -452px; } to { background-position: -520px -452px; } }
+      @keyframes spr-fall { from { background-position: 0 -565px; } to { background-position: -728px -565px; } }
+      @keyframes spr-wait { from { background-position: 0 -678px; } to { background-position: -624px -678px; } }
+      @keyframes spr-work { from { background-position: 0 -791px; } to { background-position: -624px -791px; } }
+      .pet.walking.dir-r .pet-sprite { animation: spr-walk-r 0.72s steps(8) infinite; }
+      .pet.walking.dir-l .pet-sprite { animation: spr-walk-l 0.72s steps(8) infinite; }
+      .pet.act-wave .pet-sprite { animation: spr-wave 0.76s steps(4) infinite; }
+      .pet.act-hop .pet-sprite { animation: spr-jump 0.55s steps(5) infinite; }
+      .pet.frozen .pet-sprite { animation: spr-wait 1.5s steps(6) infinite; }
+      .pet.sitting .pet-sprite { animation: spr-work 1.05s steps(6) infinite; }
+      .pet.sleeping .pet-sprite, .pet.fainted .pet-sprite { animation: spr-fall 2.2s steps(7) both; }
+      /* Evolution halo: the artwork never changes, so each stage adds
+         a brighter aura instead — shimmer, soft glow, golden ring,
+         then a radiant ring with orbiting sparkles at the top stage. */
+      .pet-halo {
+        position: absolute; left: 50%; top: 50%; width: 148px; height: 148px;
+        transform: translate(-50%, -50%); border-radius: 50%;
+        pointer-events: none;
       }
-      .pet .fox-body-g { transform-box: fill-box; transform-origin: 50% 100%; transition: transform 0.35s ease; }
-      .pet.sitting .fox-body-g { transform: translateY(5px) scaleY(0.93); }
-      .pet .fox-head { transform-box: fill-box; transform-origin: 50% 92%; }
-      .pet.act-munch .fox-head { animation: fox-munch 0.28s ease-in-out 4; }
-      @keyframes fox-munch { 0%, 100% { transform: rotate(0deg) translateY(0); } 50% { transform: rotate(3deg) translateY(2.5px); } }
+      .pet.stage-0 .pet-halo { background: radial-gradient(circle, rgba(255, 226, 160, 0.15) 0%, rgba(255, 226, 160, 0) 62%); }
+      .pet.stage-1 .pet-halo { background: radial-gradient(circle, rgba(255, 222, 150, 0.3) 0%, rgba(255, 222, 150, 0) 64%); }
+      .pet.stage-2 .pet-halo { background: radial-gradient(circle, rgba(255, 205, 92, 0.34) 0%, rgba(255, 205, 92, 0) 66%); }
+      .pet.stage-3 .pet-halo { background: radial-gradient(circle, rgba(255, 210, 100, 0.42) 0%, rgba(255, 210, 100, 0) 68%); }
+      .pet.stage-2 .pet-halo::before, .pet.stage-3 .pet-halo::before {
+        content: ""; position: absolute; inset: 15px; border-radius: 50%;
+        border: 2px solid rgba(255, 205, 92, 0.55);
+        animation: halo-pulse 3.2s ease-in-out infinite;
+      }
+      .pet.stage-3 .pet-halo::before {
+        border-color: rgba(255, 214, 110, 0.85);
+        box-shadow: 0 0 18px rgba(255, 200, 90, 0.45), inset 0 0 14px rgba(255, 200, 90, 0.3);
+      }
+      .pet.stage-3 .pet-halo::after {
+        content: ""; position: absolute; inset: 3px; border-radius: 50%;
+        background:
+          radial-gradient(circle 3px at 50% 0%, #ffe9a3 98%, transparent),
+          radial-gradient(circle 2.5px at 88% 30%, #ffd76e 98%, transparent),
+          radial-gradient(circle 2.5px at 85% 78%, #fff3c4 98%, transparent),
+          radial-gradient(circle 3px at 50% 100%, #ffd76e 98%, transparent),
+          radial-gradient(circle 2.5px at 12% 70%, #ffe9a3 98%, transparent),
+          radial-gradient(circle 2.5px at 15% 28%, #fff3c4 98%, transparent);
+        animation: halo-spin 16s linear infinite;
+      }
+      @keyframes halo-pulse { 0%, 100% { opacity: 0.55; transform: scale(1); } 50% { opacity: 1; transform: scale(1.045); } }
+      @keyframes halo-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .pet.sitting .pet-fig { transform: translateY(4px); }
+      .pet.act-munch .pet-fig { animation: fig-munch 0.28s ease-in-out 4; }
+      @keyframes fig-munch { 0%, 100% { transform: rotate(0deg) translateY(0); } 50% { transform: rotate(2deg) translateY(2.5px); } }
       .pet.act-hop .pet-scale { animation: pet-hop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); }
       @keyframes pet-hop {
         0% { transform: scale(var(--ps, 1)) translateY(0); }
@@ -425,7 +460,7 @@
         40% { transform: scale(calc(var(--ps, 1) * 1.12)); filter: brightness(1.5); }
         100% { transform: scale(var(--ps, 1)); filter: brightness(1); }
       }
-      .pet.evolving svg.fox { animation: evo-transform 1.9s ease both; }
+      .pet.evolving .pet-sprite { animation: evo-transform 1.9s ease both; }
       @keyframes evo-transform {
         0% { filter: brightness(1); transform: scale(0.92); }
         30% { filter: brightness(2.4) saturate(0.35); transform: scale(0.86) rotate(-2deg); }
@@ -532,16 +567,22 @@
       }
       .pet-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
       @media (prefers-reduced-motion: reduce) {
-        .pet .fox-eyes, .pet .fox-aura, .pet .wa-float-g, .pet .wa-tail, .pet .wa-sleeve,
-        .pet .chan-wing-l, .pet .chan-wing-r, .pet .ghost-flame, .pet-smoke,
-        .pet .fox-breath-g, .pet .fox-fire, .pet .fox-petal,
-        .pet.walking .pet-scale, .pet.walking .fox-head,
+        .pet .pet-sprite, .pet.walking.dir-r .pet-sprite, .pet.walking.dir-l .pet-sprite,
+        .pet.act-wave .pet-sprite, .pet.act-hop .pet-sprite, .pet.frozen .pet-sprite,
+        .pet.sitting .pet-sprite, .pet.sleeping .pet-sprite, .pet.fainted .pet-sprite,
+        .pet-halo::before, .pet-halo::after, .pet-smoke,
         .pet.act-hop .pet-scale, .pet.act-spin .pet-scale, .pet.act-roll .pet-scale,
         .pet.act-flip .pet-scale, .pet.act-dance .pet-scale, .pet.act-magic .pet-scale,
-        .pet.act-breath .fox-body-g, .pet.act-nod .fox-head, .pet.act-look .fox-head,
+        .pet.act-breath .pet-fig, .pet.act-nod .pet-fig, .pet.act-look .pet-fig,
+        .pet.act-munch .pet-fig,
         .pet.act-stretch .pet-scale, .pet.act-wave .pet-scale, .pet.act-shake .pet-scale,
         .pet.act-squash .pet-scale,
-        .pet.evolving svg.fox, .evo-ring, .pet-fx span, .pet-food, .pet-dot { animation: none; }
+        .pet.evolving .pet-sprite, .evo-ring, .pet-fx span, .pet-food, .pet-dot { animation: none; }
+        /* Static frames still read correctly: asleep shows the last
+           fall-row frame (lying down), frozen the waiting row. */
+        .pet.sleeping .pet-sprite, .pet.fainted .pet-sprite { background-position: -728px -565px; }
+        .pet.frozen .pet-sprite { background-position: 0 -678px; }
+        .pet.sitting .pet-sprite { background-position: 0 -791px; }
       }
 
       /* ---------- pet upgrade: status pill, panel, extra actions ---------- */
@@ -572,15 +613,14 @@
       }
       .pet.has-sign .pet-status { bottom: 146px; }
       .pet.has-sign .pet-say { bottom: 174px; }
-      .pet.held .fox-body-g { transform: rotate(-7deg) translateY(-3px); }
-      .pet.sleeping .fox-body-g { transform: translateY(6px) scaleY(0.9); }
-      .pet.fainted .pet-scale { transform: scale(var(--ps, 1)) rotate(-80deg) translateY(3px); }
-      .pet.act-breath .fox-body-g { animation: fox-breath 2.6s ease-in-out; }
-      @keyframes fox-breath { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.035) translateY(-0.6px); } }
-      .pet.act-nod .fox-head { animation: fox-nod 1.5s ease-in-out; }
-      @keyframes fox-nod { 0%, 100% { transform: rotate(0deg) translateY(0); } 35% { transform: rotate(4deg) translateY(3.5px); } 65% { transform: rotate(3deg) translateY(3px); } }
-      .pet.act-look .fox-head { animation: fox-look 1.7s ease-in-out; }
-      @keyframes fox-look { 0%, 100% { transform: rotate(0deg); } 28% { transform: rotate(-11deg); } 62% { transform: rotate(11deg); } }
+      .pet.held .pet-fig { transform: rotate(-6deg) translateY(-3px); }
+      .pet.sleeping .pet-fig { transform: translateY(3px); }
+      .pet.act-breath .pet-fig { animation: fig-breath 2.6s ease-in-out; }
+      @keyframes fig-breath { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.03) translateY(-0.6px); } }
+      .pet.act-nod .pet-fig { animation: fig-nod 1.5s ease-in-out; }
+      @keyframes fig-nod { 0%, 100% { transform: rotate(0deg) translateY(0); } 35% { transform: rotate(3deg) translateY(3.5px); } 65% { transform: rotate(2deg) translateY(3px); } }
+      .pet.act-look .pet-fig { animation: fig-look 1.7s ease-in-out; }
+      @keyframes fig-look { 0%, 100% { transform: rotate(0deg); } 28% { transform: rotate(-7deg); } 62% { transform: rotate(7deg); } }
       .pet.act-stretch .pet-scale { animation: pet-stretch 1.45s ease-in-out; }
       @keyframes pet-stretch {
         0% { transform: scale(var(--ps, 1)) scaleY(1) scaleX(1); }
@@ -609,7 +649,7 @@
         70% { transform: scale(var(--ps, 1)) scaleY(1.08) scaleX(0.95); }
         100% { transform: scale(var(--ps, 1)) scaleY(1) scaleX(1); }
       }
-      .pet.act-sun .fox-body-g { transform: translateY(6px) scaleY(0.9); }
+      .pet.act-sun .pet-fig { transform: translateY(5px) scaleY(0.96); }
       .pet-panel {
         position: absolute; bottom: 140px; left: 50%; transform: translateX(-50%) translateY(6px);
         width: 248px; max-height: min(62vh, 430px); overflow-y: auto;
@@ -639,39 +679,6 @@
       .pet-panel .pp-bar span.sat { background: #7fc96b; }
       .pet-panel .pp-acts { margin: 2px 0 0; line-height: 1.65; color: rgba(255, 255, 255, 0.88); }
       .pet-panel .pp-sec { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.16); color: rgba(255, 255, 255, 0.72); }
-      /* ---------- 小娲 the snake goddess: floats, never walks ---------- */
-      .pet .wa-float-g { animation: wa-float 3.6s ease-in-out infinite; }
-      @keyframes wa-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3.5px); } }
-      .pet .wa-tail {
-        transform-box: fill-box; transform-origin: 50% 4%;
-        animation: wa-tail-sway 3.4s ease-in-out infinite;
-      }
-      @keyframes wa-tail-sway { 0%, 100% { transform: rotate(-2.4deg); } 50% { transform: rotate(2.8deg); } }
-      .pet .wa-sleeve {
-        transform-box: fill-box; transform-origin: 50% 0%;
-        animation: wa-sleeve-wave 3.2s ease-in-out infinite;
-      }
-      @keyframes wa-sleeve-wave { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(2.2deg); } }
-      /* ---------- the other three pets: cicada wings, ghost flames ---------- */
-      .pet .chan-wing-l {
-        transform-box: fill-box; transform-origin: 100% 50%;
-        animation: chan-flutter-l 0.34s ease-in-out infinite alternate;
-      }
-      .pet .chan-wing-r {
-        transform-box: fill-box; transform-origin: 0% 50%;
-        animation: chan-flutter-r 0.34s ease-in-out infinite alternate;
-      }
-      @keyframes chan-flutter-l { from { transform: rotate(7deg); } to { transform: rotate(-9deg); } }
-      @keyframes chan-flutter-r { from { transform: rotate(-7deg); } to { transform: rotate(9deg); } }
-      .pet .ghost-flame {
-        transform-box: fill-box; transform-origin: 50% 100%;
-        animation: ghost-flicker 1.15s ease-in-out infinite alternate;
-      }
-      @keyframes ghost-flicker {
-        0% { transform: scaleY(0.88) scaleX(1.04); opacity: 0.75; }
-        55% { transform: scaleY(1.1) scaleX(0.94); opacity: 1; }
-        100% { transform: scaleY(0.97) scaleX(1); opacity: 0.88; }
-      }
       /* ---------- pet switching: smoke puff transition + panel picker ---------- */
       .pet-scale { transition: opacity 0.32s ease; }
       .pet.switching .pet-scale { opacity: 0.06; }
@@ -1645,18 +1652,25 @@
       });
 
       /* ================= desktop pets: 小娲 · 小蝉 · 幽冥书生 · 长乐仙子 =================
-         Four original SVG pets share the stage one at a time; the
-         active one is switched from the status panel （换宠物） with a
-         smoke transition, and each keeps its own save. 小娲， the
-         default, is the snake goddess drawn below: gold crown, wide flowing
-         sleeves, a jade snake tail and a lotus lantern that glows
-         brighter after dark. She lives near the bottom-left and floats
-         instead of walking, drifting slowly and swaying her tail.
-         Every Monday, once at least 7 days have passed since the last
-         evolution, she grows one stage: 小蛇女 → 少女 → 仙子 → 神女
-         (crown grander, tail longer and patterned, lantern brighter).
-         At the top stage each new week instead unlocks one extra
-         interaction.
+         The four pets use the original sprite sheets from the
+         dsh-plugin-pet repo (referenced directly from the repo's
+         raw URLs): each sheet is a 1536×1872 Codex grid, 8 cols × 9 rows
+         of 192×208 cells, and CSS steps() plays one row at a time —
+         row 0 idle, rows 1/2 walk right/left, row 3 wave, row 4 jump,
+         row 5 fall asleep (sleeping & fainted), row 6 waiting (frozen),
+         row 7 focus work (sitting with the pomodoro). Only the active
+         pet's sheet is in the DOM, so only that one ever downloads.
+         They share the stage one at a time; the active one is switched
+         from the status panel （换宠物） with a smoke transition, and
+         each keeps its own save.
+         Evolution no longer changes the artwork (each pet has a single
+         original look): every Monday, once at least 7 days have passed
+         since the last evolution, the pet gains one stage — the stage
+         name advances, a brighter halo layer appears behind it
+         （微光 → 柔光 → 金色光晕 → 璀璨光环加粒子）, and the stage-gated
+         interactions unlock as before. At the top stage each new week
+         instead unlocks one extra interaction. The glowing evolution
+         celebration is unchanged.
          Upgraded behaviour (inspired by classic desktop pets): a weighted
          random action pool, fling physics with gravity and squash, poke
          reactions by mood, idle chatter, a persistent status line, sleep
@@ -1675,12 +1689,14 @@
       /* Four pets share the stage, one at a time （一次一只）: 小娲 the
          snake goddess (the default), 小蝉 the little golden cicada monk,
          幽冥书生 the ghost-fire scholar and 长乐仙子 the lotus fairy.
-         Each entry carries its own stages, bonus actions, labels and
-         lines; each pet's progress lives under its own storage key. */
+         Each entry carries its own sprite sheet, stages, bonus actions,
+         labels and lines; each pet's progress lives under its own
+         storage key. */
       var PET_ACTIVE_KEY = "daymark-pet-active-v1";
       var PET_SPECIES = {
         wa: {
           id: "wa", key: "daymark-pet-wa-v1", name: "小娲", kind: "灵蛇小女娲",
+          sheet: "https://raw.githubusercontent.com/Dreamshe-92/dsh-plugin-pet/main/pets/xiaowa/spritesheet.webp",
           stages: [
             { name: "小蛇女", scale: 0.78 },
             { name: "少女", scale: 0.9 },
@@ -1714,6 +1730,7 @@
         },
         chan: {
           id: "chan", key: "daymark-pet-chan-v1", name: "小蝉", kind: "绯衣小金蝉",
+          sheet: "https://raw.githubusercontent.com/Dreamshe-92/dsh-plugin-pet/main/pets/xiaochan/spritesheet.webp",
           stages: [
             { name: "小金蝉", scale: 0.78 },
             { name: "禅心蝉", scale: 0.9 },
@@ -1747,6 +1764,7 @@
         },
         shu: {
           id: "shu", key: "daymark-pet-shu-v1", name: "幽冥书生", kind: "踏火小书生",
+          sheet: "https://raw.githubusercontent.com/Dreamshe-92/dsh-plugin-pet/main/pets/youming/spritesheet.webp",
           stages: [
             { name: "小书生", scale: 0.78 },
             { name: "夜读书生", scale: 0.9 },
@@ -1780,6 +1798,7 @@
         },
         le: {
           id: "le", key: "daymark-pet-le-v1", name: "长乐仙子", kind: "莲花小仙子",
+          sheet: "https://raw.githubusercontent.com/Dreamshe-92/dsh-plugin-pet/main/pets/changle/spritesheet.webp",
           stages: [
             { name: "小花仙", scale: 0.78 },
             { name: "莲心仙子", scale: 0.9 },
@@ -1985,530 +2004,17 @@
         }
       }
 
+      /* The sprite rows carry the expressions now, so there is no face
+         left to swap in: petFace only tracks mood for the status line
+         and the poke reactions, and resets itself after ms. */
       function setPetFace(face, ms) {
         petFace = face;
-        var scale = document.getElementById("pet-scale");
-        if (scale) scale.innerHTML = petSVG(pet.stage, currentPetFace());
         if (petFaceTimer) { window.clearTimeout(petFaceTimer); petFaceTimer = null; }
         if (ms) {
-          petFaceTimer = window.setTimeout(function () {
-            petFace = "normal";
-            var sc = document.getElementById("pet-scale");
-            if (sc) sc.innerHTML = petSVG(pet.stage, currentPetFace());
-          }, ms);
+          petFaceTimer = window.setTimeout(function () { petFace = "normal"; }, ms);
         }
-      }
-      function currentPetFace() {
-        if (pet && pet.sleeping) return "sleep";
-        return petFace;
       }
 
-      /* ---------- wa artwork (original SVG: 小娲， the little snake goddess) ----------
-         She shares the generic animation hooks (fox-head / fox-body-g /
-         fox-breath-g / fox-eyes classes) with the action animations.
-         She floats: the whole figure
-         bobs on the wa-float group, her jade snake tail sways beneath
-         the ivory robe, and the lotus lantern in her hand glows
-         brighter with each stage — and brighter still after dark. */
-      function waFaceSVG(face) {
-        var eyes = "", mouth = "";
-        var closed = '<path d="M49.8 39.4 Q53 41.8 56.2 39.4" stroke="#3a2415" stroke-width="1.9" fill="none" stroke-linecap="round"/>' +
-          '<path d="M63.8 39.4 Q67 41.8 70.2 39.4" stroke="#3a2415" stroke-width="1.9" fill="none" stroke-linecap="round"/>';
-        if (face === "sleep") {
-          eyes = closed;
-          mouth = '<circle cx="60" cy="48.6" r="1.5" fill="#8a4a3a"/>';
-        } else if (face === "dizzy") {
-          eyes = '<path d="M50.3 36.2 l5.4 5.4 M55.7 36.2 l-5.4 5.4" stroke="#3a2415" stroke-width="1.9" stroke-linecap="round"/>' +
-            '<path d="M64.3 36.2 l5.4 5.4 M69.7 36.2 l-5.4 5.4" stroke="#3a2415" stroke-width="1.9" stroke-linecap="round"/>';
-          mouth = '<path d="M55.5 50.2 Q57.7 48.4 60 50.2 Q62.3 52 64.5 50.2" stroke="#8a4a3a" stroke-width="1.4" fill="none" stroke-linecap="round"/>';
-        } else if (face === "angry") {
-          eyes = '<path d="M49.4 34.4 L56.6 36.8" stroke="#3a2415" stroke-width="2" stroke-linecap="round"/>' +
-            '<path d="M70.6 34.4 L63.4 36.8" stroke="#3a2415" stroke-width="2" stroke-linecap="round"/>' +
-            '<ellipse cx="53" cy="40.4" rx="2.5" ry="1.8" fill="#3a2415"/>' +
-            '<ellipse cx="67" cy="40.4" rx="2.5" ry="1.8" fill="#3a2415"/>';
-          mouth = '<path d="M56.8 51 Q60 49.2 63.2 51" stroke="#8a4a3a" stroke-width="1.4" fill="none" stroke-linecap="round"/>';
-        } else if (face === "surprised") {
-          eyes = '<circle cx="53" cy="38.8" r="3.9" fill="url(#waEye)"/><circle cx="67" cy="38.8" r="3.9" fill="url(#waEye)"/>' +
-            '<circle cx="54.2" cy="37.4" r="1.2" fill="#fff"/><circle cx="68.2" cy="37.4" r="1.2" fill="#fff"/>';
-          mouth = '<circle cx="60" cy="49.2" r="1.9" fill="#8a4a3a"/>';
-        } else if (face === "happy") {
-          eyes = '<path d="M49.6 40.4 Q53 36.4 56.4 40.4" stroke="#3a2415" stroke-width="2.1" fill="none" stroke-linecap="round"/>' +
-            '<path d="M63.6 40.4 Q67 36.4 70.4 40.4" stroke="#3a2415" stroke-width="2.1" fill="none" stroke-linecap="round"/>';
-          mouth = '<path d="M55.8 47.6 Q60 52.4 64.2 47.6 Q60 49.4 55.8 47.6 Z" fill="#a04a3a"/>' +
-            '<path d="M57.8 50 Q60 51.7 62.2 50 Q60 50.7 57.8 50 Z" fill="#f28ba0"/>';
-        } else if (face === "yawn") {
-          eyes = closed;
-          mouth = '<ellipse cx="60" cy="50" rx="2.7" ry="3.5" fill="#a04a3a"/>' +
-            '<ellipse cx="60" cy="51.6" rx="1.6" ry="1.3" fill="#f28ba0"/>';
-        } else {
-          eyes = '<g class="fox-eyes">' +
-            '<ellipse cx="53" cy="38.8" rx="3" ry="4.1" fill="url(#waEye)"/>' +
-            '<ellipse cx="67" cy="38.8" rx="3" ry="4.1" fill="url(#waEye)"/>' +
-            '<path d="M49.7 35.8 Q53 33.2 56.3 35.8" stroke="#2a170c" stroke-width="1.6" fill="none" stroke-linecap="round"/>' +
-            '<path d="M63.7 35.8 Q67 33.2 70.3 35.8" stroke="#2a170c" stroke-width="1.6" fill="none" stroke-linecap="round"/>' +
-            '<circle cx="54.1" cy="36.9" r="1.1" fill="#fff"/><circle cx="68.1" cy="36.9" r="1.1" fill="#fff"/></g>';
-          mouth = '<path d="M56.8 48.4 Q60 50.6 63.2 48.4" stroke="#8a4a3a" stroke-width="1.4" fill="none" stroke-linecap="round"/>';
-        }
-        return eyes + mouth;
-      }
-      function waSVG(stage, face) {
-        var hour = new Date().getHours();
-        var night = hour >= 18 || hour < 6; /* lantern burns brighter after dark */
-        var lampR = 9 + stage * 2.6 + (night ? 5 : 0);
-        var lampO = Math.min(0.95, 0.38 + stage * 0.13 + (night ? 0.3 : 0));
-        var tailW = 10.5 + stage * 1.1;
-        var s = "";
-        s += '<svg class="fox" viewBox="0 0 120 112" fill="none" aria-hidden="true">';
-        s += '<defs>' +
-          '<linearGradient id="waHair" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4a3542"/><stop offset="100%" stop-color="#241a20"/></linearGradient>' +
-          '<linearGradient id="waSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff3e4"/><stop offset="100%" stop-color="#ffd9b8"/></linearGradient>' +
-          '<linearGradient id="waDress" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fffaf0"/><stop offset="100%" stop-color="#f0d9a0"/></linearGradient>' +
-          '<linearGradient id="waSleeve" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fdf3d8"/><stop offset="100%" stop-color="#e8c887"/></linearGradient>' +
-          '<linearGradient id="waTail" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7fd1a8"/><stop offset="55%" stop-color="#3fae7d"/><stop offset="100%" stop-color="#22795a"/></linearGradient>' +
-          '<linearGradient id="waGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffe9a3"/><stop offset="100%" stop-color="#d99a26"/></linearGradient>' +
-          '<radialGradient id="waEye" cx="50%" cy="32%" r="78%"><stop offset="0%" stop-color="#5d7a4a"/><stop offset="55%" stop-color="#2f4a26"/><stop offset="100%" stop-color="#14230e"/></radialGradient>' +
-          '<radialGradient id="waLamp" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffe9a3" stop-opacity="0.95"/><stop offset="55%" stop-color="#ffb84d" stop-opacity="0.45"/><stop offset="100%" stop-color="#ffb84d" stop-opacity="0"/></radialGradient>' +
-          '<radialGradient id="waGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffe9a3" stop-opacity="0.8"/><stop offset="60%" stop-color="#ffd76e" stop-opacity="0.3"/><stop offset="100%" stop-color="#ffd76e" stop-opacity="0"/></radialGradient>' +
-          '</defs>';
-        /* she floats above the ground, so the shadow stays faint */
-        s += '<ellipse cx="60" cy="107" rx="23" ry="3.4" fill="#1c2a1a" opacity="0.1"/>';
-        s += '<g class="wa-float-g">';
-        if (stage >= 3) {
-          s += '<ellipse class="fox-aura" cx="60" cy="56" rx="52" ry="50" fill="url(#waGlow)"/>' +
-            '<circle class="fox-aura" cx="60" cy="36" r="27.5" fill="none" stroke="#ffcf5e" stroke-width="1.8" opacity="0.5"/>';
-        }
-        /* jade snake tail: an S-curve coiling at the base, swaying;
-           longer, thicker and patterned as she grows */
-        s += '<g class="wa-tail" style="--fan:7deg">' +
-          '<path d="M60 70 C46 78 34 86 39 95 C43.5 103.5 57 105.5 65.5 100.5 C72.5 96.4 71.5 88.6 65 87.4" stroke="url(#waTail)" stroke-width="' + tailW.toFixed(1) + '" fill="none" stroke-linecap="round"/>' +
-          '<path d="M60 70 C46 78 34 86 39 95 C43.5 103.5 57 105.5 65.5 100.5" stroke="#ffffff" stroke-width="' + (tailW * 0.32).toFixed(1) + '" fill="none" stroke-linecap="round" opacity="0.18"/>';
-        if (stage >= 2) {
-          s += '<path d="M47 79 q3.5 3 7 1.5 M41 88 q3.5 3 7 1.5 M47 98 q3.5 3 7 1.5 M60 101 q3.5 2.4 7 1" stroke="#eafff3" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.55"/>' +
-            '<circle cx="52" cy="92" r="1.7" fill="#ffd9e8" opacity="0.9"/><circle cx="43" cy="83" r="1.4" fill="#ffd9e8" opacity="0.8"/><circle cx="62" cy="97" r="1.4" fill="#fff3b0" opacity="0.9"/>';
-        }
-        if (stage >= 3) {
-          s += '<path d="M60 70 C46 78 34 86 39 95" stroke="#ffd76e" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.65"/>' +
-            '<circle cx="38" cy="90" r="1.3" fill="#ffe9a3"/><circle cx="56" cy="103" r="1.3" fill="#ffe9a3"/>';
-        }
-        s += '</g>';
-        /* ivory robe with wide flowing sleeves, jade sash */
-        s += '<g class="fox-body-g"><g class="fox-breath-g">' +
-          '<g class="wa-sleeve"><path d="M45 53 Q27 55 21 71 Q24 82 36 81 Q44 80 47 70 Z" fill="url(#waSleeve)"/></g>' +
-          '<g class="wa-sleeve" style="animation-delay:-1.4s"><path d="M75 53 Q93 55 99 71 Q96 82 84 81 Q76 80 73 70 Z" fill="url(#waSleeve)"/></g>' +
-          '<path d="M46 51 Q60 45.5 74 51 L82 79 Q60 87 38 79 Z" fill="url(#waDress)"/>' +
-          (stage >= 2 ? '<path d="M39.5 78.2 Q60 85.2 80.5 78.2" stroke="#d99a26" stroke-width="1.6" fill="none" opacity="0.85"/>' : '') +
-          '<path d="M45 63 Q60 68.5 75 63 L76.5 69.5 Q60 74.5 43.5 69.5 Z" fill="#3fae7d"/>' +
-          '<circle cx="60" cy="67.3" r="3.1" fill="url(#waGold)" stroke="#b8860b" stroke-width="1"/>' +
-          '<path d="M52 51.5 L60 58.5 L68 51.5 L66 47.8 Q60 46.2 54 47.8 Z" fill="#3fae7d" opacity="0.9"/>' +
-          '<circle cx="34.5" cy="79" r="3" fill="url(#waSkin)"/>' +
-          '</g>';
-        /* lotus lantern in her right hand */
-        s += '<g>' +
-          '<path d="M84 66 L93 74" stroke="#8a5a24" stroke-width="1.8" stroke-linecap="round"/>' +
-          '<circle cx="84" cy="66" r="3" fill="url(#waSkin)"/>' +
-          '<g class="fox-fire">' +
-            '<circle cx="95" cy="84" r="' + lampR.toFixed(1) + '" fill="url(#waLamp)" opacity="' + lampO.toFixed(2) + '"/>' +
-            '<circle cx="95" cy="84" r="3.4" fill="#ffdf8a"/>' +
-            '<path d="M95 76.5 C97.8 79.8 98.7 82.6 95 86.5 C91.3 82.6 92.2 79.8 95 76.5 Z" fill="#f7a8b8"/>' +
-            '<path d="M88.6 81 C91.6 82 93.4 84 93.8 87.4 C90.6 86.8 88.9 84.6 88.6 81 Z" fill="#f9c2d0"/>' +
-            '<path d="M101.4 81 C101.1 84.6 99.4 86.8 96.2 87.4 C96.6 84 98.4 82 101.4 81 Z" fill="#f9c2d0"/>' +
-            '<path d="M90.5 89.5 Q95 91.8 99.5 89.5 L98.2 92 Q95 93.4 91.8 92 Z" fill="#d97742"/>' +
-          '</g></g>';
-        s += '</g>'; /* body */
-        /* head: dark hair, fringe, and a crown that grows grander per stage */
-        s += '<g class="fox-head">' +
-          '<path d="M41 30 Q36 52 42 62 L48 62 Q44 46 46 34 Z" fill="url(#waHair)"/>' +
-          '<path d="M79 30 Q84 52 78 62 L72 62 Q76 46 74 34 Z" fill="url(#waHair)"/>' +
-          '<circle cx="60" cy="35" r="20.5" fill="url(#waHair)"/>' +
-          '<ellipse cx="60" cy="39" rx="15.8" ry="14.6" fill="url(#waSkin)"/>' +
-          '<path d="M44.5 37 Q43.5 21.5 60 20.5 Q76.5 21.5 75.5 37 Q70 27.5 60 28.5 Q50 27.5 44.5 37 Z" fill="url(#waHair)"/>' +
-          '<ellipse cx="46.8" cy="44.5" rx="3.6" ry="2.1" fill="#f49bb0" opacity="0.55"/>' +
-          '<ellipse cx="73.2" cy="44.5" rx="3.6" ry="2.1" fill="#f49bb0" opacity="0.55"/>' +
-          waFaceSVG(face || "normal");
-        if (stage === 0) {
-          s += '<circle cx="60" cy="17.5" r="3.4" fill="url(#waGold)" stroke="#b8860b" stroke-width="0.9"/>' +
-            '<path d="M60 14.5 L60 9.5" stroke="#b8860b" stroke-width="1.6" stroke-linecap="round"/><circle cx="60" cy="8.4" r="1.7" fill="#f2607a"/>';
-        } else if (stage === 1) {
-          s += '<path d="M51 19 L53.5 12.5 L57.5 17 L60 11 L62.5 17 L66.5 12.5 L69 19 Q60 21.5 51 19 Z" fill="url(#waGold)" stroke="#b8860b" stroke-width="0.9"/>';
-        } else if (stage === 2) {
-          s += '<path d="M49.5 19.5 L52 10.5 L56.5 16 L60 8.5 L63.5 16 L68 10.5 L70.5 19.5 Q60 22.5 49.5 19.5 Z" fill="url(#waGold)" stroke="#b8860b" stroke-width="1"/>' +
-            '<circle cx="60" cy="16.5" r="2" fill="#e2494d" stroke="#ffffff" stroke-width="0.7"/>';
-        } else {
-          s += '<path d="M47.5 20 L50 9 L55.5 15 L60 6.5 L64.5 15 L70 9 L72.5 20 Q60 23.5 47.5 20 Z" fill="url(#waGold)" stroke="#b8860b" stroke-width="1"/>' +
-            '<circle cx="60" cy="16.8" r="2.3" fill="#e2494d" stroke="#ffffff" stroke-width="0.8"/>' +
-            '<path d="M47.5 17 Q41 14.5 38.5 9.5 Q44 9 47 12.5 Z" fill="url(#waGold)" opacity="0.95"/>' +
-            '<path d="M72.5 17 Q79 14.5 81.5 9.5 Q76 9 73 12.5 Z" fill="url(#waGold)" opacity="0.95"/>' +
-            '<circle cx="60" cy="26.8" r="1.8" fill="#ffd76e" stroke="#d99a26" stroke-width="0.7"/>' +
-            '<circle cx="43" cy="46" r="1.5" fill="url(#waGold)"/><circle cx="77" cy="46" r="1.5" fill="url(#waGold)"/>';
-        }
-        s += '</g>'; /* head */
-        if (stage >= 3) {
-          s += '<path class="fox-petal" style="animation-delay:-0.8s" d="M24 6 c2 2.4 2.5 4.6 0 7 c-2.5 -2.4 -2 -4.6 0 -7 Z" fill="#f9d976" opacity="0.85"/>' +
-            '<path class="fox-petal" style="animation-delay:-2.9s" d="M98 4 c1.9 2.2 2.3 4.3 0 6.5 c-2.3 -2.2 -1.9 -4.3 0 -6.5 Z" fill="#f7a8b8" opacity="0.8"/>' +
-            '<path class="fox-petal" style="animation-delay:-4.1s" d="M110 22 l1.2 2.7 2.7 1.2 -2.7 1.2 -1.2 2.7 -1.2 -2.7 -2.7 -1.2 2.7 -1.2 Z" fill="#ffd76e"/>';
-        }
-        s += '</g></svg>';
-        return s;
-      }
-      function petSVG(stage, face) {
-        if (PET_CFG.id === "chan") return chanSVG(stage, face);
-        if (PET_CFG.id === "shu") return shuSVG(stage, face);
-        if (PET_CFG.id === "le") return leSVG(stage, face);
-        return waSVG(stage, face);
-      }
-
-      /* ---------- shared face for the three newer pets ----------
-         Same expressions and geometry as 小娲's face, parameterized by
-         the species' eye-gradient id so each pet keeps its own eyes. */
-      function petFaceSVG(face, eyeId) {
-        var eyes = "", mouth = "";
-        var closed = '<path d="M49.8 39.4 Q53 41.8 56.2 39.4" stroke="#3a2415" stroke-width="1.9" fill="none" stroke-linecap="round"/>' +
-          '<path d="M63.8 39.4 Q67 41.8 70.2 39.4" stroke="#3a2415" stroke-width="1.9" fill="none" stroke-linecap="round"/>';
-        if (face === "sleep") {
-          eyes = closed;
-          mouth = '<circle cx="60" cy="48.6" r="1.5" fill="#8a4a3a"/>';
-        } else if (face === "dizzy") {
-          eyes = '<path d="M50.3 36.2 l5.4 5.4 M55.7 36.2 l-5.4 5.4" stroke="#3a2415" stroke-width="1.9" stroke-linecap="round"/>' +
-            '<path d="M64.3 36.2 l5.4 5.4 M69.7 36.2 l-5.4 5.4" stroke="#3a2415" stroke-width="1.9" stroke-linecap="round"/>';
-          mouth = '<path d="M55.5 50.2 Q57.7 48.4 60 50.2 Q62.3 52 64.5 50.2" stroke="#8a4a3a" stroke-width="1.4" fill="none" stroke-linecap="round"/>';
-        } else if (face === "angry") {
-          eyes = '<path d="M49.4 34.4 L56.6 36.8" stroke="#3a2415" stroke-width="2" stroke-linecap="round"/>' +
-            '<path d="M70.6 34.4 L63.4 36.8" stroke="#3a2415" stroke-width="2" stroke-linecap="round"/>' +
-            '<ellipse cx="53" cy="40.4" rx="2.5" ry="1.8" fill="#3a2415"/>' +
-            '<ellipse cx="67" cy="40.4" rx="2.5" ry="1.8" fill="#3a2415"/>';
-          mouth = '<path d="M56.8 51 Q60 49.2 63.2 51" stroke="#8a4a3a" stroke-width="1.4" fill="none" stroke-linecap="round"/>';
-        } else if (face === "surprised") {
-          eyes = '<circle cx="53" cy="38.8" r="3.9" fill="url(#' + eyeId + ')"/><circle cx="67" cy="38.8" r="3.9" fill="url(#' + eyeId + ')"/>' +
-            '<circle cx="54.2" cy="37.4" r="1.2" fill="#fff"/><circle cx="68.2" cy="37.4" r="1.2" fill="#fff"/>';
-          mouth = '<circle cx="60" cy="49.2" r="1.9" fill="#8a4a3a"/>';
-        } else if (face === "happy") {
-          eyes = '<path d="M49.6 40.4 Q53 36.4 56.4 40.4" stroke="#3a2415" stroke-width="2.1" fill="none" stroke-linecap="round"/>' +
-            '<path d="M63.6 40.4 Q67 36.4 70.4 40.4" stroke="#3a2415" stroke-width="2.1" fill="none" stroke-linecap="round"/>';
-          mouth = '<path d="M55.8 47.6 Q60 52.4 64.2 47.6 Q60 49.4 55.8 47.6 Z" fill="#a04a3a"/>' +
-            '<path d="M57.8 50 Q60 51.7 62.2 50 Q60 50.7 57.8 50 Z" fill="#f28ba0"/>';
-        } else if (face === "yawn") {
-          eyes = closed;
-          mouth = '<ellipse cx="60" cy="50" rx="2.7" ry="3.5" fill="#a04a3a"/>' +
-            '<ellipse cx="60" cy="51.6" rx="1.6" ry="1.3" fill="#f28ba0"/>';
-        } else {
-          eyes = '<g class="fox-eyes">' +
-            '<ellipse cx="53" cy="38.8" rx="3" ry="4.1" fill="url(#' + eyeId + ')"/>' +
-            '<ellipse cx="67" cy="38.8" rx="3" ry="4.1" fill="url(#' + eyeId + ')"/>' +
-            '<path d="M49.7 35.8 Q53 33.2 56.3 35.8" stroke="#2a170c" stroke-width="1.6" fill="none" stroke-linecap="round"/>' +
-            '<path d="M63.7 35.8 Q67 33.2 70.3 35.8" stroke="#2a170c" stroke-width="1.6" fill="none" stroke-linecap="round"/>' +
-            '<circle cx="54.1" cy="36.9" r="1.1" fill="#fff"/><circle cx="68.1" cy="36.9" r="1.1" fill="#fff"/></g>';
-          mouth = '<path d="M56.8 48.4 Q60 50.6 63.2 48.4" stroke="#8a4a3a" stroke-width="1.4" fill="none" stroke-linecap="round"/>';
-        }
-        return eyes + mouth;
-      }
-
-      /* ---------- chan artwork (original SVG: 小蝉， the little golden
-         cicada monk) — crimson kasaya, a flame-lotus crown that grows
-         grander per stage, translucent wings that never stop fluttering,
-         prayer beads, and a nine-ring staff whose rings multiply as he
-         grows (3 / 5 / 7 / 9). He floats on the shared wa-float bob. */
-      function chanSVG(stage, face) {
-        var s = "";
-        s += '<svg class="fox" viewBox="0 0 120 112" fill="none" aria-hidden="true">';
-        s += '<defs>' +
-          '<linearGradient id="chanSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff3e4"/><stop offset="100%" stop-color="#ffd9b8"/></linearGradient>' +
-          '<linearGradient id="chanRobe" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f0664f"/><stop offset="100%" stop-color="#b03024"/></linearGradient>' +
-          '<linearGradient id="chanGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffe9a3"/><stop offset="100%" stop-color="#d99a26"/></linearGradient>' +
-          '<linearGradient id="chanWing" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fff3c4" stop-opacity="0.9"/><stop offset="100%" stop-color="#f6c945" stop-opacity="0.35"/></linearGradient>' +
-          '<radialGradient id="chanEye" cx="50%" cy="32%" r="78%"><stop offset="0%" stop-color="#a87f42"/><stop offset="55%" stop-color="#5d3d16"/><stop offset="100%" stop-color="#241203"/></radialGradient>' +
-          '<radialGradient id="chanGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffe9a3" stop-opacity="0.8"/><stop offset="60%" stop-color="#ffd76e" stop-opacity="0.3"/><stop offset="100%" stop-color="#ffd76e" stop-opacity="0"/></radialGradient>' +
-          '</defs>';
-        s += '<ellipse cx="60" cy="107" rx="23" ry="3.4" fill="#1c2a1a" opacity="0.1"/>';
-        s += '<g class="wa-float-g">';
-        if (stage >= 3) {
-          s += '<ellipse class="fox-aura" cx="60" cy="56" rx="52" ry="50" fill="url(#chanGlow)"/>' +
-            '<circle class="fox-aura" cx="60" cy="36" r="27.5" fill="none" stroke="#ffcf5e" stroke-width="1.8" opacity="0.5"/>';
-        }
-        /* translucent cicada wings behind the robe, always fluttering */
-        var ws = (0.7 + stage * 0.16).toFixed(2);
-        s += '<g transform="translate(60 54) scale(' + ws + ') translate(-60 -54)">' +
-          '<path class="chan-wing-l" d="M50 52 C34 34 16 30 6 40 C14 48 18 58 24 66 C34 64 44 60 50 58 Z" fill="url(#chanWing)" stroke="#e8b64c" stroke-width="1" opacity="0.85"/>' +
-          '<path class="chan-wing-r" d="M70 52 C86 34 104 30 114 40 C106 48 102 58 96 66 C86 64 76 60 70 58 Z" fill="url(#chanWing)" stroke="#e8b64c" stroke-width="1" opacity="0.85"/>' +
-          '<path d="M48 54 C36 46 24 43 12 41 M47 57.5 C37 54.5 28 56.5 20 62.5" stroke="#e8b64c" stroke-width="0.9" fill="none" opacity="0.55"/>' +
-          '<path d="M72 54 C84 46 96 43 108 41 M73 57.5 C83 54.5 92 56.5 100 62.5" stroke="#e8b64c" stroke-width="0.9" fill="none" opacity="0.55"/>' +
-          '</g>';
-        /* crimson kasaya with a gold sash, prayer beads from stage 1 */
-        s += '<g class="fox-body-g"><g class="fox-breath-g">' +
-          '<path d="M46 51 Q60 45.5 74 51 L83 84 Q60 91 37 84 Z" fill="url(#chanRobe)"/>' +
-          '<path d="M48.5 49.8 L78.5 80.2 L73 86 L43.8 55.2 Z" fill="url(#chanGold)" opacity="0.92"/>' +
-          '<path d="M52 51.5 L60 59.5 L68 51.5 L65.5 47.8 Q60 46.4 54.5 47.8 Z" fill="#7e1d14"/>';
-        if (stage >= 1) {
-          var beadPos = [[-13, 55.5], [-10.5, 59.5], [-7, 62.5], [-3, 64], [3, 64], [7, 62.5], [10.5, 59.5], [13, 55.5]];
-          for (var bi = 0; bi < beadPos.length; bi++) {
-            s += '<circle cx="' + (60 + beadPos[bi][0]) + '" cy="' + beadPos[bi][1] + '" r="1.55" fill="#6b4423" stroke="#4a2c12" stroke-width="0.5"/>';
-          }
-          s += '<circle cx="60" cy="65.5" r="2.1" fill="url(#chanGold)" stroke="#b8860b" stroke-width="0.7"/>';
-        }
-        if (stage >= 2) {
-          s += '<path d="M38.5 83.2 Q60 89.8 81.5 83.2" stroke="#ffd76e" stroke-width="1.6" fill="none" opacity="0.9"/>';
-        }
-        s += '<circle cx="34.5" cy="79" r="3" fill="url(#chanSkin)"/>' +
-          '</g>';
-        /* nine-ring staff in his right hand: 3 / 5 / 7 / 9 rings */
-        var rings = 3 + stage * 2;
-        s += '<g>' +
-          '<path d="M76 58 L95 63" stroke="url(#chanRobe)" stroke-width="5.5" stroke-linecap="round"/>' +
-          '<path d="M97.5 27 L97.5 99" stroke="#8a5a24" stroke-width="2.4" stroke-linecap="round"/>' +
-          '<circle cx="97.5" cy="23" r="3.3" fill="url(#chanGold)" stroke="#b8860b" stroke-width="0.9"/>' +
-          '<path d="M89 29.5 Q97.5 24.5 106 29.5" stroke="#d99a26" stroke-width="1.7" fill="none" stroke-linecap="round"/>';
-        for (var ri2 = 0; ri2 < rings; ri2++) {
-          var rx = rings === 1 ? 97.5 : 89 + ri2 * (17 / (rings - 1));
-          s += '<circle cx="' + rx.toFixed(1) + '" cy="33.5" r="1.7" fill="none" stroke="url(#chanGold)" stroke-width="1.1"/>';
-        }
-        s += '<circle cx="95.5" cy="63.5" r="3" fill="url(#chanSkin)"/></g>';
-        s += '</g>'; /* body */
-        /* head: shaved little monk with incense dots and a flame-lotus crown */
-        s += '<g class="fox-head">' +
-          '<circle cx="39.6" cy="38" r="3.4" fill="url(#chanSkin)"/>' +
-          '<circle cx="80.4" cy="38" r="3.4" fill="url(#chanSkin)"/>' +
-          '<circle cx="60" cy="35" r="20.5" fill="url(#chanSkin)"/>' +
-          '<path d="M40.5 31 Q43 15.5 60 15 Q77 15.5 79.5 31 Q73 19.5 60 19.5 Q47 19.5 40.5 31 Z" fill="#eec39a" opacity="0.55"/>' +
-          '<ellipse cx="46.8" cy="44.5" rx="3.6" ry="2.1" fill="#f49bb0" opacity="0.55"/>' +
-          '<ellipse cx="73.2" cy="44.5" rx="3.6" ry="2.1" fill="#f49bb0" opacity="0.55"/>';
-        if (stage >= 2) {
-          s += '<circle cx="56" cy="26.5" r="0.95" fill="#b06a3a"/><circle cx="60" cy="25.6" r="0.95" fill="#b06a3a"/><circle cx="64" cy="26.5" r="0.95" fill="#b06a3a"/>';
-        }
-        s += petFaceSVG(face || "normal", "chanEye");
-        var petal = '<path d="M60 16.5 C56.8 12.8 56.2 8 60 4.2 C63.8 8 63.2 12.8 60 16.5 Z" fill="url(#chanGold)" stroke="#b8860b" stroke-width="0.7"/>';
-        var flame = '<path d="M60 4.8 C62 2.8 62 0.9 60 -0.8 C58 0.9 58 2.8 60 4.8 Z" fill="#f2762e"/>';
-        if (stage === 0) {
-          s += petal;
-        } else if (stage === 1) {
-          s += '<g transform="rotate(-26 60 16)">' + petal + '</g>' + petal +
-            '<g transform="rotate(26 60 16)">' + petal + '</g>';
-        } else if (stage === 2) {
-          s += '<g transform="rotate(-40 60 16)">' + petal + '</g>' +
-            '<g transform="rotate(-20 60 16)">' + petal + flame + '</g>' +
-            petal + flame +
-            '<g transform="rotate(20 60 16)">' + petal + flame + '</g>' +
-            '<g transform="rotate(40 60 16)">' + petal + '</g>' +
-            '<circle cx="60" cy="14.5" r="1.9" fill="#e2494d" stroke="#ffffff" stroke-width="0.7"/>';
-        } else {
-          s += '<g transform="rotate(-50 60 16)">' + petal + flame + '</g>' +
-            '<g transform="rotate(-33 60 16)">' + petal + flame + '</g>' +
-            '<g transform="rotate(-16 60 16)">' + petal + flame + '</g>' +
-            petal + flame +
-            '<g transform="rotate(16 60 16)">' + petal + flame + '</g>' +
-            '<g transform="rotate(33 60 16)">' + petal + flame + '</g>' +
-            '<g transform="rotate(50 60 16)">' + petal + flame + '</g>' +
-            '<circle cx="60" cy="14.5" r="2.3" fill="#e2494d" stroke="#ffffff" stroke-width="0.8"/>' +
-            '<path d="M49 19.5 Q60 16.8 71 19.5" stroke="#d99a26" stroke-width="1.8" fill="none" stroke-linecap="round"/>';
-        }
-        s += '</g>'; /* head */
-        if (stage >= 3) {
-          s += '<path class="fox-petal" style="animation-delay:-1.4s" d="M24 6 c2 2.4 2.5 4.6 0 7 c-2.5 -2.4 -2 -4.6 0 -7 Z" fill="#f9d976" opacity="0.85"/>' +
-            '<path class="fox-petal" style="animation-delay:-3.6s" d="M98 4 c1.9 2.2 2.3 4.3 0 6.5 c-2.3 -2.2 -1.9 -4.3 0 -6.5 Z" fill="#ffd76e" opacity="0.8"/>';
-        }
-        s += '</g></svg>';
-        return s;
-      }
-
-      /* ---------- shu artwork (original SVG: 幽冥书生， the ghost scholar)
-         Teal head-cloth, a book box on his back that fills up per stage,
-         a starfield robe with flame trim, and blue ghost flames flickering
-         beneath his feet — he hovers on them instead of walking. */
-      function shuSVG(stage, face) {
-        var s = "";
-        s += '<svg class="fox" viewBox="0 0 120 112" fill="none" aria-hidden="true">';
-        s += '<defs>' +
-          '<linearGradient id="shuSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fdf6ec"/><stop offset="100%" stop-color="#e9dcc9"/></linearGradient>' +
-          '<linearGradient id="shuRobe" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2c3a5e"/><stop offset="100%" stop-color="#141d33"/></linearGradient>' +
-          '<linearGradient id="shuSleeve" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3a5080"/><stop offset="100%" stop-color="#1d2a4a"/></linearGradient>' +
-          '<linearGradient id="shuGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffe9a3"/><stop offset="100%" stop-color="#d99a26"/></linearGradient>' +
-          '<radialGradient id="shuEye" cx="50%" cy="32%" r="78%"><stop offset="0%" stop-color="#5d7ab8"/><stop offset="55%" stop-color="#2c3a6e"/><stop offset="100%" stop-color="#101736"/></radialGradient>' +
-          '<radialGradient id="shuFlame" cx="50%" cy="72%" r="65%"><stop offset="0%" stop-color="#eaf7ff"/><stop offset="45%" stop-color="#7cc0f2"/><stop offset="100%" stop-color="#2f6fd0" stop-opacity="0.25"/></radialGradient>' +
-          '<radialGradient id="shuGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#a8d4ff" stop-opacity="0.75"/><stop offset="60%" stop-color="#6ea8e8" stop-opacity="0.28"/><stop offset="100%" stop-color="#6ea8e8" stop-opacity="0"/></radialGradient>' +
-          '</defs>';
-        s += '<ellipse cx="60" cy="108" rx="24" ry="3.2" fill="#101a2a" opacity="0.14"/>';
-        s += '<g class="wa-float-g">';
-        if (stage >= 3) {
-          s += '<ellipse class="fox-aura" cx="60" cy="54" rx="52" ry="50" fill="url(#shuGlow)"/>' +
-            '<circle class="fox-aura" cx="60" cy="36" r="27.5" fill="none" stroke="#8fc1ff" stroke-width="1.8" opacity="0.45"/>';
-        }
-        /* book box on his back, filling with books and scrolls per stage */
-        var bookCols = ["#b0483e", "#3e6e8e", "#c9a227", "#5d7a4a", "#7a4a8e"];
-        s += '<g transform="rotate(-5 29 56)">';
-        for (var bk = 0; bk < 2 + stage; bk++) {
-          s += '<rect x="' + (21.5 + bk * 4.6) + '" y="' + (29 + (bk % 2) * 2) + '" width="4" height="11" rx="1" fill="' + bookCols[bk % bookCols.length] + '"/>';
-        }
-        if (stage >= 2) {
-          s += '<rect x="17.5" y="33" width="3.4" height="13" rx="1.7" fill="#e8dcc0" transform="rotate(-14 19 39)"/>';
-        }
-        s += '<rect x="19" y="39" width="21" height="35" rx="2.5" fill="#7a4a2a" stroke="#5d371d" stroke-width="1.2"/>' +
-          '<path d="M19 48 L40 48 M19 65 L40 65" stroke="#5d371d" stroke-width="1.1"/>' +
-          '<rect x="26.5" y="53" width="6" height="7" rx="1" fill="url(#shuGold)" opacity="0.9"/></g>';
-        /* starfield robe with wide sleeves */
-        s += '<g class="fox-body-g"><g class="fox-breath-g">' +
-          '<g class="wa-sleeve"><path d="M45 53 Q27 55 21 71 Q24 82 36 81 Q44 80 47 70 Z" fill="url(#shuSleeve)"/></g>' +
-          '<g class="wa-sleeve" style="animation-delay:-1.4s"><path d="M75 53 Q93 55 99 71 Q96 82 84 81 Q76 80 73 70 Z" fill="url(#shuSleeve)"/></g>' +
-          '<path d="M46 51 Q60 45.5 74 51 L82 84 Q60 90.5 38 84 Z" fill="url(#shuRobe)"/>' +
-          '<path d="M52 51 L60 59 L68 51 L66 47.6 Q60 46.2 54 47.6 Z" fill="#e8ecf4"/>' +
-          '<path d="M44 66 Q60 71 76 66 L76.8 71 Q60 75.5 43.2 71 Z" fill="#0e1526"/>' +
-          '<circle cx="60" cy="68.6" r="2.6" fill="url(#shuGold)" stroke="#8a5a24" stroke-width="0.8"/>';
-        var starPos = [[50, 56], [68, 58], [57, 63], [45, 70], [74, 72], [52, 76], [64, 80], [70, 64], [48, 62], [60, 72], [42, 79], [78, 80], [56, 84], [66, 52], [44, 55], [76, 60]];
-        var starN = Math.min(starPos.length, 4 + stage * 4);
-        for (var si = 0; si < starN; si++) {
-          s += '<circle cx="' + starPos[si][0] + '" cy="' + starPos[si][1] + '" r="' + (si % 3 === 0 ? 1.25 : 0.85) + '" fill="#ffe9a3" opacity="' + (si % 3 === 0 ? 0.95 : 0.7) + '"/>';
-        }
-        if (stage >= 2) {
-          s += '<path d="M40.5 84 L45.5 78.5 L50.5 84 L55.5 78.5 L60.5 84 L65.5 78.5 L70.5 84 L75.5 78.5 L79.5 83.5 L78.5 86.5 Q60 90.8 41.5 86.5 Z" fill="#e2703a" opacity="0.92"/>';
-        }
-        s += '<circle cx="34.5" cy="79" r="3" fill="url(#shuSkin)"/>' +
-          '</g>';
-        /* an open book in his right hand from stage 1 */
-        if (stage >= 1) {
-          s += '<g transform="rotate(10 90 66)">' +
-            '<path d="M82 60 Q90 56.5 98 60 L98 71 Q90 67.8 82 71 Z" fill="#f2e7c8" stroke="#b09a5e" stroke-width="1"/>' +
-            '<path d="M90 57.5 L90 68.5" stroke="#b09a5e" stroke-width="1"/>' +
-            '<path d="M84.5 62.5 Q87.5 61.5 89 62.3 M84.5 66 Q87.5 65 89 65.8 M91 62.3 Q92.5 61.5 95.5 62.5 M91 65.8 Q92.5 65 95.5 66" stroke="#8a7a52" stroke-width="0.8" fill="none"/></g>' +
-            '<circle cx="84" cy="64" r="3" fill="url(#shuSkin)"/>';
-        } else {
-          s += '<circle cx="85" cy="66" r="3" fill="url(#shuSkin)"/>';
-        }
-        s += '</g>'; /* body */
-        /* head: black hair under a teal scholar's cloth */
-        s += '<g class="fox-head">' +
-          '<path class="wa-sleeve" d="M79 27 Q87 40 85 54" stroke="#2e7f86" stroke-width="4.2" fill="none" stroke-linecap="round"/>' +
-          '<path class="wa-sleeve" style="animation-delay:-1.1s" d="M82 29 Q88 39 87.5 49" stroke="#256a70" stroke-width="3.4" fill="none" stroke-linecap="round"/>' +
-          '<circle cx="60" cy="35" r="20.5" fill="#262130"/>' +
-          '<ellipse cx="60" cy="39" rx="15.8" ry="14.6" fill="url(#shuSkin)"/>' +
-          '<path d="M44.5 37 Q43.5 21.5 60 20.5 Q76.5 21.5 75.5 37 Q70 27.5 60 28.5 Q50 27.5 44.5 37 Z" fill="#262130"/>' +
-          '<path d="M39.8 29 Q60 15.5 80.2 29 L79.6 21.5 Q60 9.5 40.4 21.5 Z" fill="#2e7f86"/>' +
-          '<path d="M39.8 29 Q60 15.5 80.2 29" stroke="#256a70" stroke-width="1.4" fill="none"/>' +
-          '<circle cx="79.8" cy="25" r="3.1" fill="#256a70"/>' +
-          '<ellipse cx="46.8" cy="44.5" rx="3.6" ry="2.1" fill="#c9a3b8" opacity="0.5"/>' +
-          '<ellipse cx="73.2" cy="44.5" rx="3.6" ry="2.1" fill="#c9a3b8" opacity="0.5"/>' +
-          petFaceSVG(face || "normal", "shuEye") +
-          '</g>'; /* head */
-        /* blue ghost flames flicker beneath his feet: 2 / 3 / 4 / 5 */
-        var flameXs = [[50, 70], [43, 60, 77], [38, 53, 67, 82], [35, 48, 61, 74, 86]][stage];
-        for (var fi = 0; fi < flameXs.length; fi++) {
-          var fx = flameXs[fi];
-          s += '<g class="ghost-flame" style="animation-delay:-' + (fi * 0.37).toFixed(2) + 's">' +
-            '<path d="M' + fx + ' 91 C' + (fx + 4.2) + ' 96.5 ' + (fx + 4.6) + ' 101 ' + fx + ' 106.5 C' + (fx - 4.6) + ' 101 ' + (fx - 4.2) + ' 96.5 ' + fx + ' 91 Z" fill="url(#shuFlame)"/>' +
-            '<circle cx="' + fx + '" cy="101.5" r="2.1" fill="#dff2ff" opacity="0.9"/></g>';
-        }
-        if (stage >= 3) {
-          s += '<path class="fox-petal" style="animation-delay:-0.6s" d="M110 22 l1.2 2.7 2.7 1.2 -2.7 1.2 -1.2 2.7 -1.2 -2.7 -2.7 -1.2 2.7 -1.2 Z" fill="#a8d4ff"/>' +
-            '<path class="fox-petal" style="animation-delay:-3.1s" d="M14 16 l1 2.2 2.2 1 -2.2 1 -1 2.2 -1 -2.2 -2.2 -1 2.2 -1 Z" fill="#ffe9a3"/>';
-        }
-        s += '</g></svg>';
-        return s;
-      }
-
-      /* ---------- le artwork (original SVG: 长乐仙子， the lotus fairy)
-         Silver hair and a phoenix crown that grows grander per stage,
-         a pink top and green skirt, a flower fan in her hand, and a
-         lotus platform under her feet that blooms wider as she grows.
-         She rides the platform on the shared wa-float bob. */
-      function leSVG(stage, face) {
-        var s = "";
-        s += '<svg class="fox" viewBox="0 0 120 112" fill="none" aria-hidden="true">';
-        s += '<defs>' +
-          '<linearGradient id="leSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff3e4"/><stop offset="100%" stop-color="#ffd9b8"/></linearGradient>' +
-          '<linearGradient id="leHair" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fdfdff"/><stop offset="100%" stop-color="#c3cede"/></linearGradient>' +
-          '<linearGradient id="leTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f9c2d0"/><stop offset="100%" stop-color="#ef8fb0"/></linearGradient>' +
-          '<linearGradient id="leSkirt" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#bfe3b0"/><stop offset="100%" stop-color="#5da864"/></linearGradient>' +
-          '<linearGradient id="leLotus" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fbd3e0"/><stop offset="100%" stop-color="#ef8fb5"/></linearGradient>' +
-          '<linearGradient id="leGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffe9a3"/><stop offset="100%" stop-color="#d99a26"/></linearGradient>' +
-          '<radialGradient id="leEye" cx="50%" cy="32%" r="78%"><stop offset="0%" stop-color="#9a5d8a"/><stop offset="55%" stop-color="#54263f"/><stop offset="100%" stop-color="#22060f"/></radialGradient>' +
-          '<radialGradient id="leGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffd9e8" stop-opacity="0.8"/><stop offset="60%" stop-color="#f7a8c4" stop-opacity="0.3"/><stop offset="100%" stop-color="#f7a8c4" stop-opacity="0"/></radialGradient>' +
-          '</defs>';
-        s += '<ellipse cx="60" cy="108" rx="24" ry="3.2" fill="#1c2a1a" opacity="0.1"/>';
-        s += '<g class="wa-float-g">';
-        if (stage >= 3) {
-          s += '<ellipse class="fox-aura" cx="60" cy="54" rx="52" ry="50" fill="url(#leGlow)"/>' +
-            '<circle class="fox-aura" cx="60" cy="36" r="27.5" fill="none" stroke="#f7a8c4" stroke-width="1.8" opacity="0.5"/>';
-        }
-        /* body: pink top, green skirt, floating ribbons */
-        s += '<g class="fox-body-g"><g class="fox-breath-g">' +
-          '<path class="wa-sleeve" d="M45 53 Q30 62 25 80" stroke="url(#leTop)" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.8"/>' +
-          '<path d="M47 61 Q60 57 73 61 L81 90 Q60 96 39 90 Z" fill="url(#leSkirt)"/>' +
-          (stage >= 2 ? '<path d="M40.5 89 Q60 94.8 79.5 89" stroke="#ffd76e" stroke-width="1.6" fill="none" opacity="0.9"/>' : '') +
-          '<path d="M45.5 50 Q60 45 74.5 50 L73.2 63.5 Q60 67.5 46.8 63.5 Z" fill="url(#leTop)"/>' +
-          '<path d="M46.8 61.5 Q60 65.5 73.2 61.5 L73.6 65.5 Q60 69.5 46.4 65.5 Z" fill="url(#leGold)"/>' +
-          '<path d="M52 50.5 L60 57.5 L68 50.5 L66 47.4 Q60 45.9 54 47.4 Z" fill="#fdf3d8"/>' +
-          '<circle cx="35" cy="76" r="3" fill="url(#leSkin)"/>' +
-          '</g>';
-        /* flower fan in her right hand, opening wider per stage */
-        var fanR = (10.5 + stage * 1.6).toFixed(1);
-        s += '<g>' +
-          '<path d="M74 57 L88 49" stroke="url(#leTop)" stroke-width="5" stroke-linecap="round"/>' +
-          '<g class="wa-sleeve">' +
-            '<path transform="translate(92 47) scale(' + (fanR / 11).toFixed(2) + ') translate(-92 -47)" d="M81.5 47 A10.5 10.5 0 0 1 102.5 47 L92 47 Z" fill="url(#leLotus)" stroke="#e2709e" stroke-width="1"/>' +
-            '<circle cx="87" cy="42.5" r="1.3" fill="#fff3f8"/><circle cx="92" cy="40.5" r="1.3" fill="#fff3f8"/><circle cx="97" cy="42.5" r="1.3" fill="#fff3f8"/>' +
-            '<path d="M92 47 L92 58" stroke="#b8860b" stroke-width="1.8" stroke-linecap="round"/>' +
-          '</g>' +
-          '<circle cx="86" cy="50.5" r="3" fill="url(#leSkin)"/></g>';
-        s += '</g>'; /* body */
-        /* head: long silver hair and a phoenix crown */
-        s += '<g class="fox-head">' +
-          '<path d="M41.5 29 Q35 56 39.5 73 L47 73 Q43.5 50 45.5 33 Z" fill="url(#leHair)"/>' +
-          '<path d="M78.5 29 Q85 56 80.5 73 L73 73 Q76.5 50 74.5 33 Z" fill="url(#leHair)"/>' +
-          '<circle cx="60" cy="35" r="20.5" fill="url(#leHair)"/>' +
-          '<ellipse cx="60" cy="39" rx="15.8" ry="14.6" fill="url(#leSkin)"/>' +
-          '<path d="M44.5 37 Q43.5 21.5 60 20.5 Q76.5 21.5 75.5 37 Q70 27.5 60 28.5 Q50 27.5 44.5 37 Z" fill="url(#leHair)"/>' +
-          '<ellipse cx="46.8" cy="44.5" rx="3.6" ry="2.1" fill="#f49bb0" opacity="0.6"/>' +
-          '<ellipse cx="73.2" cy="44.5" rx="3.6" ry="2.1" fill="#f49bb0" opacity="0.6"/>' +
-          petFaceSVG(face || "normal", "leEye");
-        if (stage === 0) {
-          s += '<circle cx="54.5" cy="14.5" r="2" fill="#f7a8b8"/><circle cx="60" cy="12" r="2.2" fill="#f7a8b8"/><circle cx="65.5" cy="14.5" r="2" fill="#f7a8b8"/>' +
-            '<circle cx="57.2" cy="16.8" r="1.7" fill="#f9c2d0"/><circle cx="62.8" cy="16.8" r="1.7" fill="#f9c2d0"/>' +
-            '<circle cx="60" cy="14.8" r="1.5" fill="url(#leGold)"/>';
-        } else if (stage === 1) {
-          s += '<path d="M51 16 Q60 5.5 69 16 Q60 12 51 16 Z" fill="url(#leGold)" stroke="#b8860b" stroke-width="0.8"/>' +
-            '<circle cx="69" cy="12.5" r="1.7" fill="url(#leGold)" stroke="#b8860b" stroke-width="0.7"/>' +
-            '<path d="M51 16 Q46 14 44 10.5 Q48.5 10.5 51 13 Z" fill="url(#leGold)" opacity="0.95"/>';
-        } else if (stage === 2) {
-          s += '<path d="M49.5 16.5 Q60 4 70.5 16.5 Q60 11.5 49.5 16.5 Z" fill="url(#leGold)" stroke="#b8860b" stroke-width="0.9"/>' +
-            '<circle cx="70.5" cy="12" r="2" fill="url(#leGold)" stroke="#b8860b" stroke-width="0.8"/>' +
-            '<path d="M49.5 16.5 Q43.5 14.5 41 9.5 Q46.5 9.5 49.5 13.5 Z" fill="url(#leGold)" opacity="0.95"/>' +
-            '<path d="M46 19 L46 23.5" stroke="#d99a26" stroke-width="1"/><circle cx="46" cy="25" r="1.4" fill="#f7a8b8"/>' +
-            '<path d="M74 19 L74 23.5" stroke="#d99a26" stroke-width="1"/><circle cx="74" cy="25" r="1.4" fill="#f7a8b8"/>' +
-            '<circle cx="60" cy="13.5" r="1.8" fill="#e2494d" stroke="#ffffff" stroke-width="0.7"/>';
-        } else {
-          s += '<path d="M47.5 17 Q60 1.5 72.5 17 Q60 11 47.5 17 Z" fill="url(#leGold)" stroke="#b8860b" stroke-width="1"/>' +
-            '<circle cx="72.5" cy="11.5" r="2.3" fill="url(#leGold)" stroke="#b8860b" stroke-width="0.8"/>' +
-            '<path d="M47.5 17 Q40.5 15 37.5 8.5 Q44 8.5 47.5 13.5 Z" fill="url(#leGold)" opacity="0.95"/>' +
-            '<path d="M72.5 17 Q79.5 15 82.5 8.5 Q76 8.5 72.5 13.5 Z" fill="url(#leGold)" opacity="0.95"/>' +
-            '<circle cx="60" cy="13.8" r="2.1" fill="#e2494d" stroke="#ffffff" stroke-width="0.8"/>' +
-            '<path d="M44.5 19.5 L44.5 26" stroke="#d99a26" stroke-width="1"/><circle cx="44.5" cy="24" r="1.2" fill="#ffd76e"/><circle cx="44.5" cy="28" r="1.5" fill="#f7a8b8"/>' +
-            '<path d="M75.5 19.5 L75.5 26" stroke="#d99a26" stroke-width="1"/><circle cx="75.5" cy="24" r="1.2" fill="#ffd76e"/><circle cx="75.5" cy="28" r="1.5" fill="#f7a8b8"/>' +
-            '<circle cx="60" cy="21" r="1" fill="#ffd76e"/><circle cx="60" cy="24.2" r="1.5" fill="#e2494d" stroke="#ffffff" stroke-width="0.5"/>';
-        }
-        s += '</g>'; /* head */
-        /* lotus platform: blooms wider with each stage */
-        var lp = '<path d="M60 105 C55.5 99.5 55.5 93.5 60 89.5 C64.5 93.5 64.5 99.5 60 105 Z" fill="url(#leLotus)" stroke="#e2709e" stroke-width="0.8"/>';
-        s += '<g>';
-        if (stage >= 2) {
-          s += '<g opacity="0.8">' +
-            '<g transform="rotate(-42 60 103)">' + lp + '</g>' +
-            '<g transform="rotate(-21 60 103)">' + lp + '</g>' +
-            '<g transform="rotate(21 60 103)">' + lp + '</g>' +
-            '<g transform="rotate(42 60 103)">' + lp + '</g></g>';
-        }
-        var front = stage === 0 ? [-24, 0, 24] : stage === 1 ? [-32, -16, 0, 16, 32] : [-38, -25, -12, 0, 12, 25, 38];
-        for (var li = 0; li < front.length; li++) {
-          s += '<g transform="rotate(' + front[li] + ' 60 104)">' + lp + '</g>';
-        }
-        s += '<ellipse cx="60" cy="104.5" rx="17" ry="3" fill="#d96a9c" opacity="0.55"/>';
-        if (stage >= 3) {
-          s += '<ellipse class="fox-aura" cx="60" cy="100" rx="30" ry="8" fill="url(#leGlow)"/>' +
-            '<circle cx="60" cy="97.5" r="2.2" fill="url(#leGold)" stroke="#b8860b" stroke-width="0.7"/>';
-        }
-        s += '</g>';
-        if (stage >= 3) {
-          s += '<path class="fox-petal" style="animation-delay:-0.9s" d="M22 6 c2 2.4 2.5 4.6 0 7 c-2.5 -2.4 -2 -4.6 0 -7 Z" fill="#f7a8b8" opacity="0.85"/>' +
-            '<path class="fox-petal" style="animation-delay:-3.3s" d="M99 5 c1.9 2.2 2.3 4.3 0 6.5 c-2.3 -2.2 -1.9 -4.3 0 -6.5 Z" fill="#f9c2d0" opacity="0.8"/>';
-        }
-        s += '</g></svg>';
-        return s;
-      }
       var LOTUS_SVG = '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
         '<path d="M12 3.6c1.9 2.1 2.9 4.5 2.9 7.1 0 2.1-1.1 3.9-2.9 5.1-1.8-1.2-2.9-3-2.9-5.1 0-2.6 1-5 2.9-7.1z"/>' +
         '<path d="M4.3 9.2c2.8.2 5.1 1.3 6.9 3.2-1.6 1.5-3.8 2-6 1.4C3.9 12.5 3.7 10.7 4.3 9.2z"/>' +
@@ -2530,7 +2036,7 @@
       function petMenuHTML() {
         var stage = PET_STAGES[pet.stage];
         var hint = pet.stage < 3
-          ? "每周一长大一阶"
+          ? "每周一进化一阶 · 光环更亮，新动作解锁"
           : pet.bonus < PET_BONUS.length ? "每周解锁一个新动作" : "新动作已全部解锁";
         var html = '<div class="pet-menu-head"><div class="pm-name">' + SP().name + '<span>' + stage.name +
           '</span></div><div class="pm-hint">' + hint + "</div></div>";
@@ -2660,7 +2166,9 @@
         var pos = clampPetPos(pet.x, pet.y);
         pet.x = pos.x; pet.y = pos.y;
         petRoot.innerHTML =
-          '<div class="pet' + (pet.sleeping ? " sleeping" : "") + (petDizzy ? " fainted" : "") +
+          '<div class="pet stage-' + pet.stage + (pet.sleeping ? " sleeping" : "") +
+            (petDizzy ? " fainted" : "") + (pet.frozen ? " frozen" : "") +
+            (petWalk.facing < 0 ? " dir-l" : " dir-r") +
             '" id="pet" role="button" tabindex="0" aria-haspopup="true" aria-expanded="' +
             (petMenuOpen ? "true" : "false") + '" aria-label="桌宠' + SP().name + '，' + PET_STAGES[pet.stage].name +
             '，点一下和它打招呼，双击让它原地休息或继续' + SP().moveWord + '，长按或右键打开互动菜单，也可以拖动、甩出去" style="left:' + pet.x + "px;top:" + pet.y + 'px;--ps:' +
@@ -2674,7 +2182,9 @@
               (petMenuOpen ? petMenuHTML() : "") + "</div>" +
             '<div class="pet-panel" id="pet-panel" role="dialog" aria-label="' + SP().name + '的状态"></div>' +
             '<div class="pet-walk" id="pet-walk"><div class="pet-scale" id="pet-scale">' +
-              petSVG(pet.stage, currentPetFace()) + "</div></div>" +
+              '<div class="pet-fig"><div class="pet-halo" aria-hidden="true"></div>' +
+              '<div class="pet-sprite" style="background-image:url(' + SP().sheet + ')" aria-hidden="true"></div></div>' +
+              "</div></div>" +
             '<div class="pet-fx" id="pet-fx"></div>' +
           "</div>" +
           '<div class="pet-toast" id="pet-toast" role="status"></div>';
@@ -3168,6 +2678,8 @@
         if (pet.sleeping) petWake(true);
         pet.frozen = !pet.frozen;
         savePet();
+        var rootEl = petEl();
+        if (rootEl) rootEl.classList.toggle("frozen", pet.frozen);
         updatePetStatus();
         if (pet.frozen) {
           petSay(SP().says.freezeSay, 2600);
@@ -3237,7 +2749,7 @@
         if (petPhysTimer) { window.clearInterval(petPhysTimer); petPhysTimer = null; }
         petFlying = false;
         var walkEl = document.getElementById("pet-walk");
-        if (walkEl) walkEl.style.transform = "translateX(" + petWalk.x + "px) scaleX(" + petWalk.facing + ")";
+        if (walkEl) walkEl.style.transform = "translateX(" + petWalk.x + "px)";
       }
       function petStartPhysics() {
         if (reduceMotion) return; /* reduced motion: static frame, no flinging */
@@ -3452,8 +2964,9 @@
       /* ---------- ambient walking ----------
          小娲 drifts along the bottom around her home spot: she picks
          a random target inside her roam range, floats to it, often
-         pauses for a few seconds, and turns around (facing flips) at
-         the range edges and whenever the next leg heads the other way.
+         pauses for a few seconds, and turns around at the range edges
+         and whenever the next leg heads the other way — the sprite
+         sheet's walk-right / walk-left rows do the turning.
          The range is clamped so she never drifts off-screen. While she
          is actually moving, the root carries .walking. Double-click
          freezes the drift
@@ -3497,7 +3010,11 @@
           petWalk.x += step * petWalk.facing;
           el.classList.add("walking");
         }
-        walkEl.style.transform = "translateX(" + petWalk.x.toFixed(1) + "px) scaleX(" + petWalk.facing + ")";
+        walkEl.style.transform = "translateX(" + petWalk.x.toFixed(1) + "px)";
+        /* The sheet has a real left-walk row, so direction switches
+           rows (dir-l / dir-r) instead of mirroring the artwork. */
+        el.classList.toggle("dir-l", petWalk.facing < 0);
+        el.classList.toggle("dir-r", petWalk.facing >= 0);
       }, 50);
 
       /* ---------- pomodoro link + status/Zzz ticker ---------- */
