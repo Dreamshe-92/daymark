@@ -944,31 +944,95 @@
 
       /* ================= 夜读 (人民日报) =================
          Fetched at runtime from the People's Daily app homepage
-         (https://www.peopleapp.com/home, served with
-         Access-Control-Allow-Origin: *). Its __NUXT_DATA__ payload carries
-         the latest 夜读 record: abstract, title, article id, a "13" type
-         marker, a 13-digit publish timestamp and the narration mp3.
-         The result is cached in localStorage, rechecked hourly, and the
-         block stays hidden when there is nothing to show — no error ever
-         reaches the wallpaper. */
-      var NR_KEY = "daymark-nightread-v1";
+         (https://www.peopleapp.com/home). Its __NUXT_DATA__ payload
+         carries the latest 夜读 record: abstract, title, article id,
+         a "13" type marker, a 13-digit publish timestamp and the
+         narration mp3. The direct URL is often blocked by CORS, so
+         public proxies are tried next, in order, each with an ~8s
+         timeout. Fetched records go into a localStorage history
+         (newest first, max 7, deduped by article id); the card always
+         shows the newest history entry, so when every route fails it
+         keeps showing the previous day's article, labelled with that
+         article's own date. A seed record (tonight's article, baked
+         in below) guarantees a first open is never empty. Rechecked
+         hourly; no error ever reaches the wallpaper. */
+      var NR_KEY = "daymark-nightread-v1"; /* legacy single-record cache */
+      var NR_HIST_KEY = "daymark-nightread-history-v1";
       var NR_HOME = "https://www.peopleapp.com/home";
+      var NR_ROUTES = [
+        NR_HOME,
+        "https://api.allorigins.win/raw?url=" + encodeURIComponent(NR_HOME),
+        "https://api.codetabs.com/v1/proxy?quest=" + NR_HOME
+      ];
+      /* Seed: tonight's 夜读 (2026-11-22), written into history only
+         when history is empty. No audio: the exact narration URL for
+         this article could not be confirmed, so the seed has no play
+         button until a successful fetch supplies one. */
+      var NR_SEED = {
+        title: "夜读 | “慌啥子嘛，慢慢来” 稳扎稳打自有花开",
+        summary: "向阳而行，慢慢活成闪闪发光的自己。",
+        id: "30053614055",
+        ts: 1795356334000,
+        audio: "",
+        url: "https://www.peopleapp.com/?id=30053614055"
+      };
       var nrEl = document.getElementById("nightread");
       var nrAudio = null;
       var nrPlaying = false;
       var nrShownId = "";
+      var nrShownAudio = "";
 
-      function nrLoadCache() {
-        try {
-          var raw = localStorage.getItem(NR_KEY);
-          if (!raw) return null;
-          var p = JSON.parse(raw);
-          if (p && typeof p.title === "string" && p.title && typeof p.url === "string" && p.url) return p;
-        } catch (e) { /* corrupted cache — ignore */ }
-        return null;
+      function nrValidRec(p) {
+        return !!(p && typeof p.title === "string" && p.title &&
+                  typeof p.url === "string" && p.url);
       }
-      function nrSaveCache(rec) {
-        try { localStorage.setItem(NR_KEY, JSON.stringify(rec)); } catch (e) { /* storage unavailable */ }
+      function nrLoadHistory() {
+        var list = [];
+        try {
+          var raw = localStorage.getItem(NR_HIST_KEY);
+          if (raw) {
+            var arr = JSON.parse(raw);
+            if (Array.isArray(arr)) list = arr.filter(nrValidRec);
+          }
+        } catch (e) { /* corrupted history — start over */ }
+        /* Migrate the legacy single-record cache, if any. */
+        try {
+          var old = localStorage.getItem(NR_KEY);
+          if (old) {
+            var p = JSON.parse(old);
+            if (nrValidRec(p)) {
+              var dup = false;
+              for (var i = 0; i < list.length; i++) {
+                if (p.id && list[i].id === p.id) dup = true;
+              }
+              if (!dup) list.push(p);
+            }
+            localStorage.removeItem(NR_KEY);
+          }
+        } catch (e) { /* ignore */ }
+        list.sort(function (a, b) { return (b.ts || 0) - (a.ts || 0); });
+        return list.slice(0, 7);
+      }
+      function nrSaveHistory(list) {
+        try { localStorage.setItem(NR_HIST_KEY, JSON.stringify(list.slice(0, 7))); } catch (e) { /* storage unavailable */ }
+      }
+      var nrHistory = nrLoadHistory();
+      if (!nrHistory.length) nrHistory = [NR_SEED];
+      /* Persist right away so a migrated legacy record (or the seed)
+         survives even if no fetch ever succeeds. */
+      nrSaveHistory(nrHistory);
+      function nrLatest() { return nrHistory.length ? nrHistory[0] : null; }
+      /* Merge a freshly fetched record into history and show the newest. */
+      function nrAddRecord(rec) {
+        var list = [];
+        for (var i = 0; i < nrHistory.length; i++) {
+          if (!(rec.id && nrHistory[i].id === rec.id)) list.push(nrHistory[i]);
+        }
+        list.push(rec);
+        list.sort(function (a, b) { return (b.ts || 0) - (a.ts || 0); });
+        nrHistory = list.slice(0, 7);
+        nrSaveHistory(nrHistory);
+        nrRender(nrLatest());
       }
       function nrCleanTitle(t) {
         return String(t).replace(/^夜读\s*[|｜]\s*/, "").trim();
@@ -1018,10 +1082,14 @@
           nrEl.hidden = true;
           nrEl.innerHTML = "";
           nrShownId = "";
+          nrShownAudio = "";
           return;
         }
-        /* Same article already on screen: keep it (and any playing audio). */
-        if (rec.id && rec.id === nrShownId && !nrEl.hidden) return;
+        /* Same article already on screen with the same audio state:
+           keep it (and any playing audio). A re-render still happens
+           when a later fetch supplies the audio the seed lacked. */
+        if (rec.id && rec.id === nrShownId && !nrEl.hidden &&
+            (!!rec.audio === !!nrShownAudio)) return;
         nrStopAudio();
         var d = rec.ts ? new Date(rec.ts) : new Date();
         var label = "夜读 · " + (d.getMonth() + 1) + "月" + d.getDate() + "日";
@@ -1042,6 +1110,7 @@
         nrEl.hidden = false;
         nrEl.innerHTML = html;
         nrShownId = rec.id || "";
+        nrShownAudio = rec.audio || "";
         var open = function () { window.open(rec.url, "_blank", "noopener"); };
         var card = nrEl.querySelector(".nr-card");
         card.addEventListener("click", open);
@@ -1156,33 +1225,56 @@
         if (bm) return { title: bm[0], summary: "", id: "", ts: 0, audio: "" };
         return null;
       }
+      /* One route attempt with an ~8s timeout (AbortController). */
+      function nrFetchRoute(url) {
+        var ctrl = (typeof AbortController === "function") ? new AbortController() : null;
+        var timer = ctrl ? window.setTimeout(function () { ctrl.abort(); }, 8000) : null;
+        var done = function () { if (timer) window.clearTimeout(timer); };
+        return fetch(url, { credentials: "omit", signal: ctrl ? ctrl.signal : undefined })
+          .then(function (r) {
+            done();
+            if (!r.ok) throw new Error("night-read fetch failed");
+            return r.text();
+          })
+          .catch(function (e) { done(); throw e; });
+      }
+      function nrParseHtml(html) {
+        var rec = null;
+        var dm = html.match(/<script[^>]*id="__NUXT_DATA__"[^>]*>([\s\S]*?)<\/script>/);
+        if (dm) {
+          try {
+            var arr = JSON.parse(dm[1]);
+            if (Array.isArray(arr)) rec = nrFromArray(arr);
+          } catch (e) { /* fall through to the text parse */ }
+        }
+        if (!rec) rec = nrFromText(html);
+        if (rec && rec.title) {
+          rec.url = rec.id ? "https://www.peopleapp.com/?id=" + rec.id : NR_HOME;
+          if (!rec.ts) rec.ts = Date.now();
+          return rec;
+        }
+        return null;
+      }
+      /* Try the routes in order; the first one that yields a record
+         wins and is merged into history. When every route fails, the
+         card keeps showing the newest history entry (the previous
+         day's article) — nothing is reported on the wallpaper. */
       function nrFetch() {
         if (typeof fetch !== "function") return;
-        fetch(NR_HOME, { credentials: "omit" }).then(function (r) {
-          if (!r.ok) throw new Error("night-read fetch failed");
-          return r.text();
-        }).then(function (html) {
-          var rec = null;
-          var dm = html.match(/<script[^>]*id="__NUXT_DATA__"[^>]*>([\s\S]*?)<\/script>/);
-          if (dm) {
-            try {
-              var arr = JSON.parse(dm[1]);
-              if (Array.isArray(arr)) rec = nrFromArray(arr);
-            } catch (e) { /* fall through to the text parse */ }
-          }
-          if (!rec) rec = nrFromText(html);
-          if (rec && rec.title) {
-            rec.url = rec.id ? "https://www.peopleapp.com/?id=" + rec.id : NR_HOME;
-            if (!rec.ts) rec.ts = Date.now();
-            nrSaveCache(rec);
-            nrRender(rec);
-          }
-          /* On any failure above, whatever is already shown (the cached
-             record) simply stays — nothing is reported on the wallpaper. */
-        }).catch(function () { /* keep the cached record, stay silent */ });
+        var idx = 0;
+        var attempt = function () {
+          if (idx >= NR_ROUTES.length) return;
+          var url = NR_ROUTES[idx++];
+          nrFetchRoute(url).then(function (html) {
+            var rec = nrParseHtml(html);
+            if (rec) nrAddRecord(rec);
+            else attempt();
+          }).catch(function () { attempt(); });
+        };
+        attempt();
       }
 
-      nrRender(nrLoadCache());
+      nrRender(nrLatest());
       nrFetch();
       window.setInterval(nrFetch, 3600000);
 
