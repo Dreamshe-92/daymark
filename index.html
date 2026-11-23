@@ -946,9 +946,11 @@
          Fetched at runtime from the People's Daily app homepage
          (https://www.peopleapp.com/home). Its __NUXT_DATA__ payload
          carries the latest 夜读 record: abstract, title, article id,
-         a "13" type marker, a 13-digit publish timestamp and the
-         narration mp3. The direct URL is often blocked by CORS, so
-         public proxies are tried next, in order, each with an ~8s
+         a "13" type marker (absent from 2026-11-23 on, so a looser
+         title/id/timestamp pattern is tried next), a 13-digit publish
+         timestamp and the narration mp3. The direct URL is often
+         blocked by CORS, so public proxies are tried next, in order
+         (proxy.cors.dev, allorigins, codetabs), each with an ~8s
          timeout. Fetched records go into a localStorage history
          (newest first, max 7, deduped by article id); the card always
          shows the newest history entry, so when every route fails it
@@ -961,6 +963,7 @@
       var NR_HOME = "https://www.peopleapp.com/home";
       var NR_ROUTES = [
         NR_HOME,
+        "https://proxy.cors.dev/" + NR_HOME,
         "https://api.allorigins.win/raw?url=" + encodeURIComponent(NR_HOME),
         "https://api.codetabs.com/v1/proxy?quest=" + NR_HOME
       ];
@@ -1131,7 +1134,8 @@
       }
       /* Primary parse: scan the flattened __NUXT_DATA__ array for 夜读
          titles. The record layout around a title is: abstract just
-         before it, then "文章id","13","13位发布时间戳" right after it;
+         before it, then "文章id","13","13位发布时间戳" right after it
+         (or, when the "13" marker is absent, "文章id","13位发布时间戳");
          the narration mp3 sits a little earlier, referenced by a nearby
          {audioUrl: n} / {voiceUrl: n} object whose value indexes the
          mp3 string in the same array. Pick the latest publish time. */
@@ -1144,6 +1148,12 @@
               String(arr[i + 2]) === "13" && /^\d{13}$/.test(String(arr[i + 3]))) {
             rec.id = arr[i + 1];
             rec.ts = Number(arr[i + 3]);
+          } else if (typeof arr[i + 1] === "string" && /^\d{8,12}$/.test(arr[i + 1]) &&
+              /^\d{13}$/.test(String(arr[i + 2]))) {
+            /* Loose layout (seen from 2026-11-23): the "13" type marker
+               is gone, so title, article id and timestamp sit adjacent. */
+            rec.id = arr[i + 1];
+            rec.ts = Number(arr[i + 2]);
           }
           var lo = Math.max(0, i - 18);
           var hi = Math.min(arr.length - 1, i + 18);
@@ -1190,7 +1200,8 @@
         return best;
       }
       /* Fallback parse: quoted "夜读 | …" strings in the raw HTML, with the
-         "id","13",timestamp triple searched in the surrounding text. */
+         "id","13",timestamp triple (or the looser "id",timestamp pair
+         when the "13" marker is absent) searched in surrounding text. */
       function nrFromText(html) {
         var best = null;
         var re = /"((?:[^"\\]|\\.)*夜读\s*[|｜](?:[^"\\]|\\.)*)"/g;
@@ -1201,9 +1212,11 @@
           if (typeof title !== "string" || !title) continue;
           var rec = { title: title, summary: "", id: "", ts: 0, audio: "" };
           var tail = html.slice(m.index, m.index + 300);
+          var around = html.slice(Math.max(0, m.index - 500), m.index + 2000);
           var idm = tail.match(/"(\d{8,12})"\s*,\s*"?13"?\s*,\s*"(\d{13})"/) ||
-                    html.slice(Math.max(0, m.index - 500), m.index + 2000)
-                      .match(/"(\d{8,12})"\s*,\s*"?13"?\s*,\s*"?(\d{13})"?/);
+                    tail.match(/"(\d{8,12})"\s*,\s*"(\d{13})"/) ||
+                    around.match(/"(\d{8,12})"\s*,\s*"?13"?\s*,\s*"?(\d{13})"?/) ||
+                    around.match(/"(\d{8,12})"\s*,\s*"(\d{13})"/);
           if (idm) { rec.id = idm[1]; rec.ts = Number(idm[2]); }
           /* The full narration file (…/vod/content/output/…_opt.mp3) sits
              shortly before the title; per-voice segment mp3s are not it. */
