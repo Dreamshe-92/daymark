@@ -130,37 +130,58 @@
         color: rgba(255, 255, 255, 0.7); text-shadow: 0 1px 10px rgba(9, 20, 32, 0.55);
       }
 
-      /* ---------- 夜读 (top-right, under the date block) ---------- */
+      /* ---------- 夜读 (top-right, under the date block) ----------
+         No card box: the text sits directly on the wallpaper, invisible
+         until hover / keyboard focus / a tap reveals it over a soft
+         gradient veil. Only the play button stays faintly visible. */
       .nightread { margin-top: 14px; display: flex; justify-content: flex-end; }
       .nightread[hidden] { display: none; }
       .nr-card {
-        display: flex; align-items: flex-start; gap: 12px;
-        max-width: min(92vw, 400px); cursor: pointer; text-align: left;
-        border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 16px;
-        background: rgba(12, 22, 34, 0.42);
-        padding: 12px 16px;
-        box-shadow: 0 4px 18px rgba(9, 20, 32, 0.25);
-        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        position: relative;
+        display: flex; flex-direction: column; align-items: flex-end;
+        max-width: min(92vw, 400px); cursor: pointer; text-align: right;
+        padding: 2px 4px;
         color: #fff;
       }
-      .nr-card:hover { background: rgba(12, 22, 34, 0.55); }
-      .nr-card:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.85); outline-offset: 2px; }
-      .nr-main { min-width: 0; }
-      .nr-label { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; color: #ffb340; }
-      .nr-title { margin: 4px 0 0; font-size: 15px; font-weight: 600; line-height: 1.45; }
+      .nr-card:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.85); outline-offset: 6px; }
+      .nr-veil {
+        position: absolute; inset: -18px -20px; z-index: 0; pointer-events: none;
+        background: linear-gradient(to top, rgba(9, 20, 32, 0.55) 0%, rgba(9, 20, 32, 0.28) 45%, rgba(9, 20, 32, 0) 100%);
+        opacity: 0; transition: opacity 0.35s ease;
+      }
+      .nr-main { position: relative; z-index: 1; min-width: 0; }
+      .nr-title, .nr-summary {
+        opacity: 0; transform: translateY(8px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        text-shadow: 0 1px 12px rgba(9, 20, 32, 0.6);
+      }
+      .nr-title { margin: 0; font-size: 15px; font-weight: 600; line-height: 1.5; transition-delay: 0.05s; }
       .nr-summary {
-        margin: 3px 0 0; font-size: 13px; color: rgba(255, 255, 255, 0.85);
-        white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px;
+        margin: 4px 0 0; font-size: 13px; line-height: 1.5;
+        color: rgba(255, 255, 255, 0.88); transition-delay: 0.13s;
       }
-      .nr-source { margin: 5px 0 0; font-size: 11px; color: rgba(255, 255, 255, 0.65); }
+      .nr-card:hover .nr-veil, .nr-card:focus-visible .nr-veil, .nr-card.nr-on .nr-veil { opacity: 1; }
+      .nr-card:hover .nr-title, .nr-card:focus-visible .nr-title, .nr-card.nr-on .nr-title,
+      .nr-card:hover .nr-summary, .nr-card:focus-visible .nr-summary, .nr-card.nr-on .nr-summary {
+        opacity: 1; transform: translateY(0);
+      }
       .nr-play {
-        flex-shrink: 0; width: 34px; height: 34px; margin-top: 2px; padding: 0;
+        position: relative; z-index: 1; flex-shrink: 0;
+        width: 34px; height: 34px; margin-top: 10px; padding: 0;
         display: flex; align-items: center; justify-content: center;
-        border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.35);
-        background: rgba(255, 255, 255, 0.12); color: #fff; cursor: pointer;
+        border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.4);
+        background: rgba(255, 255, 255, 0.1); color: #fff; cursor: pointer;
+        opacity: 0.45; transition: opacity 0.3s ease, background 0.3s ease;
       }
-      .nr-play:hover { background: rgba(255, 255, 255, 0.24); }
+      .nr-card:hover .nr-play, .nr-card:focus-visible .nr-play, .nr-card.nr-on .nr-play {
+        opacity: 1; background: rgba(255, 255, 255, 0.22);
+      }
       .nr-play svg { width: 14px; height: 14px; display: block; }
+      @media (prefers-reduced-motion: reduce) {
+        .nr-title, .nr-summary { opacity: 1; transform: none; transition: none; }
+        .nr-veil { opacity: 1; transition: none; }
+        .nr-play { transition: none; }
+      }
 
       /* ---------- floating tool dot (iOS AssistiveTouch style) ---------- */
       .tool-dot {
@@ -1094,16 +1115,13 @@
         if (rec.id && rec.id === nrShownId && !nrEl.hidden &&
             (!!rec.audio === !!nrShownAudio)) return;
         nrStopAudio();
-        var d = rec.ts ? new Date(rec.ts) : new Date();
-        var label = "夜读 · " + (d.getMonth() + 1) + "月" + d.getDate() + "日";
         var html = "";
         html += '<div class="nr-card" role="link" tabindex="0" aria-label="打开人民日报夜读：' +
           esc(nrCleanTitle(rec.title)) + '">';
+        html += '<div class="nr-veil" aria-hidden="true"></div>';
         html += '<div class="nr-main">';
-        html += '<p class="nr-label">' + esc(label) + "</p>";
         html += '<p class="nr-title">' + esc(nrCleanTitle(rec.title)) + "</p>";
         if (rec.summary) html += '<p class="nr-summary">' + esc(rec.summary) + "</p>";
-        html += '<p class="nr-source">来源：人民日报</p>';
         html += "</div>";
         if (rec.audio) {
           html += '<button type="button" class="nr-play" id="nr-play" aria-label="播放夜读朗读">' +
@@ -1116,7 +1134,16 @@
         nrShownAudio = rec.audio || "";
         var open = function () { window.open(rec.url, "_blank", "noopener"); };
         var card = nrEl.querySelector(".nr-card");
-        card.addEventListener("click", open);
+        card.addEventListener("click", function () {
+          /* Touch has no hover: the first tap only reveals the text,
+             a second tap (once revealed) opens the article. */
+          var noHover = window.matchMedia && window.matchMedia("(hover: none)").matches;
+          if (noHover && !card.classList.contains("nr-on")) {
+            card.classList.add("nr-on");
+            return;
+          }
+          open();
+        });
         card.addEventListener("keydown", function (ev) {
           if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); open(); }
         });
