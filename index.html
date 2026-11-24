@@ -760,6 +760,123 @@
       .pet-panel .pp-pet .pp-pet-name { font-size: 13px; font-weight: 600; }
       .pet-panel .pp-pet .pp-pet-kind { font-size: 10.5px; color: rgba(255, 255, 255, 0.66); }
       .pet-panel .pp-pet .pp-pet-tag { font-size: 10px; font-weight: 600; color: #ffcf7d; }
+      /* ---------- habits: timer tabs, check-in, stats, ambience ---------- */
+      .timer-tabs { margin-bottom: 12px; flex-shrink: 0; }
+      .sec-title {
+        margin: 18px 0 8px; font-size: 13px; font-weight: 600; color: var(--dim);
+      }
+      .sec-title:first-of-type { margin-top: 4px; }
+      .checkin-card {
+        display: flex; align-items: center; gap: 14px;
+        border-radius: 10px; background: var(--glass-inset); padding: 14px 16px;
+      }
+      .checkin-info { flex: 1; min-width: 0; }
+      .checkin-num { font-size: 34px; line-height: 1; font-weight: 600; font-variant-numeric: tabular-nums; }
+      .checkin-num small { margin-left: 2px; font-size: 13px; font-weight: 400; color: var(--dim); }
+      .checkin-label { margin-top: 4px; font-size: 12px; color: var(--dim); }
+      .checkin-btn { height: 40px; border: 0; border-radius: 6px; padding: 0 20px; flex-shrink: 0;
+        background: var(--accent); color: #fff; font-size: 14px; font-weight: 600; }
+      .checkin-btn:hover:not(:disabled) { filter: brightness(1.1); }
+      .checkin-btn:disabled { background: var(--green); cursor: default; }
+      .week-dots { margin-top: 12px; display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+      .week-dots .wd { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+      .week-dots .wd i {
+        width: 22px; height: 22px; border-radius: 999px; display: block;
+        border: 2px solid var(--border); background: transparent;
+      }
+      .week-dots .wd.on i { border-color: var(--accent); background: var(--accent); }
+      .week-dots .wd.today i { box-shadow: 0 0 0 2px var(--glass-inset), 0 0 0 4px var(--dim); }
+      .week-dots .wd span { font-size: 11px; color: var(--dim); }
+      .timer-stats.stats-row { margin-top: 16px; }
+      .chart-wrap { border-radius: 10px; background: var(--glass-inset); padding: 10px 8px 4px; }
+      .chart-wrap svg { display: block; width: 100%; height: auto; }
+      .review-card {
+        border-radius: 10px; background: var(--glass-inset); padding: 12px 14px;
+      }
+      .review-card .rv-range { font-size: 13px; font-weight: 600; }
+      .review-card .rv-nums { margin-top: 6px; font-size: 13px; line-height: 1.7; color: var(--text); }
+      .review-card .rv-nums b { font-variant-numeric: tabular-nums; }
+      .review-list { list-style: none; margin: 8px 0 0; padding: 0; }
+      .review-list li {
+        display: flex; justify-content: space-between; gap: 10px;
+        padding: 6px 2px; border-bottom: 1px solid var(--border); font-size: 12.5px;
+      }
+      .review-list li:last-child { border-bottom: 0; }
+      .review-list .rv-r { color: var(--dim); flex-shrink: 0; }
+      .review-list .rv-v { text-align: right; font-variant-numeric: tabular-nums; }
+      .stats-empty { margin: 0; font-size: 13px; color: var(--dim); line-height: 1.6; }
+
+      /* ---------- ambience: white noise + fullscreen focus ---------- */
+      .noise-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .noise-kind {
+        height: 44px; border-radius: 8px; border: 1px solid var(--border);
+        background: var(--glass-inset); color: var(--text);
+        font-size: 14px; font-weight: 500;
+        display: flex; align-items: center; justify-content: center; gap: 6px;
+      }
+      .noise-kind[aria-pressed="true"] { border-color: var(--blue); background: var(--surface); font-weight: 600; }
+      .noise-kind .live { width: 7px; height: 7px; border-radius: 999px; background: var(--green); display: none; }
+      .noise-kind.playing .live { display: block; animation: pet-dot-pulse 1.5s ease-in-out infinite; }
+      .amb-row {
+        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        padding: 10px 0; border-bottom: 1px solid var(--border);
+      }
+      .amb-row:last-of-type { border-bottom: 0; }
+      .amb-row .k { font-size: 14px; }
+      .amb-row .k small { display: block; margin-top: 2px; font-size: 12px; color: var(--dim); }
+      .chip-btn {
+        min-height: 32px; border-radius: 999px; border: 1px solid var(--border);
+        background: var(--surface); color: var(--text); padding: 0 16px;
+        font-size: 13px; font-weight: 600; flex-shrink: 0;
+      }
+      .chip-btn[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+      .vol-slider { flex: 1; min-width: 0; accent-color: var(--blue); height: 32px; }
+      .fs-enter-btn { width: 100%; margin-top: 4px; }
+      .amb-note { margin: 10px 0 0; font-size: 12.5px; color: var(--dim); line-height: 1.6; }
+      #fs-overlay {
+        position: fixed; inset: 0; z-index: 55;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+        background: radial-gradient(ellipse at 50% 42%, rgba(20, 34, 50, 0.82) 0%, rgba(7, 12, 19, 0.94) 78%);
+        backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px);
+        color: #fff; text-align: center; padding: 24px;
+      }
+      #fs-overlay[hidden] { display: none; }
+      .fs-digits {
+        font-size: clamp(88px, 19vw, 168px); line-height: 1; font-weight: 600;
+        letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+        text-shadow: 0 4px 34px rgba(0, 0, 0, 0.5);
+      }
+      .fs-mode { font-size: 17px; color: rgba(255, 255, 255, 0.85); }
+      .fs-btns { margin-top: 18px; display: flex; gap: 10px; }
+      .fs-btn {
+        height: 44px; border-radius: 8px; padding: 0 26px;
+        border: 1px solid rgba(255, 255, 255, 0.4); background: rgba(255, 255, 255, 0.14);
+        color: #fff; font-size: 15px; font-weight: 600;
+      }
+      .fs-btn:hover { background: rgba(255, 255, 255, 0.24); }
+      .fs-btn.main { background: var(--accent); border-color: transparent; }
+      body.fs-on .pet { z-index: 58; }
+      body.fs-on .tool-dot { opacity: 0; pointer-events: none; }
+
+      /* ---------- pet panel: mood bar, ball game, diary ---------- */
+      .pet-panel .pp-bar span.mood { background: #f2789f; }
+      .pet-panel .pp-game-btn {
+        width: 100%; min-height: 34px; margin-top: 6px; border-radius: 8px;
+        border: 1px solid rgba(255, 207, 125, 0.55); background: rgba(255, 207, 125, 0.14);
+        color: #ffe1a6; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer;
+      }
+      .pet-panel .pp-game-btn:hover { background: rgba(255, 207, 125, 0.24); }
+      .pet-panel .pp-diary { margin-top: 4px; }
+      .pet-panel .pp-diary-row { display: flex; gap: 8px; padding: 3.5px 0; line-height: 1.5; }
+      .pet-panel .pp-diary-row .d { flex-shrink: 0; color: rgba(255, 207, 125, 0.9); font-weight: 600; }
+      .pet-panel .pp-diary-row .t { color: rgba(255, 255, 255, 0.9); }
+      .pet-ball {
+        position: absolute; z-index: 5; width: 17px; height: 17px; border-radius: 999px;
+        pointer-events: none;
+        background: radial-gradient(circle at 35% 30%, #ffffff 0%, #ffc46b 45%, #e2703a 100%);
+        box-shadow: 0 3px 8px rgba(8, 16, 26, 0.4);
+      }
+
       /* ---------- animations (from v8) ---------- */
       .todo-check-path { stroke-dasharray: 1; stroke-dashoffset: 0; animation: check-draw 0.28s ease both; }
       @keyframes check-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
@@ -1360,8 +1477,9 @@
         if (activeTool === "timer") initTimerPanel();
         if (activeTool === "todos") initTodosPanel();
         if (activeTool === "days") initDaysPanel();
+        noiseSync();
       }
-      function closeAll() { ringOpen = false; activeTool = null; renderUI(); }
+      function closeAll() { ringOpen = false; activeTool = null; fsExit(false); renderUI(); }
       function openRing() { ringOpen = true; activeTool = null; renderUI(); }
       function openPanel(id) {
         ringOpen = false; activeTool = id;
@@ -1718,6 +1836,7 @@
           data.pomodoros.push({ day: todayStr(), minutes: MODES.focus.minutes });
           saveData();
           renderHeaderExtras();
+          habOnFocusDone();
           timer.cycle += 1;
           if (timer.cycle >= 4) {
             timer.cycle = 0;
@@ -1747,6 +1866,7 @@
         }, 200);
       }
       function paintTimerDigits() {
+        fsPaint();
         var el = document.getElementById("timer-digits");
         if (!el || !timer) return;
         var mm = Math.floor(timer.secondsLeft / 60);
@@ -1762,6 +1882,7 @@
       function renderTimerPanel() {
         var body = document.getElementById("panel-body");
         if (!body || !timer) return;
+        if (timerTab !== "timer") { renderTimerAlt(body); noiseSync(); return; }
         var stats = computeStats();
         var mode = MODES[timer.mode];
         var total = mode.minutes * 60;
@@ -1776,6 +1897,7 @@
         }
         body.innerHTML =
           panelHeadHTML("番茄钟", "专注 25 · 短休息 5 · 长休息 15") +
+          timerTabsHTML() +
           segmentedHTML([
             { value: "focus", label: "专注 25" },
             { value: "short", label: "短休息 5" },
@@ -1810,6 +1932,8 @@
             statCell(stats.streak, "连续打卡", "天") +
           "</div>";
         wirePanelShell();
+        wireTimerTabs();
+        noiseSync();
         wireSegmented("timer-modes", function (v) { timerSwitchMode(v); });
         document.getElementById("timer-toggle").addEventListener("click", timerToggleRun);
         document.getElementById("timer-reset").addEventListener("click", timerReset);
@@ -1927,6 +2051,7 @@
           todoError = "";
           data.todos.push({ id: data.nextId++, title: title, done: false });
           saveData();
+          habSyncTodoOpen();
           renderHeaderExtras();
           renderTodosPanel(false);
           var fresh = document.getElementById("todo-input");
@@ -1940,6 +2065,7 @@
             var todo = data.todos.filter(function (t) { return t.id === id; })[0];
             if (!todo) return;
             todo.done = !todo.done;
+            habTodoToggled(todo.done);
             if (todo.done) petCelebrateJump();
             saveData();
             renderHeaderExtras();
@@ -1948,6 +2074,7 @@
           li.querySelector('[data-act="delete"]').addEventListener("click", function () {
             data.todos = data.todos.filter(function (t) { return t.id !== id; });
             saveData();
+            habSyncTodoOpen();
             renderHeaderExtras();
             renderTodosPanel(true);
           });
@@ -1957,6 +2084,7 @@
           clearBtn.addEventListener("click", function () {
             data.todos = data.todos.filter(function (t) { return !t.done; });
             saveData();
+            habSyncTodoOpen();
             renderHeaderExtras();
             renderTodosPanel(true);
           });
@@ -2394,6 +2522,7 @@
         savePet();
         if (petTier() > before) {
           petToast(SP().name + "和你更亲近了：现在是「" + PET_TIERS[petTier()] + "」");
+          petDiaryAdd(SP().name + "和你的关系变成了「" + PET_TIERS[petTier()] + "」");
           petSay("感觉和你更亲近了！", 3000);
         }
       }
@@ -2521,9 +2650,12 @@
         if (petDizzy) return "晕乎乎";
         if (petFace === "angry") return "有点小脾气";
         if (pet.satiety < 25) return "肚子饿了";
-        if (Date.now() - petLastTouchAt < 120000) return "很开心";
-        if (petTier() >= 2) return "开心";
-        return "平静";
+        var m = petMood();
+        if (m >= 75) return "特别开心";
+        if (m >= 55) return "开心";
+        if (m >= 35) return "平静";
+        if (m >= 18) return "有点低落";
+        return "闷闷不乐，想你陪陪它";
       }
       function petNextEvolve() {
         if (pet.stage >= 3 && pet.bonus >= PET_BONUS.length) return null;
@@ -2552,7 +2684,10 @@
         html += '<div class="pp-row"><span class="k">饱食度</span><span class="v">' + sat + "%" +
           (sat < 25 ? " · 有点饿了" : sat >= 85 ? " · 吃得饱饱的" : "") + "</span></div>";
         html += '<div class="pp-bar"><span class="sat" style="width:' + sat + '%"></span></div>';
-        html += '<div class="pp-row"><span class="k">心情</span><span class="v">' + petMoodText() + "</span></div>";
+        var moodNow = Math.round(petMood());
+        html += '<div class="pp-row"><span class="k">心情</span><span class="v">' + petMoodText() +
+          " · " + moodNow + "%</span></div>";
+        html += '<div class="pp-bar"><span class="mood" style="width:' + moodNow + '%"></span></div>';
         html += '<div class="pp-row"><span class="k">' + SP().moveWord + '</span><span class="v">' +
           (pet.frozen ? "休息中 · 双击" + SP().name + "继续" + SP().moveWord
             : SP().moveWord + "中 · 双击" + SP().name + "原地休息") + "</span></div>";
@@ -2564,6 +2699,10 @@
           "</span></div>";
         html += '<div class="pp-sec">已解锁的动作</div><p class="pp-acts">' +
           petUnlockedActions().join("、") + "</p>";
+        html += '<div class="pp-sec">接小球</div><p class="pp-acts">把球抛给' + SP().name +
+          "，在球落到它身边时点一下它就能接住。最高连中 " + hab.ball.best + ' 次。</p>' +
+          '<button type="button" class="pp-game-btn" id="pet-ball-btn">抛小球</button>';
+        html += '<div class="pp-sec">宠物日记</div><div class="pp-diary">' + petDiaryHTML() + "</div>";
         html += '<div class="pp-sec">换宠物</div><div class="pp-pets">';
         PET_ORDER.forEach(function (pid) {
           var c = PET_SPECIES[pid];
@@ -2677,6 +2816,13 @@
             closeBtn.addEventListener("click", function (e) {
               e.stopPropagation();
               setPetPanel(false);
+            });
+          }
+          var ballBtn = document.getElementById("pet-ball-btn");
+          if (ballBtn) {
+            ballBtn.addEventListener("click", function (e) {
+              e.stopPropagation();
+              petBallThrow();
             });
           }
           Array.prototype.forEach.call(panel.querySelectorAll("button[data-pet]"), function (btn) {
@@ -2983,6 +3129,15 @@
           petSay(petPickLine(PET_CHATTER.hungry), 3000);
           return;
         }
+        var moodNow2 = petMood();
+        if (moodNow2 >= 75 && Math.random() < 0.35) {
+          petSay(petPickLine(MOOD_HAPPY_LINES), 3000);
+          return;
+        }
+        if (moodNow2 <= 30) {
+          petSay(petPickLine(MOOD_LOW_LINES), 3200);
+          return;
+        }
         var remaining = data.todos.filter(function (t) { return !t.done; }).length;
         var up = upcomingEvents();
         var roll = Math.random();
@@ -3054,6 +3209,7 @@
           petAct("act-hop", 580);
           petBurst("heart", 6);
           petSfx("jump");
+          petMoodAdd(4);
           petGainIntimacy(2);
           petSay(petPickLine(SP().says.petLines));
         } else if (act === "feed") {
@@ -3062,18 +3218,23 @@
           petSfx("eat");
           pet.satiety = Math.min(100, pet.satiety + 35);
           pet.satietyAt = Date.now();
+          petMoodAdd(12);
+          petDiaryAdd("喂了" + SP().name + SP().feedLabel.slice(1) + "，它吃得很满足");
           petGainIntimacy(3);
           window.setTimeout(function () { petSay(SP().says.feedSay); }, 620);
         } else if (act === "play") {
           petAct("act-spin", 880);
           petBurst("star", 5);
           petSfx("jump");
+          petMoodAdd(8);
+          petDiaryAdd("和" + SP().name + "一起" + SP().playLabel + "，玩得很开心");
           petGainIntimacy(2);
           petSay(SP().says.playSay);
         } else if (act === "magic") {
           petAct("act-magic", 720);
           petBurst("star", 12);
           petSfx("magic");
+          petMoodAdd(5);
           petGainIntimacy(2);
           window.setTimeout(function () { petBurst("heart", 4); }, 260);
           petSay(SP().says.specialSay);
@@ -3084,6 +3245,7 @@
               petAct(PET_BONUS[i].cls, 950);
               if (PET_BONUS[i].fx) petBurst(PET_BONUS[i].fx, 8);
               petSfx("jump");
+              petMoodAdd(3);
               petGainIntimacy(1);
               petSay(PET_BONUS[i].say);
             }
@@ -3116,6 +3278,7 @@
 
       /* ---------- poking: reactions by mood ---------- */
       function petPoke() {
+        if (petBall && petBall.suppressUntil && Date.now() < petBall.suppressUntil) return;
         petLastTouchAt = Date.now();
         if (pet.sleeping) { petWake(); return; }
         if (petDizzy || petFlying) return;
@@ -3149,6 +3312,7 @@
           petSfx("pop");
           petSay(SP().says.pokeWave);
         }
+        petMoodAdd(2);
         petGainIntimacy(1);
       }
       function petGoDizzy() {
@@ -3234,6 +3398,7 @@
         });
         el.addEventListener("pointerdown", function (e) {
           if (e.target.closest && (e.target.closest(".pet-menu") || e.target.closest(".pet-panel"))) return;
+          petBallTryCatch();
           petStopPhysics();
           drag = {
             pointerId: e.pointerId, startX: e.clientX, startY: e.clientY,
@@ -3449,7 +3614,11 @@
         var now = Date.now();
         var idleFor = now - Math.max(petLastActAt, petPokeLast);
         if (!pet.sleeping && idleFor > 16000 && now - petLastActAt > 15000 + Math.random() * 14000) {
-          petRunPoolAction(petPickPoolAction());
+          if (petMood() <= 25 && Math.random() < 0.5) {
+            petAct("act-nod", 1600); /* low mood: a little sigh instead of playing */
+          } else {
+            petRunPoolAction(petPickPoolAction());
+          }
         }
         if (now - petLastChatAt > 165000 && Math.random() < 0.55) {
           if (!petActing) petChatter();
@@ -3469,10 +3638,12 @@
         if (pet.stage < 3) {
           pet.stage += 1;
           savePet();
+          petDiaryAdd(SP().name + "进化成了「" + PET_STAGES[pet.stage].name + "」，光环更亮了");
           petEvolveCelebration(SP().name + "进化了！现在是「" + PET_STAGES[pet.stage].name + "」");
         } else if (pet.bonus < PET_BONUS.length) {
           pet.bonus += 1;
           savePet();
+          petDiaryAdd(SP().name + "学会了新动作「" + PET_BONUS[pet.bonus - 1].label + "」");
           renderPet();
           petBurst("star", 10);
           petSfx("evolve");
@@ -3601,6 +3772,7 @@
         checkEvolution();
         window.setInterval(function () {
           petDecaySatiety();
+          petMoodTick();
           savePet();
           checkEvolution();
           updatePetSign();
@@ -3611,7 +3783,7 @@
            time-of-day hello (once per day, persisted via lastGreetDay). */
         var firstEver = !pet.greeted;
         var needGreet = pet.lastGreetDay !== todayStr();
-        if (firstEver) pet.greeted = true;
+        if (firstEver) { pet.greeted = true; petDiaryAdd(SP().name + "来到你身边，陪伴开始了"); }
         if (needGreet) pet.lastGreetDay = todayStr();
         if (firstEver || needGreet) savePet();
         if (!pet.hidden && (firstEver || needGreet)) {
@@ -3628,6 +3800,692 @@
           }, 700);
         }
       }
+
+      /* ================= habits, ambience & pet depth =================
+         Everything in this round lives under its own storage key,
+         daymark-habits-v1 — the existing saves (todos / pomodoros /
+         per-pet progress / night-read history) are only read, never
+         rewritten: daily check-ins and their streak, per-day todo
+         completion counts, generated weekly reviews, per-pet mood,
+         the pet diary, the ball-game best combo and the white-noise
+         preferences. */
+      var HAB_KEY = "daymark-habits-v1";
+      var hab = {
+        checkins: {}, checkinBest: 0,
+        todoDone: {}, todoOpen: {},
+        weeks: {},
+        mood: {}, moodAt: 0,
+        diary: [],
+        ball: { best: 0 },
+        noise: { kind: "rain", vol: 60, on: false, auto: true },
+      };
+      function habSave() {
+        try { localStorage.setItem(HAB_KEY, JSON.stringify(hab)); } catch (e) { /* storage unavailable */ }
+      }
+      function habLoad() {
+        try {
+          var raw = localStorage.getItem(HAB_KEY);
+          if (!raw) return;
+          var p = JSON.parse(raw);
+          if (!p || typeof p !== "object") return;
+          if (p.checkins && typeof p.checkins === "object") hab.checkins = p.checkins;
+          if (typeof p.checkinBest === "number") hab.checkinBest = p.checkinBest;
+          if (p.todoDone && typeof p.todoDone === "object") hab.todoDone = p.todoDone;
+          if (p.todoOpen && typeof p.todoOpen === "object") hab.todoOpen = p.todoOpen;
+          if (p.weeks && typeof p.weeks === "object") hab.weeks = p.weeks;
+          if (p.mood && typeof p.mood === "object") hab.mood = p.mood;
+          if (typeof p.moodAt === "number") hab.moodAt = p.moodAt;
+          if (Array.isArray(p.diary)) hab.diary = p.diary;
+          if (p.ball && typeof p.ball.best === "number") hab.ball.best = p.ball.best;
+          if (p.noise && typeof p.noise === "object") {
+            if (typeof p.noise.kind === "string") hab.noise.kind = p.noise.kind;
+            if (typeof p.noise.vol === "number") hab.noise.vol = Math.min(100, Math.max(0, p.noise.vol));
+            hab.noise.on = !!p.noise.on;
+            hab.noise.auto = p.noise.auto !== false;
+          }
+        } catch (e) { /* corrupted storage — start fresh */ }
+      }
+
+      /* ---------- date helpers for habits ---------- */
+      function addDaysStr(day, n) {
+        var dt = parseDay(day);
+        dt.setDate(dt.getDate() + n);
+        return dt.getFullYear() + "-" + pad(dt.getMonth() + 1) + "-" + pad(dt.getDate());
+      }
+      function mondayOf(day) {
+        var dow = (parseDay(day).getDay() + 6) % 7; /* Mon=0 … Sun=6 */
+        return addDaysStr(day, -dow);
+      }
+      function shortCN(day) {
+        var dt = parseDay(day);
+        return (dt.getMonth() + 1) + "月" + dt.getDate() + "日";
+      }
+      function focusMinutesOn(day) {
+        var sum = 0;
+        data.pomodoros.forEach(function (r) { if (r.day === day) sum += r.minutes; });
+        return sum;
+      }
+      function focusStreakEnding(day) {
+        var days = {};
+        data.pomodoros.forEach(function (r) { days[r.day] = true; });
+        var streak = 0, cursor = day;
+        if (!days[cursor]) cursor = prevDayStr(cursor);
+        while (days[cursor]) { streak += 1; cursor = prevDayStr(cursor); }
+        return streak;
+      }
+
+      /* ---------- daily check-in ---------- */
+      function checkinStreak() {
+        var streak = 0, cursor = todayStr();
+        if (!hab.checkins[cursor]) cursor = prevDayStr(cursor);
+        while (hab.checkins[cursor]) { streak += 1; cursor = prevDayStr(cursor); }
+        return streak;
+      }
+      function habDoCheckin() {
+        var today = todayStr();
+        if (hab.checkins[today]) return;
+        hab.checkins[today] = true;
+        var s = checkinStreak();
+        if (s > hab.checkinBest) hab.checkinBest = s;
+        habSave();
+        petCelebrateJump();
+        if (pet && !pet.hidden && !pet.sleeping) {
+          petSay("打卡成功！连续 " + s + " 天啦", 2800);
+        }
+        renderTimerPanel();
+      }
+
+      /* ---------- todo completion tracking (per day) ---------- */
+      function habSyncTodoOpen() {
+        hab.todoOpen[todayStr()] = data.todos.filter(function (t) { return !t.done; }).length;
+        habSave();
+      }
+      function habTodoToggled(done) {
+        var today = todayStr();
+        var n = hab.todoDone[today] || 0;
+        hab.todoDone[today] = done ? n + 1 : Math.max(0, n - 1);
+        habSyncTodoOpen();
+      }
+      function todoRateToday() {
+        var today = todayStr();
+        var done = hab.todoDone[today] || 0;
+        var open = typeof hab.todoOpen[today] === "number"
+          ? hab.todoOpen[today]
+          : data.todos.filter(function (t) { return !t.done; }).length;
+        if (done + open === 0) return null;
+        return Math.round((done / (done + open)) * 100);
+      }
+
+      /* ---------- weekly review (generated every Monday) ----------
+         On the first open of a new week, last week's summary is
+         computed from the pomodoro log and the todo counters and
+         stored, so it stays put even as this week moves on. */
+      function habBuildWeek(mon) {
+        var focus = 0, todos = 0, checkins = 0;
+        for (var i = 0; i < 7; i++) {
+          var d = addDaysStr(mon, i);
+          focus += focusMinutesOn(d);
+          todos += hab.todoDone[d] || 0;
+          if (hab.checkins[d]) checkins += 1;
+        }
+        return {
+          focus: focus, todos: todos, checkins: checkins,
+          streak: focusStreakEnding(addDaysStr(mon, 6)),
+        };
+      }
+      function habEnsureWeeks() {
+        var thisMon = mondayOf(todayStr());
+        var changed = false;
+        for (var back = 1; back <= 4; back++) {
+          var mon = addDaysStr(thisMon, -7 * back);
+          if (hab.weeks[mon]) continue;
+          var w = habBuildWeek(mon);
+          if (w.focus > 0 || w.todos > 0 || w.checkins > 0) {
+            hab.weeks[mon] = w;
+            changed = true;
+          }
+        }
+        Object.keys(hab.weeks).forEach(function (k) {
+          if (k < addDaysStr(thisMon, -7 * 8)) { delete hab.weeks[k]; changed = true; }
+        });
+        if (changed) habSave();
+      }
+
+      /* ---------- pet mood & diary ---------- */
+      var MOOD_HAPPY_LINES = ["今天心情特别好！", "感觉浑身都是劲儿", "陪着你，连云都是甜的", "开心到想转个圈圈"];
+      var MOOD_LOW_LINES = ["唔……有点提不起劲", "陪陪我嘛，心情会变好的", "今天有点闷闷的", "摸摸我好不好"];
+      function petMood() {
+        if (!pet) return 70;
+        var v = hab.mood[PET_CFG.id];
+        return typeof v === "number" ? Math.min(100, Math.max(0, v)) : 70;
+      }
+      function petMoodAdd(delta) {
+        if (!pet) return;
+        hab.mood[PET_CFG.id] = Math.min(100, Math.max(0, petMood() + delta));
+        hab.moodAt = Date.now();
+        habSave();
+      }
+      /* Mood drifts down slowly between visits (faster on an empty
+         stomach); a single tick never counts more than 30 minutes. */
+      function petMoodTick() {
+        if (!pet) return;
+        var now = Date.now();
+        if (!hab.moodAt) { hab.moodAt = now; return; }
+        var mins = Math.min(30, (now - hab.moodAt) / 60000);
+        if (mins <= 0) return;
+        var rate = pet.sleeping ? 0.02 : pet.satiety < 25 ? 0.16 : 0.06;
+        var v = Math.max(28, petMood() - mins * rate);
+        if (v !== petMood()) { hab.mood[PET_CFG.id] = v; habSave(); }
+        hab.moodAt = now;
+      }
+      function petDiaryAdd(text) {
+        var today = todayStr();
+        for (var i = 0; i < hab.diary.length; i++) {
+          if (hab.diary[i].d === today && hab.diary[i].t === text) return;
+        }
+        hab.diary.unshift({ d: today, t: text });
+        if (hab.diary.length > 60) hab.diary.length = 60;
+        habSave();
+      }
+      function petDiaryHTML() {
+        if (!hab.diary.length) {
+          return '<p class="pp-acts">还没有记录，陪它玩一会儿，第一页日记就写下了。</p>';
+        }
+        var html = "";
+        hab.diary.slice(0, 9).forEach(function (e) {
+          html += '<div class="pp-diary-row"><span class="d">' + shortCN(e.d) +
+            '</span><span class="t">' + esc(e.t) + "</span></div>";
+        });
+        return html;
+      }
+      function habOnFocusDone() {
+        petMoodAdd(6);
+        petDiaryAdd("陪你专注了 25 分钟，安安静静守在一旁");
+      }
+
+      /* ---------- ball game: throw, the pet jumps to catch ----------
+         The ball arcs in from above; tapping the pet while the ball
+         is in its second half of flight catches it. Catches chain
+         into a combo; the best combo is kept. */
+      var petBall = null;
+      var petBallCombo = 0;
+      function petBallThrow() {
+        if (!pet || pet.hidden) return;
+        if (petBall && petBall.el) return; /* a ball is already in flight */
+        petBall = null;
+        setPetPanel(false);
+        setPetMenu(false);
+        if (pet.sleeping) { petSay("Zzz……先叫醒它再玩接球吧", 2600); return; }
+        var el = petEl();
+        if (!el) return;
+        var ball = document.createElement("div");
+        ball.className = "pet-ball";
+        el.appendChild(ball);
+        var fromLeft = Math.random() < 0.5;
+        var sx = fromLeft ? -58 : 138;
+        var sy = -34;
+        var tx = 43, ty = 30;
+        var dur = 780, started = Date.now();
+        petBall = { el: ball, p: 0, suppressUntil: 0 };
+        petBall.timer = window.setInterval(function () {
+          if (!petBall || petBall.el !== ball) return;
+          var p = Math.min(1, (Date.now() - started) / dur);
+          petBall.p = p;
+          var x = sx + (tx - sx) * p;
+          var y = sy + (ty - sy) * p - Math.sin(p * Math.PI) * 66;
+          ball.style.left = x + "px";
+          ball.style.top = y + "px";
+          if (p >= 1) petBallMiss();
+        }, 16);
+        petSay("看球！", 900);
+      }
+      function petBallClear() {
+        if (!petBall) return;
+        if (petBall.timer) window.clearInterval(petBall.timer);
+        if (petBall.el && petBall.el.parentNode) petBall.el.parentNode.removeChild(petBall.el);
+        petBall = null;
+      }
+      function petBallMiss() {
+        var ball = petBall ? petBall.el : null;
+        petBallClear();
+        petBallCombo = 0;
+        if (ball && petEl()) {
+          ball.style.transition = "top 0.3s ease-in, opacity 0.3s ease";
+          ball.style.top = "104px";
+          ball.style.opacity = "0";
+          petEl().appendChild(ball);
+          window.setTimeout(function () { if (ball.parentNode) ball.parentNode.removeChild(ball); }, 320);
+        }
+        petMoodAdd(-1);
+        petSay(petPickLine(["差一点点！", "哎呀，没接住", "再抛一次嘛"]), 2200);
+      }
+      function petBallTryCatch() {
+        if (!petBall || petBall.p < 0.45) return false;
+        petBallClear();
+        petBallCombo += 1;
+        if (petBallCombo > hab.ball.best) {
+          hab.ball.best = petBallCombo;
+          habSave();
+          if (petBallCombo >= 3) {
+            petDiaryAdd(SP().name + "接球连中 " + petBallCombo + " 次，创了新纪录");
+          }
+        }
+        petBall = { el: null, p: 0, suppressUntil: Date.now() + 700 };
+        if (!reduceMotion) petAct("act-hop", 580);
+        petBurst("heart", petBallCombo >= 3 ? 6 : 4);
+        petSfx("jump");
+        petMoodAdd(3);
+        petGainIntimacy(1);
+        petSay(petBallCombo >= 2 ? "接住啦！连中 " + petBallCombo + " 次" : "接住啦！", 2000);
+        return true;
+      }
+
+      /* ---------- timer panel tabs: 计时 / 统计 / 氛围 ---------- */
+      var timerTab = "timer";
+      function timerTabsHTML() {
+        return '<div class="timer-tabs">' + segmentedHTML([
+          { value: "timer", label: "计时" },
+          { value: "stats", label: "统计" },
+          { value: "amb", label: "氛围" },
+        ], timerTab, "timer-tabs", "番茄钟页签") + "</div>";
+      }
+      function wireTimerTabs() {
+        wireSegmented("timer-tabs", function (v) {
+          timerTab = v;
+          renderTimerPanel();
+        });
+      }
+      function renderTimerAlt(body) {
+        if (timerTab === "stats") {
+          body.innerHTML = panelHeadHTML("番茄钟", "专注 25 · 短休息 5 · 长休息 15") +
+            timerTabsHTML() + statsTabHTML();
+          wirePanelShell();
+          wireTimerTabs();
+          var cb = document.getElementById("checkin-btn");
+          if (cb) cb.addEventListener("click", habDoCheckin);
+        } else {
+          body.innerHTML = panelHeadHTML("番茄钟", "专注 25 · 短休息 5 · 长休息 15") +
+            timerTabsHTML() + ambTabHTML();
+          wirePanelShell();
+          wireTimerTabs();
+          wireAmbTab();
+        }
+      }
+      function barChartSVG(items, color) {
+        var max = 0;
+        items.forEach(function (it) { if (it.v > max) max = it.v; });
+        var W = 352, base = 82, top = 16, plotH = base - top - 12;
+        var slot = W / items.length;
+        var bw = Math.min(38, slot * 0.55);
+        var html = '<svg viewBox="0 0 ' + W + ' 104" role="img" aria-label="' +
+          esc(items.map(function (it) { return it.label + " " + it.v + " 分钟"; }).join("，")) + '">';
+        items.forEach(function (it, i) {
+          var h = max > 0 ? Math.max(it.v > 0 ? 3 : 0, (it.v / max) * plotH) : 0;
+          var x = slot * i + (slot - bw) / 2;
+          var y = base - h;
+          html += '<rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + bw +
+            '" height="' + h.toFixed(1) + '" rx="3" style="fill:' + color + (it.today ? "" : ";opacity:0.55") + '"/>';
+          if (it.v > 0) {
+            html += '<text x="' + (slot * i + slot / 2) + '" y="' + (y - 4) +
+              '" text-anchor="middle" font-size="11" font-weight="600" style="fill:var(--text)">' + it.v + "</text>";
+          }
+          html += '<text x="' + (slot * i + slot / 2) + '" y="' + (base + 15) +
+            '" text-anchor="middle" font-size="11" style="fill:var(--dim)">' + esc(it.label) + "</text>";
+        });
+        html += '<line x1="6" y1="' + base + '" x2="' + (W - 6) + '" y2="' + base +
+          '" stroke-width="1" style="stroke:var(--border)"/>';
+        return html + "</svg>";
+      }
+      function statsTabHTML() {
+        var stats = computeStats();
+        var today = todayStr();
+        var checked = !!hab.checkins[today];
+        var cStreak = checkinStreak();
+        var html = '<div class="checkin-card"><div class="checkin-info">' +
+          '<div class="checkin-num">' + cStreak + "<small>天</small></div>" +
+          '<div class="checkin-label">打卡连续天数 · 历史最长 ' + Math.max(hab.checkinBest, cStreak) + " 天</div></div>" +
+          '<button type="button" class="checkin-btn" id="checkin-btn"' + (checked ? " disabled" : "") + ">" +
+          (checked ? "今天已打卡" : "今日打卡") + "</button></div>";
+        html += '<div class="week-dots" aria-label="最近七天打卡情况">';
+        for (var i = 6; i >= 0; i--) {
+          var d = addDaysStr(today, -i);
+          html += '<div class="wd' + (hab.checkins[d] ? " on" : "") + (i === 0 ? " today" : "") +
+            '"><i></i><span>' + (i === 0 ? "今" : WEEKDAYS[parseDay(d).getDay()]) + "</span></div>";
+        }
+        html += "</div>";
+        var rate = todoRateToday();
+        var thisMon = mondayOf(today);
+        var weekFocus = 0;
+        for (var w = 0; w < 7; w++) {
+          var wd2 = addDaysStr(thisMon, w);
+          if (wd2 > today) break;
+          weekFocus += focusMinutesOn(wd2);
+        }
+        html += '<div class="timer-stats stats-row">' +
+          statCell(stats.streak, "番茄连续", "天") +
+          statCell(rate === null ? "—" : rate, "今日待办完成率", rate === null ? "" : "%") +
+          statCell(weekFocus, "本周专注", "分钟") +
+          "</div>";
+        var dayItems = [];
+        for (var j = 6; j >= 0; j--) {
+          var dd = addDaysStr(today, -j);
+          dayItems.push({
+            label: j === 0 ? "今" : WEEKDAYS[parseDay(dd).getDay()],
+            v: focusMinutesOn(dd), today: j === 0,
+          });
+        }
+        html += '<div class="sec-title">近 7 天专注（分钟）</div><div class="chart-wrap">' +
+          barChartSVG(dayItems, "var(--accent)") + "</div>";
+        var weekItems = [];
+        for (var k = 3; k >= 0; k--) {
+          var mon = addDaysStr(thisMon, -7 * k);
+          var sum = 0;
+          for (var m = 0; m < 7; m++) sum += focusMinutesOn(addDaysStr(mon, m));
+          weekItems.push({ label: shortCN(mon), v: sum, today: k === 0 });
+        }
+        html += '<div class="sec-title">近 4 周专注（分钟）</div><div class="chart-wrap">' +
+          barChartSVG(weekItems, "var(--blue)") + "</div>";
+        html += '<div class="sec-title">每周回顾</div>';
+        var keys = Object.keys(hab.weeks).sort().reverse();
+        if (!keys.length) {
+          html += '<p class="stats-empty">还没有周回顾。每周一会把上周的专注、待办和连续天数收成一张小结，放在这里。</p>';
+        } else {
+          var latest = keys[0];
+          var lw = hab.weeks[latest];
+          html += '<div class="review-card"><div class="rv-range">上周 · ' +
+            shortCN(latest) + " – " + shortCN(addDaysStr(latest, 6)) + '</div>' +
+            '<div class="rv-nums">专注 <b>' + lw.focus + '</b> 分钟 · 完成待办 <b>' + lw.todos +
+            '</b> 件<br>番茄连续 <b>' + lw.streak + '</b> 天 · 打卡 <b>' + lw.checkins + "</b> 天</div></div>";
+          if (keys.length > 1) {
+            html += '<ul class="review-list">';
+            keys.slice(1, 4).forEach(function (k2) {
+              var wv = hab.weeks[k2];
+              html += '<li><span class="rv-r">' + shortCN(k2) + " – " + shortCN(addDaysStr(k2, 6)) +
+                '</span><span class="rv-v">专注 ' + wv.focus + " 分钟 · 待办 " + wv.todos +
+                " 件 · 连续 " + wv.streak + " 天</span></li>";
+            });
+            html += "</ul>";
+          }
+        }
+        return html;
+      }
+
+      /* ---------- white noise (WebAudio synth, no audio files) ----------
+         Rain: filtered white noise. Café: brown-noise murmur bed with
+         slow babble swells. Wind: band-passed noise with a wandering
+         centre frequency. Fire: a low rumble bed plus scheduled
+         crackle pops. One shared context, one master gain. */
+      var NOISE_KINDS = [
+        { id: "rain", label: "雨声" },
+        { id: "cafe", label: "咖啡馆" },
+        { id: "wind", label: "风声" },
+        { id: "fire", label: "篝火" },
+      ];
+      var noiseCtx = null, noiseMaster = null, noiseNodes = [], noiseKindOn = null;
+      var noiseCrackleTimer = null, noiseHold = false;
+      function noiseBuffer(seconds, brown) {
+        var len = Math.floor(noiseCtx.sampleRate * seconds);
+        var buf = noiseCtx.createBuffer(1, len, noiseCtx.sampleRate);
+        var ch = buf.getChannelData(0);
+        var last = 0;
+        for (var i = 0; i < len; i++) {
+          var w = Math.random() * 2 - 1;
+          if (brown) {
+            last = (last + 0.02 * w) / 1.02;
+            ch[i] = last * 3.2;
+          } else {
+            ch[i] = w;
+          }
+        }
+        return buf;
+      }
+      function noiseSrc(buf) {
+        var s = noiseCtx.createBufferSource();
+        s.buffer = buf;
+        s.loop = true;
+        noiseNodes.push(s);
+        return s;
+      }
+      function noiseFilter(type, freq, q) {
+        var f = noiseCtx.createBiquadFilter();
+        f.type = type;
+        f.frequency.value = freq;
+        f.Q.value = q;
+        noiseNodes.push(f);
+        return f;
+      }
+      function noiseGain(v) {
+        var g = noiseCtx.createGain();
+        g.gain.value = v;
+        noiseNodes.push(g);
+        return g;
+      }
+      function noiseLFO(rate, depth, param, base) {
+        var o = noiseCtx.createOscillator();
+        o.frequency.value = rate;
+        var og = noiseCtx.createGain();
+        og.gain.value = depth;
+        o.connect(og);
+        og.connect(param);
+        param.value = base;
+        o.start();
+        noiseNodes.push(o, og);
+      }
+      function noiseStart(kind) {
+        var Ctor = window.AudioContext || window.webkitAudioContext;
+        if (!Ctor) return;
+        noiseStopAudio();
+        try {
+          if (!noiseCtx) {
+            noiseCtx = new Ctor();
+            noiseMaster = noiseCtx.createGain();
+            noiseMaster.connect(noiseCtx.destination);
+          }
+          if (noiseCtx.state === "suspended") noiseCtx.resume();
+          noiseMaster.gain.value = (hab.noise.vol / 100) * 0.85;
+          var white = noiseBuffer(2.4, false);
+          var brown = noiseBuffer(3.2, true);
+          if (kind === "rain") {
+            var r1 = noiseSrc(white), rf = noiseFilter("lowpass", 1050, 0.4), rg = noiseGain(0.5);
+            r1.connect(rf); rf.connect(rg); rg.connect(noiseMaster); r1.start();
+            var r2 = noiseSrc(white), rb = noiseFilter("bandpass", 2600, 0.5), rg2 = noiseGain(0.05);
+            r2.connect(rb); rb.connect(rg2); rg2.connect(noiseMaster); r2.start();
+            noiseLFO(0.09, 0.1, rg.gain, 0.5);
+          } else if (kind === "cafe") {
+            var c1 = noiseSrc(brown), cf = noiseFilter("lowpass", 420, 0.4), cg = noiseGain(0.65);
+            c1.connect(cf); cf.connect(cg); cg.connect(noiseMaster); c1.start();
+            var c2 = noiseSrc(brown), cb = noiseFilter("bandpass", 720, 0.5), cg2 = noiseGain(0.1);
+            c2.connect(cb); cb.connect(cg2); cg2.connect(noiseMaster); c2.start();
+            noiseLFO(0.13, 0.07, cg2.gain, 0.1);
+            noiseLFO(0.045, 0.05, cg2.gain, 0.1);
+          } else if (kind === "wind") {
+            var w1 = noiseSrc(white), wf = noiseFilter("bandpass", 520, 0.7), wg = noiseGain(0.4);
+            w1.connect(wf); wf.connect(wg); wg.connect(noiseMaster); w1.start();
+            noiseLFO(0.06, 260, wf.frequency, 520);
+            noiseLFO(0.11, 0.13, wg.gain, 0.4);
+            var w2 = noiseSrc(brown), wl = noiseFilter("lowpass", 240, 0.4), wg2 = noiseGain(0.3);
+            w2.connect(wl); wl.connect(wg2); wg2.connect(noiseMaster); w2.start();
+          } else { /* fire */
+            var f1 = noiseSrc(brown), ff = noiseFilter("lowpass", 300, 0.4), fg = noiseGain(0.55);
+            f1.connect(ff); ff.connect(fg); fg.connect(noiseMaster); f1.start();
+            noiseCrackleTimer = window.setInterval(function () {
+              if (!noiseCtx || Math.random() < 0.35) return;
+              try {
+                var len = Math.floor(noiseCtx.sampleRate * 0.05);
+                var b = noiseCtx.createBuffer(1, len, noiseCtx.sampleRate);
+                var chd = b.getChannelData(0);
+                for (var i = 0; i < len; i++) chd[i] = (Math.random() * 2 - 1) * (1 - i / len);
+                var s = noiseCtx.createBufferSource();
+                s.buffer = b;
+                var bp = noiseCtx.createBiquadFilter();
+                bp.type = "bandpass";
+                bp.frequency.value = 1400 + Math.random() * 1800;
+                var g = noiseCtx.createGain();
+                g.gain.value = 0.12 + Math.random() * 0.2;
+                s.connect(bp); bp.connect(g); g.connect(noiseMaster);
+                s.start();
+              } catch (e) { /* crackle is best-effort */ }
+            }, 150);
+          }
+          noiseKindOn = kind;
+        } catch (e) { noiseKindOn = null; }
+      }
+      function noiseStopAudio() {
+        if (noiseCrackleTimer) { window.clearInterval(noiseCrackleTimer); noiseCrackleTimer = null; }
+        noiseNodes.forEach(function (n) {
+          try { if (n.stop) n.stop(); } catch (e) {}
+          try { n.disconnect(); } catch (e) {}
+        });
+        noiseNodes = [];
+        noiseKindOn = null;
+      }
+      /* Desired state: the manual switch, or — with 自动开启 on —
+         while a focus phase is actually running in the open panel.
+         A manual stop during focus holds until the phase changes. */
+      function noiseSync() {
+        var focusing = !!(timer && timer.running && timer.mode === "focus" && activeTool === "timer");
+        if (!focusing) noiseHold = false;
+        var want = activeTool === "timer" && !noiseHold &&
+          (hab.noise.on || (hab.noise.auto && focusing));
+        if (want) {
+          if (noiseKindOn !== hab.noise.kind) noiseStart(hab.noise.kind);
+        } else if (noiseKindOn) {
+          noiseStopAudio();
+        }
+      }
+      function ambTabHTML() {
+        var html = '<div class="sec-title">白噪音</div><div class="noise-grid">';
+        NOISE_KINDS.forEach(function (k) {
+          html += '<button type="button" class="noise-kind' + (noiseKindOn === k.id ? " playing" : "") +
+            '" data-noise="' + k.id + '" aria-pressed="' + (hab.noise.kind === k.id ? "true" : "false") +
+            '"><span class="live" aria-hidden="true"></span>' + k.label + "</button>";
+        });
+        html += "</div>";
+        html += '<div class="amb-row"><span class="k">播放<small>' +
+          (noiseKindOn ? "正在播放：" + NOISE_KINDS.filter(function (k) { return k.id === noiseKindOn; })[0].label : "已停止") +
+          '</small></span><button type="button" class="chip-btn" id="noise-toggle" aria-pressed="' +
+          (noiseKindOn ? "true" : "false") + '">' + (noiseKindOn ? "停止" : "开启") + "</button></div>";
+        html += '<div class="amb-row"><span class="k">音量</span>' +
+          '<input type="range" class="vol-slider" id="noise-vol" min="0" max="100" step="1" value="' +
+          hab.noise.vol + '" aria-label="白噪声音量"></div>';
+        html += '<div class="amb-row"><span class="k">专注时自动开启<small>开始专注就响起，休息时停下</small></span>' +
+          '<button type="button" class="chip-btn" id="noise-auto" aria-pressed="' +
+          (hab.noise.auto ? "true" : "false") + '">' + (hab.noise.auto ? "开" : "关") + "</button></div>";
+        html += '<div class="sec-title">全屏专注</div>' +
+          '<button type="button" class="btn-run fs-enter-btn" id="fs-enter" style="background:var(--accent)">进入全屏专注</button>' +
+          '<p class="amb-note">全屏里只留下倒计时和桌宠，别的都不见。按 Esc 或点「退出全屏」回来。</p>';
+        return html;
+      }
+      function wireAmbTab() {
+        Array.prototype.forEach.call(document.querySelectorAll("[data-noise]"), function (btn) {
+          btn.addEventListener("click", function () {
+            hab.noise.kind = btn.getAttribute("data-noise");
+            hab.noise.on = true;
+            noiseHold = false;
+            habSave();
+            noiseSync();
+            renderTimerPanel();
+          });
+        });
+        var tog = document.getElementById("noise-toggle");
+        if (tog) {
+          tog.addEventListener("click", function () {
+            if (noiseKindOn) {
+              hab.noise.on = false;
+              noiseHold = true;
+              noiseStopAudio();
+            } else {
+              hab.noise.on = true;
+              noiseHold = false;
+              noiseSync();
+            }
+            habSave();
+            renderTimerPanel();
+          });
+        }
+        var vol = document.getElementById("noise-vol");
+        if (vol) {
+          vol.addEventListener("input", function () {
+            hab.noise.vol = Number(vol.value);
+            if (noiseMaster) noiseMaster.gain.value = (hab.noise.vol / 100) * 0.85;
+            habSave();
+          });
+        }
+        var auto = document.getElementById("noise-auto");
+        if (auto) {
+          auto.addEventListener("click", function () {
+            hab.noise.auto = !hab.noise.auto;
+            habSave();
+            noiseSync();
+            renderTimerPanel();
+          });
+        }
+        var fsBtn = document.getElementById("fs-enter");
+        if (fsBtn) fsBtn.addEventListener("click", fsEnter);
+      }
+
+      /* ---------- fullscreen focus: only the countdown and the pet ----------
+         The overlay sits above the panels; the pet is raised above
+         it via body.fs-on. Exiting browser fullscreen (Esc) closes
+         the overlay too. */
+      var fsOverlay = null;
+      function fsBuild() {
+        fsOverlay = document.createElement("div");
+        fsOverlay.id = "fs-overlay";
+        fsOverlay.hidden = true;
+        fsOverlay.innerHTML =
+          '<div class="fs-digits" id="fs-digits">--:--</div>' +
+          '<div class="fs-mode" id="fs-mode">专注</div>' +
+          '<div class="fs-btns">' +
+          '<button type="button" class="fs-btn main" id="fs-toggle">暂停</button>' +
+          '<button type="button" class="fs-btn" id="fs-close">退出全屏</button></div>';
+        document.body.appendChild(fsOverlay);
+        document.getElementById("fs-toggle").addEventListener("click", function () {
+          timerToggleRun();
+          fsPaint();
+        });
+        document.getElementById("fs-close").addEventListener("click", function () { fsExit(true); });
+        document.addEventListener("fullscreenchange", function () {
+          if (!document.fullscreenElement && fsOverlay && !fsOverlay.hidden) fsExit(false);
+        });
+      }
+      function fsEnter() {
+        if (!fsOverlay) fsBuild();
+        fsOverlay.hidden = false;
+        document.body.classList.add("fs-on");
+        fsPaint();
+        try {
+          var p = document.documentElement.requestFullscreen &&
+            document.documentElement.requestFullscreen();
+          if (p && p.catch) p.catch(function () { /* overlay alone still works */ });
+        } catch (e) { /* overlay alone still works */ }
+      }
+      function fsExit(leaveFs) {
+        if (!fsOverlay || fsOverlay.hidden) return;
+        fsOverlay.hidden = true;
+        document.body.classList.remove("fs-on");
+        if (leaveFs && document.fullscreenElement) {
+          try { document.exitFullscreen(); } catch (e) {}
+        }
+      }
+      function fsPaint() {
+        if (!fsOverlay || fsOverlay.hidden || !timer) return;
+        var mm = Math.floor(timer.secondsLeft / 60);
+        var ss = timer.secondsLeft % 60;
+        var d = document.getElementById("fs-digits");
+        if (d) d.textContent = pad(mm) + ":" + pad(ss);
+        var m = document.getElementById("fs-mode");
+        if (m) m.textContent = MODES[timer.mode].label + (timer.running ? "中" : " · 已暂停");
+        var t = document.getElementById("fs-toggle");
+        if (t) t.textContent = timer.running ? "暂停" : "继续";
+      }
+
+      /* ---------- habits init ---------- */
+      habLoad();
+      if (!hab.moodAt) hab.moodAt = Date.now();
+      habEnsureWeeks();
+      habSyncTodoOpen();
+      petMoodTick();
 
       renderUI();
       petInit();
