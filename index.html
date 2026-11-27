@@ -126,10 +126,11 @@
       body.wp-theme-mist .summary b { color: #22332a; }
       body.wp-theme-mist .nr-card { color: #22332a; }
       body.wp-theme-mist .nr-card:focus-visible { outline-color: rgba(34, 51, 42, 0.75); }
-      body.wp-theme-mist .nr-title, body.wp-theme-mist .nr-summary { text-shadow: 0 1px 10px rgba(255, 255, 255, 0.7); }
+      body.wp-theme-mist .nr-title { text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9), 0 0 18px rgba(255, 255, 255, 0.85), 0 0 42px rgba(255, 255, 255, 0.6); }
+      body.wp-theme-mist .nr-summary { text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9), 0 0 16px rgba(255, 255, 255, 0.8), 0 0 36px rgba(255, 255, 255, 0.55); }
       body.wp-theme-mist .nr-summary { color: rgba(34, 51, 42, 0.85); }
-      body.wp-theme-mist .nr-veil {
-        background: linear-gradient(to top, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 45%, rgba(255, 255, 255, 0) 100%);
+      body.wp-theme-mist .nr-main::before {
+        background: linear-gradient(to top, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 92%);
       }
       body.wp-theme-mist .nr-play { border-color: rgba(34, 51, 42, 0.45); background: rgba(255, 255, 255, 0.3); color: #22332a; }
       body.wp-theme-mist .nr-card:hover .nr-play, body.wp-theme-mist .nr-card:focus-visible .nr-play,
@@ -226,9 +227,11 @@
       }
 
       /* ---------- 夜读 (top-right, under the date block) ----------
-         No card box: the text sits directly on the wallpaper, invisible
-         until hover / keyboard focus / a tap reveals it over a soft
-         gradient veil. Only the play button stays faintly visible. */
+         No card box, no veil panel: the text sits directly on the
+         wallpaper, invisible until hover / keyboard focus / a tap
+         reveals it, backed only by a soft blurred glow behind the text
+         and layered text shadows. Only the play button stays faintly
+         visible. */
       .nightread { margin-top: 14px; display: flex; justify-content: flex-end; }
       .nightread[hidden] { display: none; }
       .nr-card {
@@ -239,26 +242,25 @@
         color: #fff;
       }
       .nr-card:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.85); outline-offset: 6px; }
-      .nr-veil {
-        position: absolute; inset: -20px -24px; z-index: 0; pointer-events: none;
-        background: linear-gradient(to top, rgba(9, 20, 32, 0.55) 0%, rgba(9, 20, 32, 0.28) 45%, rgba(9, 20, 32, 0) 100%);
-        /* Feather all four edges so the veil never reads as a hard rectangle. */
-        -webkit-mask-image: radial-gradient(ellipse 100% 100% at 50% 50%, #000 52%, rgba(0, 0, 0, 0) 96%);
-        mask-image: radial-gradient(ellipse 100% 100% at 50% 50%, #000 52%, rgba(0, 0, 0, 0) 96%);
-        opacity: 0; transition: opacity 0.35s ease;
-      }
+      /* No veil panel: only a soft blurred glow behind the text itself,
+         so no rectangular region ever reads on the wallpaper. */
       .nr-main { position: relative; z-index: 1; min-width: 0; }
+      .nr-main::before {
+        content: ""; position: absolute; inset: -16px -20px; z-index: -1;
+        background: linear-gradient(to top, rgba(9, 20, 32, 0.55) 0%, rgba(9, 20, 32, 0) 92%);
+        filter: blur(14px); opacity: 0; transition: opacity 0.35s ease;
+      }
       .nr-title, .nr-summary {
         opacity: 0; transform: translateY(8px);
         transition: opacity 0.3s ease, transform 0.3s ease;
-        text-shadow: 0 1px 12px rgba(9, 20, 32, 0.6);
+        text-shadow: 0 1px 2px rgba(9, 20, 32, 0.9), 0 0 18px rgba(9, 20, 32, 0.85), 0 0 42px rgba(9, 20, 32, 0.6);
       }
       .nr-title { margin: 0; font-size: 15px; font-weight: 600; line-height: 1.5; transition-delay: 0.05s; }
       .nr-summary {
         margin: 4px 0 0; font-size: 13px; line-height: 1.5;
         color: rgba(255, 255, 255, 0.88); transition-delay: 0.13s;
       }
-      .nr-card:hover .nr-veil, .nr-card:focus-visible .nr-veil, .nr-card.nr-on .nr-veil { opacity: 1; }
+      .nr-card:hover .nr-main::before, .nr-card:focus-visible .nr-main::before, .nr-card.nr-on .nr-main::before { opacity: 1; }
       .nr-card:hover .nr-title, .nr-card:focus-visible .nr-title, .nr-card.nr-on .nr-title,
       .nr-card:hover .nr-summary, .nr-card:focus-visible .nr-summary, .nr-card.nr-on .nr-summary {
         opacity: 1; transform: translateY(0);
@@ -277,7 +279,7 @@
       .nr-play svg { width: 14px; height: 14px; display: block; }
       @media (prefers-reduced-motion: reduce) {
         .nr-title, .nr-summary { opacity: 1; transform: none; transition: none; }
-        .nr-veil { opacity: 1; transition: none; }
+        .nr-main::before { opacity: 1; transition: none; }
         .nr-play { transition: none; }
       }
 
@@ -1341,7 +1343,6 @@
         var html = "";
         html += '<div class="nr-card" role="link" tabindex="0" aria-label="打开人民日报夜读：' +
           esc(nrCleanTitle(rec.title)) + '">';
-        html += '<div class="nr-veil" aria-hidden="true"></div>';
         html += '<div class="nr-main">';
         html += '<p class="nr-title">' + esc(nrCleanTitle(rec.title)) + "</p>";
         if (rec.summary) html += '<p class="nr-summary">' + esc(rec.summary) + "</p>";
